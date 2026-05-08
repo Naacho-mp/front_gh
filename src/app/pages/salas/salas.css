@@ -1,0 +1,244 @@
+@import "primeicons/primeicons.css";
+
+.titulo-modulo{
+  margin-top: 50px; 
+  font-size: 35px; 
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.parrafo-modulo{ 
+  margin: 0;
+  font-size: 16px; 
+  font-family: 'Segoe UI', sans-serif;
+  flex-grow: 1;     
+  text-align: justify;   
+  padding-right: 40px;    
+  line-height: 1.5;              
+
+}
+
+.header-actions {
+  display: flex;
+  gap: 15px;
+  justify-content: flex-end;
+  white-space: nowrap;
+  flex-shrink: 0; 
+}
+
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;                          
+  margin-bottom: 30px;    
+         
+}
+
+.btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 12px 24px;
+  border-radius: 6px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 180px;
+  white-space: nowrap;
+}
+
+
+.btn-primary {
+  background-color: #003366; 
+  color: white;
+  border: none;
+}
+
+.btn-primary:hover {
+  background-color: #004a99;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.btn-outline {
+  background-color: white;
+  color: #003366;
+  border: 2px solid #003366;
+  width: 180px;
+  text-decoration: none;
+  box-sizing: border-box;
+}
+
+.btn-outline:hover {
+  background-color: #f0f5fa;
+}
+
+.icon-btn {
+  font-size: 1.2rem;
+}
+
+.btn-text {
+  text-align: center;
+  line-height: 1.2;
+}
+
+
+/*-------------------Tabla de salas ucm-------------------------*/
+
+.filters input,
+.filters select {
+  padding: 8px 12px;
+  font-size: 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  outline: none;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.filters input:focus,
+.filters select:focus {
+  border-color: #003366;
+}
+
+.filtro-nombre {
+  flex: 2; 
+  max-width: 550px;
+}
+
+.filtro-contrato {
+  flex: 0 0 180px; 
+}
+
+.filters {
+  display: flex;
+  gap: 12px;
+  margin-top: 50px;
+  margin-bottom: 12px;
+}
+
+.texto-filtro-nombre, .texto-filtro-sala {
+  font-size: 14px;
+  font-family: 'Segoe UI', sans-serif;
+  color: #111827;
+  margin: 0;
+  align-self: center;
+}
+
+table {
+  width: 100%;
+  margin-top: 55px;
+  border-collapse: collapse;
+  font-size: 14px;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+th {
+  padding: 10px 14px;
+  text-align: left;
+  font-size: 12px;
+  font-weight: 700;
+  color: #000000;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+td {
+  padding: 14px;
+  color: #111827;
+  border-bottom: 1px solid #f3f4f6;
+  vertical-align: middle;
+}
+
+tr:hover td {
+  background: #f9fafb;
+}
+
+.id-cell {
+  font-family: monospace;
+  font-size: 14px;
+  color: #003366;
+}
+
+.badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 99px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.badge-lab {
+  background: #E6F1FB;
+  color: #0C447C;
+}
+
+.badge-sala {
+  background: #EAF3DE;
+  color: #27500A;
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+}
+
+.action-btn {
+  background: none;
+  border: none;
+  outline: none;
+  box-shadow: none;
+  padding: 6px 8px;
+  cursor: pointer;
+  color: #000000;
+  font-size: 15px;
+  transition: color 0.12s;
+}
+
+.action-btn:hover {
+  background: none;
+  color: #003366;
+}
+
+.action-btn.del:hover {
+  background: none;
+  color: #dc2626;
+  
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 20px;
+}
+
+.page-btn {
+  background: transparent;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  padding: 6px 12px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #111827;
+  min-width: 36px;
+  transition: background 0.12s;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.page-btn:hover {
+  background: #f3f4f6;
+}
+
+.page-btn.active {
+  background: #003366;
+  color: white;
+  border-color: #003366;
+}
+
+.page-btn:disabled {
+  opacity: 0.35;
+  cursor: default;
+}

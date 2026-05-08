@@ -1,0 +1,70 @@
+<head>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+
+<h1 class="titulo-modulo">Gestión de Salas</h1>
+
+<div class="header-container">
+  <p class="parrafo-modulo">
+    Panel de administración para la gestión integral de las salas. Permite registrar nuevas salas,<br>
+     actualizar información, visualizar y eliminar registros.
+  </p>
+
+  <div class="header-actions">
+    <a href="https://www.ucm.cl/mapa-ucm-y-salas-de-clase/" target="_blank" class="btn btn-outline">
+      <i class="pi pi-map-marker"></i> Mapas de Salas
+    </a>
+    <button class="btn btn-primary">
+      <i class="pi pi-building"></i> Registrar +
+    </button>
+  </div>
+</div>
+
+
+<div class="filters">
+  <p class="texto-filtro-nombre">Filtrar por nombre: </p>
+  <input class="filtro-nombre" type="text" [(ngModel)]="searchName" (input)="onFilter()" placeholder="Buscar sala por nombre..." >
+  <p class="texto-filtro-sala">Filtrar por tipo de sala: </p>
+  <select class="filtro-sala" [(ngModel)]="filterType" (change)="onFilter()">
+    <option value="">Tipo de sala</option>
+    <option value="Sala">Cátedra</option>
+    <option value="Laboratorio">Laboratorio</option>
+  </select>
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th>ID Sala</th>
+      <th>Nombre de la sala</th>
+      <th>Tipo de sala</th>
+      <th>Capacidad</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let d of paginados">
+      <td class="id-cell">{{ d.id }}</td>
+      <td>{{ d.nombre }}</td>
+      <td>
+        <span [class]="d.tipo === 'Laboratorio' ? 'badge badge-lab' : 'badge badge-sala'">
+          {{ d.tipo }}
+        </span>
+      </td>
+      <td>{{ d.capacidad }}</td>
+      <td>
+        <button class="action-btn" (click)="disponibilidad(d)"><i class="pi pi-calendar"></i></button>
+        <button class="action-btn" (click)="editar(d)"><i class="pi pi-pencil"></i></button>
+        <button class="action-btn del" (click)="eliminar(d)"><i class="pi pi-trash"></i></button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="pagination">
+  <button class="page-btn" (click)="goTo(currentPage - 1)" [disabled]="currentPage === 1">‹</button>
+  <button *ngFor="let p of totalPagesArray()" class="page-btn"
+          (click)="goTo(p)"
+          [class.active]="p === currentPage">{{ p }}</button>
+  <button class="page-btn" (click)="goTo(currentPage + 1)" [disabled]="currentPage === totalPages">›</button>
+</div>

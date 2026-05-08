@@ -1,0 +1,16 @@
+<h1 class="titulo-modulo">{{ titulo }}</h1>
+
+<div class="header-container">
+  <p class="parrafo-modulo">
+    {{ descripcion }}
+  </p>
+
+  <div class="header-actions">
+    <button class="btn btn-outline" (click)="accionExcel.emit()">
+      <i class="pi pi-file-excel"></i> Importar Excel
+    </button>
+    <button class="btn btn-primary" (click)="accionPrincipal.emit()">
+      <i class="pi" [ngClass]="iconoBotonPrincipal"></i> {{ textoBotonPrincipal }}
+    </button>
+  </div>
+</div>

@@ -1,0 +1,23 @@
+
+<head>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+
+<header class="navbar">
+  <span class="navbar-title">Sistema de Gestión Horaria ICI - UCM</span>
+  <div class="navbar-user">
+    <button class="user-btn" (click)="toggleMenu()">
+      <div class="avatar">
+        <span style="color:white; font-size:14px; font-weight:500">U</span>
+      </div>
+      <span class="user-name">Mi cuenta</span>
+      <span class="chevron" [class.open]="menuOpen">&#8964;</span>
+    </button>
+
+    <div class="dropdown" *ngIf="menuOpen">
+      <button class="dropdown-item" (click)="onMiPerfil()">Mi perfil</button>
+      <hr class="divider" />
+      <button class="dropdown-item danger" (click)="onCerrarSesion()">Cerrar sesión</button>
+    </div>
+  </div>
+</header>

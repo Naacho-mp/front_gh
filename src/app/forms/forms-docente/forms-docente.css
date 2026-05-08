@@ -1,0 +1,19 @@
+.btn-ucm {
+  background-color: #003366 !important;
+  border: none;
+}
+
+.label-mini {
+  font-size: 0.7rem;
+  color: #6c757d;
+  letter-spacing: 0.5px;
+}
+
+.modal-content {
+  border-radius: 12px;
+}
+
+.modal-backdrop.show {
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(2px);
+}

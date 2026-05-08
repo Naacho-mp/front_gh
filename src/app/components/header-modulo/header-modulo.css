@@ -1,0 +1,29 @@
+
+.titulo-modulo {
+  margin-top: 65px; 
+  font-size: 35px; 
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 30px;
+}
+
+.parrafo-modulo { 
+  margin: 0;
+  font-size: 18px; 
+  font-family: 'Segoe UI', sans-serif;
+  flex-grow: 1;
+}
+
+.header-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px; 
+  width: 100%;
+  white-space: nowrap;
+  margin-left: 20px;
+}

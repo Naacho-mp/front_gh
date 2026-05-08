@@ -1,0 +1,58 @@
+<head>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+
+<h1 class="titulo-modulo">Gestión de Secciones</h1>
+
+<div class="header-container">
+  <p class="parrafo-modulo">
+    Panel de administración para la gestión integral de las secciones. Permite registrar nuevas secciones, <br>
+     actualizar información, visualizar y eliminar registros.
+  </p>
+
+  <div class="header-actions">
+    <a href="https://files.griddo.ucm.cl/malla-ingenieria-civil-informatica-ucm-2018.pdf" target="_blank" class="btn btn-outline">
+      <i class="pi pi-external-link"></i> Malla Curricular ICI
+    </a>
+    <button class="btn btn-primary">
+      <i class="pi pi-users"></i> Registrar +
+    </button>
+  </div>
+</div>
+
+<div class="filters">
+  <p class="texto-filtro-nombre">Filtrar por nombre: </p>
+  <input class="filtro-nombre" type="text" [(ngModel)]="searchName" (input)="onFilter()" placeholder="Buscar sección por nombre..." >
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th>ID Sección</th>
+      <th>Código Ramo</th>
+      <th>Número Sección</th>
+      <th>Estudiantes Inscritos</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let d of paginados">
+      <td class="id-cell">{{ d.id }}</td>
+      <td>{{ d.codigo_ramo }}</td>
+      <td>{{ d.numero_seccion }}</td>
+      <td>{{ d.estudiantes_inscritos }}</td>
+      <td>
+        <button class="action-btn"><i class="pi pi-pencil"></i></button>
+        <button class="action-btn del"><i class="pi pi-trash"></i></button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="pagination">
+  <button class="page-btn" (click)="goTo(currentPage - 1)" [disabled]="currentPage === 1">‹</button>
+  <button *ngFor="let p of totalPagesArray()" class="page-btn"
+          (click)="goTo(p)"
+          [class.active]="p === currentPage">{{ p }}</button>
+  <button class="page-btn" (click)="goTo(currentPage + 1)" [disabled]="currentPage === totalPages">›</button>
+</div>

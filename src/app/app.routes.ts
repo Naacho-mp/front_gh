@@ -4,14 +4,23 @@ import { Docentes} from './pages/docentes/docentes';
 import { Secciones } from './pages/secciones/secciones';
 import { Ramos } from './pages/ramos/ramos';
 import { Salas } from './pages/salas/salas';
+import { LoginComponent } from './pages/login/login';
+import { MainLayoutComponent } from './layouts/main-layout/main-layout';
+
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'horario', pathMatch: 'full' },
-  { path: 'horario', component: Horario },
-  { path: 'docentes', component: Docentes },
-  { path: 'salas', component: Salas },
-  { path: 'ramos', component: Ramos },
-  { path: 'secciones', component: Secciones },
-
-  { path: '**', redirectTo: 'horario' }
+  
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  { path: 'login', component: LoginComponent}, 
+  {
+    path: '', component: MainLayoutComponent, 
+    children: [
+    { path: 'horario', component: Horario },
+    { path: 'docentes', component: Docentes },
+    { path: 'salas', component: Salas },
+    { path: 'ramos', component: Ramos },
+    { path: 'secciones', component: Secciones },
+    { path: '**', redirectTo: 'horario' },
+    ]
+  }
 ];

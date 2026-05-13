@@ -1,0 +1,67 @@
+<div class="login-page">
+  <div class="login-wrap">
+
+    <div class="left">
+      <div class="left-content">
+        <div class="ucm-logo">
+            <img src="/inicio_sesion.png" alt="UCM Logo">
+        </div>
+       
+        <h1>Sistema de<br>Gestión de Horario</h1>       
+        <p class="facultad">Facultad de Ciencias de la Ingeniería UCM</p>
+        <p class="descripcion">Sistema Oficial para la Gestión Horaria de<br>Ingeniería Civil en Informática</p>
+        <div class="badge-oficial">
+          <i class="pi pi-shield"></i>
+          SISTEMA OFICIAL UNIVERSITARIO
+        </div>
+        <p class="left-footer">
+          Acceso restringido a personal docente y administrativo<br>
+          autorizado. 
+        </p>
+      </div>
+    </div>
+
+    <div class="right">
+      <h2>Bienvenido(a)</h2>
+      <p class="subtitle">Ingrese sus credenciales para acceder a la plataforma.</p>
+
+      <div class="field">
+        <label>USUARIO</label>
+        <div class="input-wrap">
+          <i class="pi pi-user"></i>
+          <input type="text" [(ngModel)]="usuario" placeholder="nombre.apellido@ucm.cl">
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="field-header">
+          <label>CONTRASEÑA</label>
+          <a href="#">¿Olvidaste tu contraseña?</a>
+        </div>
+        <div class="input-wrap">
+          <i class="pi pi-lock"></i>
+          <input [type]="mostrarPassword ? 'text' : 'password'"
+                 [(ngModel)]="password"
+                 placeholder="••••••••••••">
+          <i class="pi toggle-pw"
+             [class.pi-eye]="!mostrarPassword"
+             [class.pi-eye-slash]="mostrarPassword"
+             (click)="togglePassword()"></i>
+        </div>
+      </div>
+
+      <button class="btn-login" (click)="iniciarSesion()" routerLink="/horario">
+        Iniciar Sesión <i class="pi pi-sign-in"></i>
+      </button>
+
+      <div class="right-footer">
+        <div class="help">
+          <i class="pi pi-question-circle"></i>
+          ¿Necesitas ayuda? <a href="#">Contactar Soporte</a>
+        </div>
+        <span class="version">V1.0.0 © 2026 SGH</span>
+      </div>
+    </div>
+
+  </div>
+</div>

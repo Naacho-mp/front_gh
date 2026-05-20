@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common'; 
 import { FormsModule } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
+import { SalaFormComponent } from '../../forms/forms-sala/forms-sala';
 
 interface Sala {
   id: string;
@@ -29,6 +31,22 @@ export class Salas {
     { id: '#SALA-1005', nombre: 'Sala 302', tipo: 'Sala', capacidad: 25 },
 
   ];
+
+ constructor(private dialog: MatDialog) {}
+
+  abrirRegistro(): void {
+    const dialogRef = this.dialog.open(SalaFormComponent, {
+      width: '560px',
+      disableClose: true,
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        console.log('Sala guardada:', result);
+        //this.salaService.crear(result).subscribe(...)
+      }
+    });
+  }
 
   get filtrados(): Sala[] {
     return this.salas.filter(s =>

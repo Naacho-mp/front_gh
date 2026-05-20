@@ -1,7 +1,10 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-// import { FormDocenteComponent } from '../../forms/forms-docente/forms-docente';
+import { MatDialog, MatDialogModule} from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
+import { DocenteFormComponent } from '../../forms/forms-docente/forms-docente';
+import  { DocenteService } from '../../services/docente.service';
 
 interface Docente {
   id: string;
@@ -12,10 +15,11 @@ interface Docente {
 @Component({
   selector: 'app-docentes',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, MatDialogModule, MatButtonModule],
   templateUrl: './docentes.html',
   styleUrl: './docentes.css',
 })
+
 export class Docentes {
   searchName = '';
   filterType = '';
@@ -37,6 +41,23 @@ export class Docentes {
     { id: '#DOC-1011', nombre: 'Matías Castillo', contrato: 'Part-time' },
     { id: '#DOC-1012', nombre: 'Gabriela Reyes', contrato: 'Full-time' },
   ];
+
+
+  constructor(private dialog: MatDialog) {}
+
+  abrirRegistro(): void {
+    const dialogRef = this.dialog.open(DocenteFormComponent, {
+      width: '560px',
+      disableClose: true,
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        console.log('Docente guardado:', result);
+        //this.docenteService.crear(result).subscribe(...)
+      }
+    });
+  }
 
   get filtrados(): Docente[] {
     return this.docentes.filter(d =>
@@ -70,5 +91,27 @@ export class Docentes {
 
 
   editar(d: Docente) { console.log('Editar', d); }
+  
   eliminar(d: Docente) { console.log('Eliminar', d); }
+
+// Funciones para modal de subir archivo
+
+mostrarModalImportar = false;
+archivoSeleccionado: File | null = null;
+
+onArchivoSeleccionado(event: Event): void {
+  const input = event.target as HTMLInputElement;
+  if (input.files?.[0]) this.archivoSeleccionado = input.files[0];
+}
+
+subir(): void {
+  if (!this.archivoSeleccionado) return;
+  console.log('Subiendo:', this.archivoSeleccionado.name);
+  this.mostrarModalImportar = false;
+  this.archivoSeleccionado = null;
+}
+
+
+
+
 }

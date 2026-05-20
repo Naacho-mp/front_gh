@@ -7,22 +7,22 @@
 <div class="header-container">
   <p class="parrafo-modulo">
     Panel de administración para la gestión integral de las secciones. Permite registrar nuevas secciones, <br>
-     actualizar información, visualizar y eliminar registros.
+     actualizar información, y eliminar registros.
   </p>
 
   <div class="header-actions">
     <a href="https://files.griddo.ucm.cl/malla-ingenieria-civil-informatica-ucm-2018.pdf" target="_blank" class="btn btn-outline">
       <i class="pi pi-external-link"></i> Malla Curricular ICI
     </a>
-    <button class="btn btn-primary">
+    <button class="btn btn-primary" (click)="abrirRegistro()">
       <i class="pi pi-users"></i> Registrar +
     </button>
   </div>
 </div>
 
 <div class="filters">
-  <p class="texto-filtro-nombre">Filtrar por nombre: </p>
-  <input class="filtro-nombre" type="text" [(ngModel)]="searchName" (input)="onFilter()" placeholder="Buscar sección por nombre..." >
+  <p class="texto-filtro-nombre">Filtrar por código : </p>
+  <input class="filtro-nombre" type="text" [(ngModel)]="searchName" (input)="onFilter()" placeholder="Buscar por código de sección..." >
 </div>
 
 <table>

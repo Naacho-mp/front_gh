@@ -1,43 +1,58 @@
-<!-- <div class="modal fade" [ngClass]="{'show d-block': visible, 'd-none': !visible}" tabindex="-1">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content shadow border-0">
-      
-      <div class="modal-header border-0 pb-0">
-        <h5 class="modal-title fw-bold">Registrar Docente</h5>
-        <button type="button" class="btn-close shadow-none" (click)="cerrar()"></button>
-      </div>
+<div [formGroup]="docenteForm">
 
-      <div class="modal-body">
-        <p class="text-muted small mb-4">Ingrese la información académica para el registro.</p>
-        
-        <form>
-          <div class="mb-4">
-            <label class="form-label fw-bold text-uppercase label-mini">Nombre Completo</label>
-            <input type="text" class="form-control bg-light border-0" placeholder="Ej. Dr. Alberto García Martínez">
-          </div>
-
-          <div class="mb-3">
-            <label class="form-label fw-bold text-uppercase label-mini">Tipo de Contrato</label>
-            <select class="form-select bg-light border-0 text-secondary">
-              <option selected disabled>Seleccione modalidad...</option>
-              <option>Full-time</option>
-              <option>Part-time</option>
-            </select>
-          </div>
-        </form>
-      </div>
-
-      <div class="modal-footer border-0 pt-0">
-        <button type="button" class="btn btn-link text-decoration-none text-dark fw-bold" (click)="cerrar()">
-          Cancelar
-        </button>
-        <button type="button" class="btn btn-primary px-4 btn-ucm" (click)="cerrar()">
-          Registrar
-        </button>
-      </div>
-
+  <!-- Header -->
+  <div style="display:flex; justify-content:space-between; align-items:flex-start; padding: 20px 24px 0px;">
+    <div>
+      <h5 class="titulo-modal-registro">Registrar Docente</h5>
+      <p class="subtitulo-registro">Ingrese la información del docente para el registro.</p>
     </div>
+    <button (click)="cancelar()"
+      style="background:none; border:none; font-size:20px; color:#aaa; cursor:pointer; line-height:1; padding:0;">
+      ✕
+    </button>
   </div>
-</div>
 
-<div class="modal-backdrop fade" [ngClass]="{'show': visible, 'd-none': !visible}"></div> -->
+  <div style="padding: 16px 24px;">
+
+    <div style="margin-bottom:16px;">
+      <label style="display:block; font-size:11px; font-weight:600; letter-spacing:0.7px; color:#353333; text-transform:uppercase; margin-bottom:6px; font-family: 'Segoe UI', sans-serif;">
+        Nombre Completo
+      </label>
+      <input type="text" formControlName="nombre_completo"
+        placeholder="Ej: Alberto García Martínez"
+        style="width:100%; padding:10px 14px; border:1.5px solid #e0e0e0; border-radius:8px; font-size:14px; background:#f8f9fa; box-sizing:border-box; outline:none;"
+      />
+      <div style="color:#dc3545; font-size:12px; margin-top:4px;"
+        *ngIf="nombre_completo?.touched && nombre_completo?.hasError('required')">El nombre completo es requerido</div>
+    </div>
+
+    <div style="margin-bottom:16px;">
+      <label style="display:block; font-size:11px; font-weight:600; letter-spacing:0.7px; color:#353333; text-transform:uppercase; margin-bottom:6px; font-family: 'Segoe UI', sans-serif;">
+        Tipo de Contrato
+      </label>
+      <select formControlName="tipo_contrato"
+        style="width:100%; padding:10px 14px; border:1.5px solid #e0e0e0; border-radius:8px; font-size:14px; background:#f8f9fa; box-sizing:border-box; outline:none; appearance:none; cursor:pointer;">
+        <option value="" disabled selected>Seleccione modalidad...</option>
+        <option value="Full-time">Full-time</option>
+        <option value="Part-time">Part-time</option>
+      </select>
+      <div style="color:#dc3545; font-size:12px; margin-top:4px;"
+        *ngIf="tipo_contrato?.touched && tipo_contrato?.hasError('required')">
+        El tipo de contrato es requerido
+      </div>
+    </div>
+
+  </div>
+
+  <div style="display:flex; justify-content:flex-end; gap:10px; padding:12px 24px 20px; border-top:1px solid #f0f0f0;">
+    <button (click)="cancelar()"
+      style="padding:9px 22px; border:none; background: #9c9c9c; color:#ffffff; font-size:13px; border-radius:8px; cursor:pointer; font-family: 'Segoe UI', sans-serif;">
+      Cancelar
+    </button>
+    <button (click)="guardar()"
+      style="padding:9px 24px; border:none; background:#1a3c8f; color:white; font-size:13px; font-weight:500; border-radius:8px; cursor:pointer; font-family: 'Segoe UI', sans-serif;">
+      Registrar
+    </button>
+  </div>
+
+</div>

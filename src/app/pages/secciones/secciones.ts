@@ -1,6 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
+import { SeccionFormComponent } from '../../forms/forms-seccion/forms-seccion';
 
 interface Seccion {
   id:String;
@@ -21,7 +23,7 @@ export class Secciones {
   currentPage = 1;
   readonly perPage = 5;
 
-   salas: Seccion[] = [
+   secciones: Seccion[] = [
     { id: '#S-01', codigo_ramo: '#INF-201', numero_seccion: '01', estudiantes_inscritos: 15 },
     { id: '#S-02', codigo_ramo: '#ECI-302', numero_seccion: '02', estudiantes_inscritos: 20 },
     { id: '#S-03', codigo_ramo: '#ECI-102', numero_seccion: '03', estudiantes_inscritos: 15 },
@@ -31,8 +33,27 @@ export class Secciones {
 
   ];
 
+ constructor(private dialog: MatDialog) {}
+
+  abrirRegistro(): void {
+    const dialogRef = this.dialog.open(SeccionFormComponent, {
+      width: '560px',
+      disableClose: true,
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        console.log('Sección guardada:', result);
+        //this.seccionService.crear(result).subscribe(...)
+      }
+    });
+  }
+
+
+
+
     get filtrados(): Seccion[] {
-    return this.salas.filter(s =>
+    return this.secciones.filter(s =>
       s.codigo_ramo.toLowerCase().includes(this.searchName.toLowerCase()) &&
       (this.filterType === '' || s.numero_seccion === this.filterType)
     );

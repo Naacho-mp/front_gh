@@ -1,6 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
+import { RamoFormComponent } from '../../forms/forms-ramo/forms-ramo';
 
 interface Ramo {
   id: string;
@@ -33,6 +35,22 @@ export class Ramos {
     { id: '#ECI-135', nombre: 'Cloud', nivel: 'I', cantidad_secciones: 1, cupos_por_seccion: 25, horas_catedra: 4, horas_laboratorio: 3 },
 
   ];
+
+   constructor(private dialog: MatDialog) {}
+
+  abrirRegistro(): void {
+    const dialogRef = this.dialog.open(RamoFormComponent, {
+      width: '560px',
+      disableClose: true,
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        console.log('Ramo guardado:', result);
+        //this.ramoService.crear(result).subscribe(...)
+      }
+    });
+  }
 
   get filtrados(): Ramo[] {
     return this.salas.filter(r =>

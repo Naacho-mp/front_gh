@@ -1,0 +1,46 @@
+<div class="login-page">
+  <div class="login-wrap">
+    <div class="left">
+      <div class="left-content">
+        <div class="ucm-logo">
+          <img src="/inicio_sesion.png" alt="UCM Logo">
+        </div>
+        <h1>Sistema de<br>Gestión de Horario</h1>
+        <p class="facultad">Facultad de Ciencias de la Ingeniería UCM</p>
+        <p class="descripcion">Sistema Oficial para la Gestión Horaria de<br>Ingeniería Civil en Informática</p>
+        <div class="badge-oficial">
+          <i class="pi pi-shield"></i>
+          SISTEMA OFICIAL UNIVERSITARIO
+        </div>
+        <p class="left-footer">
+          Acceso restringido a personal docente y administrativo<br>
+          autorizado.
+        </p>
+      </div>
+    </div>
+    <div class="right">
+      <h2>Recuperar Contraseña</h2>
+      <p class="subtitle">Ingrese su correo institucional para recibir las instrucciones de recuperación.</p>
+      <div class="field">
+        <label>Correo Electrónico</label>
+        <div class="input-wrap">
+          <i class="pi pi-at"></i>
+          <input type="text" [(ngModel)]="correo" placeholder="nombre.apellido@ucm.cl">
+        </div>
+      </div>                              
+      <button class="btn-login" (click)="recuperarContrasena()">
+        Solicitar contraseña <i class="pi pi-send"></i>
+      </button>
+
+       <p class="texto-retorno"><a class="link-volver-inicio" routerLink="/login">Iniciar sesión</a> con tus credenciales actuales</p> 
+   
+      <div class="right-footer">
+        <div class="help">
+          <i class="pi pi-question-circle"></i>
+          ¿Necesitas ayuda? <a href="#">Contactar Soporte</a>
+        </div>
+        <span class="version">V1.0.0 © 2026 SGH</span>
+      </div>
+    </div>                               
+  </div>                                  
+</div>                                    

@@ -1,0 +1,252 @@
+@import "primeicons/primeicons.css";
+
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f3f4f6;
+}
+
+.login-wrap {
+  display: flex;
+  width: 900px;
+  min-height: 560px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+}
+
+.left {
+  width: 45%;
+  background: #003366;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2.5rem 2rem;
+  text-align: center;
+}
+
+.left-content { width: 100%; }
+
+.ucm-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  
+}
+
+.ucm-logo img {
+  width: 240px;
+  height: auto;
+}
+
+.ucm-text {
+  font-size: 40px;
+  font-weight: 700;
+  color: white;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+
+.left h1 {
+  font-size: 36px;
+  font-weight: 700;
+  color: white;
+  line-height: 1.2;
+  margin-bottom: 0.75rem;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.facultad {
+  font-size: 16px;
+  color: rgba(255,255,255,0.8);
+  margin-bottom: 0.5rem;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.descripcion {
+  font-size: 18px;
+  color: rgba(255,255,255,0.7);
+  margin-bottom: 1rem;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.badge-oficial {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.25);
+  border-radius: 99px;
+  padding: 5px 14px;
+  font-size: 11px;
+  color: rgba(255,255,255,0.9);
+  letter-spacing: 1px;
+  margin-bottom: 1.5rem;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.left-footer {
+  font-size: 11px;
+  color: rgba(255,255,255,0.5);
+  line-height: 1.5;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.right {
+  flex: 1;
+  background: white;
+  padding: 3rem 2.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.right h2 {
+  font-size: 26px;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 4px;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.subtitle {
+  font-size: 14px;
+  color: #6b7280;
+  font-family: 'Segoe UI', sans-serif;
+  margin-bottom: 2rem;
+}
+
+.field {
+  margin-bottom: 1.25rem;
+}
+
+.field label {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  color: #6b7280;
+  letter-spacing: 0.08em;
+  margin-bottom: 6px;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.field-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.field-header label { margin-bottom: 0; }
+
+.field-header a {
+  font-size: 12px;
+  color: #003366;
+  text-decoration: none;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.input-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  padding: 0 12px;
+}
+
+.input-wrap:focus-within {
+  border-color: #003366;
+}
+
+.input-wrap i {
+  font-size: 15px;
+  color: #9ca3af;
+  flex-shrink: 0;
+}
+
+.input-wrap input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 14px;
+  color: #111827;
+  padding: 11px 0;
+  background: transparent;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.input-wrap input::placeholder { color: #9ca3af; }
+
+.toggle-pw {
+  cursor: pointer;
+  color: #9ca3af;
+}
+
+
+.btn-login {
+  
+  padding: 13px 40px;
+  background: #003366;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: 'Segoe UI', sans-serif;
+  transition: background 0.15s;
+}
+
+.btn-login:hover { background: #004a99; }
+
+.right-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 2rem;
+}
+
+.help {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #6b7280;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.help a {
+  color: #003366;
+  text-decoration: none;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.version {
+  font-size: 12px;
+  color: #9ca3af;
+  font-family: 'Segoe UI', sans-serif;  
+}
+
+.texto-retorno {
+  margin-top: 8px;
+  margin-left: 4px;
+  font-size: 13px;
+  text-align: center;
+  color: #6b7280;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.link-volver-inicio {
+  color: #003366;
+  text-decoration: none;
+  font-weight: 600;
+  font-family: 'Segoe UI', sans-serif;
+}

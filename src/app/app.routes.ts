@@ -6,12 +6,14 @@ import { Ramos } from './pages/ramos/ramos';
 import { Salas } from './pages/salas/salas';
 import { LoginComponent } from './pages/login/login';
 import { MainLayoutComponent } from './layouts/main-layout/main-layout';
+import { RecuperarPass } from './pages/recuperar-pass/recuperar-pass';
 
 
 export const routes: Routes = [
   
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent}, 
+  { path: 'recuperar-pass', component: RecuperarPass},
   {
     path: '', component: MainLayoutComponent, 
     children: [

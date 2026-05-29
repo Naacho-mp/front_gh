@@ -1,37 +1,32 @@
-<div [formGroup]="ramoForm">
 
-  <!-- Header -->
-  <div style="display:flex; justify-content:space-between; align-items:flex-start; padding: 20px 24px 0px;">
+<div [formGroup]="ramoForm" class="modal-wrapper">
+
+  <div class="modal-header">
     <div>
       <h5 class="titulo-modal-registro">Registrar Ramo</h5>
       <p class="subtitulo-registro">Ingrese la información del ramo para el registro.</p>
     </div>
-    <button (click)="cancelar()"
-      style="background:none; border:none; font-size:20px; color:#aaa; cursor:pointer; line-height:1; padding:0;">
+    <button (click)="cancelar()" class="btn-close">
       ✕
     </button>
   </div>
 
-  <div style="padding: 16px 24px;">
+  <div class="modal-body">
 
-    <div style="margin-bottom:16px;">
-      <label style="display:block; font-size:11px; font-weight:600; letter-spacing:0.7px; color:#353333; text-transform:uppercase; margin-bottom:6px; font-family: 'Segoe UI', sans-serif;">
-        Nombre del Ramo
-      </label>
-      <input type="text" formControlName="nombre_ramo"
-        placeholder="Ej: Matemáticas"
-        style="width:100%; padding:10px 14px; border:1.5px solid #e0e0e0; border-radius:8px; font-size:14px; background:#f8f9fa; box-sizing:border-box; outline:none;"
-      />
-      <div style="color:#dc3545; font-size:12px; margin-top:4px;"
-        *ngIf="nombre_ramo?.touched && nombre_ramo?.hasError('required')">El nombre del ramo es requerido</div>
+    <div class="form-group">
+      <label class="form-label">Nombre del Ramo</label>
+      <input type="text" 
+             formControlName="nombre_ramo"
+             placeholder="Ej: Matemáticas"
+             class="form-control" />
+      <div class="error-message" *ngIf="nombre_ramo?.touched && nombre_ramo?.hasError('required')">
+        El nombre del ramo es requerido
+      </div>
     </div>
 
-    <div style="margin-bottom:16px;">
-      <label style="display:block; font-size:11px; font-weight:600; letter-spacing:0.7px; color:#353333; text-transform:uppercase; margin-bottom:6px; font-family: 'Segoe UI', sans-serif;">
-        Nivel
-      </label>
-      <select formControlName="nivel"
-        style="width:100%; padding:10px 14px; border:1.5px solid #e0e0e0; border-radius:8px; font-size:14px; background:#f8f9fa; box-sizing:border-box; outline:none; appearance:none; cursor:pointer;">
+    <div class="form-group">
+      <label class="form-label">Nivel</label>
+      <select formControlName="nivel" class="form-select">
         <option value="" disabled selected>Seleccione el nivel</option>
         <option value="I">Nivel I</option>
         <option value="II">Nivel II</option>
@@ -39,78 +34,65 @@
         <option value="IV">Nivel IV</option>
         <option value="V">Nivel V</option>
       </select>
-      <div style="color:#dc3545; font-size:12px; margin-top:4px;"
-        *ngIf="nivel?.touched && nivel?.hasError('required')">
+      <div class="error-message" *ngIf="nivel?.touched && nivel?.hasError('required')">
         El nivel es requerido
       </div>
     </div>
 
-    <div style="margin-bottom:16px;">
-      <label style="display:block; font-size:11px; font-weight:600; letter-spacing:0.7px; color:#353333; text-transform:uppercase; margin-bottom:6px; font-family: 'Segoe UI', sans-serif;">
-        Cantidad de secciones
-      </label>
-      <input type="number" formControlName="cantidad_secciones"
-        placeholder="Ej: 3"
-        style="width:100%; padding:10px 14px; border:1.5px solid #e0e0e0; border-radius:8px; font-size:14px; background:#f8f9fa; box-sizing:border-box; outline:none;"
-      />
-      <div style="color:#dc3545; font-size:12px; margin-top:4px;"
-        *ngIf="cantidad_secciones?.touched && cantidad_secciones?.hasError('required')">
+    <div class="form-group">
+      <label class="form-label">Cantidad de secciones</label>
+      <input type="number" 
+             formControlName="cantidad_secciones"
+             placeholder="Ej: 3"
+             class="form-control" />
+      <div class="error-message" *ngIf="cantidad_secciones?.touched && cantidad_secciones?.hasError('required')">
         La cantidad de secciones es requerida
       </div>
     </div>
 
-    <div style="margin-bottom:16px;">
-      <label style="display:block; font-size:11px; font-weight:600; letter-spacing:0.7px; color:#353333; text-transform:uppercase; margin-bottom:6px; font-family: 'Segoe UI', sans-serif;">
-        Cupos por sección
-      </label>
-      <input type="number" formControlName="cupos_seccion"
-        placeholder="Ej: 30"
-        style="width:100%; padding:10px 14px; border:1.5px solid #e0e0e0; border-radius:8px; font-size:14px; background:#f8f9fa; box-sizing:border-box; outline:none;"
-      />
-      <div style="color:#dc3545; font-size:12px; margin-top:4px;"
-        *ngIf="cupos_seccion?.touched && cupos_seccion?.hasError('required')">
+    <div class="form-group">
+      <label class="form-label">Cupos por sección</label>
+      <input type="number" 
+             formControlName="cupos_seccion"
+             placeholder="Ej: 30"
+             class="form-control" />
+      <div class="error-message" *ngIf="cupos_seccion?.touched && cupos_seccion?.hasError('required')">
         Los cupos por sección son requeridos
       </div>
     </div>
 
-  <label style="display:block; font-size:11px; font-weight:600; letter-spacing:0.7px; color:#353333; text-transform:uppercase; margin-bottom:6px; font-family: 'Segoe UI', sans-serif;">
-    Horas Cátedra
-  </label>
-  <div style="margin-bottom:16px;">
-    <input type="number" formControlName="horas_catedra"
-      placeholder="Ej: 4"
-      style="width:100%; padding:10px 14px; border:1.5px solid #e0e0e0; border-radius:8px; font-size:14px; background:#f8f9fa; box-sizing:border-box; outline:none;"
-    />
-    <div style="color:#dc3545; font-size:12px; margin-top:4px;"
-      *ngIf="horas_catedra?.touched && horas_catedra?.hasError('required')">
-      La cantidad de horas cátedra es requerida
+    <div class="form-group">
+      <label class="form-label">Horas Cátedra</label>
+      <input type="number" 
+             formControlName="horas_catedra"
+             placeholder="Ej: 4"
+             class="form-control" />
+      <div class="error-message" *ngIf="horas_catedra?.touched && horas_catedra?.hasError('required')">
+        La cantidad de horas cátedra es requerida
+      </div>
     </div>
+
+    <div class="form-group">
+      <label class="form-label">Horas Laboratorio</label>
+      <input type="number" 
+             formControlName="horas_laboratorio"
+             placeholder="Ej: 4"
+             class="form-control" />
+      <div class="error-message" *ngIf="horas_laboratorio?.touched && horas_laboratorio?.hasError('required')">
+        La cantidad de horas laboratorio es requerida
+      </div>
+    </div>
+
   </div>
 
-  <label style="display:block; font-size:11px; font-weight:600; letter-spacing:0.7px; color:#353333; text-transform:uppercase; margin-bottom:6px; font-family: 'Segoe UI', sans-serif;">
-    Horas Laboratorio
-  </label>
-  <div style="margin-bottom:16px;">
-    <input type="number" formControlName="horas_laboratorio"
-      placeholder="Ej: 4"
-      style="width:100%; padding:10px 14px; border:1.5px solid #e0e0e0; border-radius:8px; font-size:14px; background:#f8f9fa; box-sizing:border-box; outline:none;"
-    />
-    <div style="color:#dc3545; font-size:12px; margin-top:4px;"
-      *ngIf="horas_laboratorio?.touched && horas_laboratorio?.hasError('required')">
-      La cantidad de horas laboratorio es requerida
-    </div>
-  </div>
-
-
-  <div style="display:flex; justify-content:flex-end; gap:10px; padding:12px 24px 20px; border-top:1px solid #f0f0f0;">
-    <button (click)="cancelar()"
-      style="padding:9px 22px; border:none; background: #9c9c9c; color:#ffffff; font-size:13px; border-radius:8px; cursor:pointer; font-family: 'Segoe UI', sans-serif;">
+  <div class="modal-footer">
+    <button (click)="cancelar()" class="btn-secondary">
       Cancelar
     </button>
-    <button (click)="guardar()"
-      style="padding:9px 24px; border:none; background:#1a3c8f; color:white; font-size:13px; font-weight:500; border-radius:8px; cursor:pointer; font-family: 'Segoe UI', sans-serif;">
+    <button (click)="guardar()" class="btn-primary">
       Registrar
     </button>
   </div>
 
 </div>
+

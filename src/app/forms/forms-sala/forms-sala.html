@@ -1,66 +1,64 @@
-<div [formGroup]="salaForm">
+<div [formGroup]="salaForm" class="modal-wrapper">
 
-  <!-- Header -->
-  <div style="display:flex; justify-content:space-between; align-items:flex-start; padding: 20px 24px 0px;">
+  <div class="modal-header">
     <div>
       <h5 class="titulo-modal-registro">Registrar Sala</h5>
       <p class="subtitulo-registro">Ingrese la información de la sala para el registro.</p>
     </div>
-    <button (click)="cancelar()"
-      style="background:none; border:none; font-size:20px; color:#aaa; cursor:pointer; line-height:1; padding:0;">
+    <button (click)="cancelar()" class="btn-close">
       ✕
     </button>
   </div>
 
-  <div style="padding: 16px 24px;">
+  <div class="modal-body">
 
-    <div style="margin-bottom:16px;">
-      <label style="display:block; font-size:11px; font-weight:600; letter-spacing:0.7px; color:#353333; text-transform:uppercase; margin-bottom:6px; font-family: 'Segoe UI', sans-serif;">
+    <div class="form-group">
+      <label class="form-label">
         Nombre de la Sala
       </label>
-      <input type="text" formControlName="nombre_sala"
-        placeholder="Ej: Sala de Computación"
-        style="width:100%; padding:10px 14px; border:1.5px solid #e0e0e0; border-radius:8px; font-size:14px; background:#f8f9fa; box-sizing:border-box; outline:none;"
-      />
-      <div style="color:#dc3545; font-size:12px; margin-top:4px;"
-        *ngIf="nombre_sala?.touched && nombre_sala?.hasError('required')">El nombre de la sala es requerido</div>
+      <input type="text" 
+             formControlName="nombre_sala"
+             placeholder="Ej: Sala de Computación"
+             class="form-control" />
+      <div class="error-message" *ngIf="nombre_sala?.touched && nombre_sala?.hasError('required')">
+        El nombre de la sala es requerido
+      </div>
     </div>
 
-    <div style="margin-bottom:16px;">
-      <label style="display:block; font-size:11px; font-weight:600; letter-spacing:0.7px; color:#353333; text-transform:uppercase; margin-bottom:6px; font-family: 'Segoe UI', sans-serif;">
+    <div class="form-group">
+      <label class="form-label">
         Tipo de Sala
       </label>
-      <select formControlName="tipo_sala"
-        style="width:100%; padding:10px 14px; border:1.5px solid #e0e0e0; border-radius:8px; font-size:14px; background:#f8f9fa; box-sizing:border-box; outline:none; appearance:none; cursor:pointer;">
+      <select formControlName="tipo_sala" class="form-select">
         <option value="" disabled selected>Seleccione tipo de sala</option>
         <option value="Full-time">Laboratorio</option>
         <option value="Part-time">Sala</option>
       </select>
-      <div style="color:#dc3545; font-size:12px; margin-top:4px;"
-        *ngIf="tipo_sala?.touched && tipo_sala?.hasError('required')">
+      <div class="error-message" *ngIf="tipo_sala?.touched && tipo_sala?.hasError('required')">
         El tipo de sala es requerido
       </div>
     </div>
 
-    <div style="margin-bottom:16px;">
-      <label style="display:block; font-size:11px; font-weight:600; letter-spacing:0.7px; color:#353333; text-transform:uppercase; margin-bottom:6px; font-family: 'Segoe UI', sans-serif;">
+    <div class="form-group">
+      <label class="form-label">
         Capacidad
       </label>
-      <input type="number" formControlName="capacidad"
-        placeholder="Ej: 30"
-        style="width:100%; padding:10px 14px; border:1.5px solid #e0e0e0; border-radius:8px; font-size:14px; background:#f8f9fa; box-sizing:border-box; outline:none;"
-      />
+      <input type="number" 
+             formControlName="capacidad"
+             placeholder="Ej: 30"
+             class="form-control" />
+      <div class="error-message" *ngIf="capacidad?.touched && capacidad?.hasError('required')">
+        La capacidad es requerida
+      </div>
     </div>
 
   </div>
 
-  <div style="display:flex; justify-content:flex-end; gap:10px; padding:12px 24px 20px; border-top:1px solid #f0f0f0;">
-    <button (click)="cancelar()"
-      style="padding:9px 22px; border:none; background: #9c9c9c; color:#ffffff; font-size:13px; border-radius:8px; cursor:pointer; font-family: 'Segoe UI', sans-serif;">
+  <div class="modal-footer">
+    <button (click)="cancelar()" class="btn-secondary">
       Cancelar
     </button>
-    <button (click)="guardar()"
-      style="padding:9px 24px; border:none; background:#1a3c8f; color:white; font-size:13px; font-weight:500; border-radius:8px; cursor:pointer; font-family: 'Segoe UI', sans-serif;">
+    <button (click)="guardar()" class="btn-primary">
       Registrar
     </button>
   </div>

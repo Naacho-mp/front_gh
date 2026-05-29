@@ -1,3 +1,19 @@
+/* 
+   Contenedor Principal e Identidad Visual
+   */
+.modal-wrapper {
+  min-width: 420px;
+  border-radius: 12px;
+  overflow: hidden;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.modal-header, 
+.modal-body, 
+.modal-footer {
+  font-family: 'Segoe UI', sans-serif;
+}
+
 .titulo-modal-registro {
   font-size: 20px;
   margin: 0 0 4px;
@@ -5,19 +21,19 @@
 }
 
 .subtitulo-registro {
-  font-size: 13px;
+  font-size: 16px;
   color: #000;
   font-family: 'Segoe UI', sans-serif;
-  
 }
 
-.modal-wrapper {
-  min-width: 420px;
-  border-radius: 12px;
-  overflow: hidden;
-}
 
+/* 
+   Estructura y Layout del Modal
+   */
 .modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
   padding: 24px 24px 8px;
 }
 
@@ -26,34 +42,92 @@
 }
 
 .modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
   padding: 12px 24px 20px;
+  border-top: 1px solid #f0f0f0;
 }
 
-.form-control, .form-select {
-  background-color: #f8f9fa;
+
+/* 
+   Elementos de Formulario
+    */
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.7px;
+  color: #353333;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.form-control {
+  display: block;
+  width: 100%;
+  padding: 10px 14px;
   border: 1.5px solid #e0e0e0;
   border-radius: 8px;
-  padding: 10px 14px;
   font-size: 14px;
+  background-color: #f8f9fa;
+  box-sizing: border-box;
+  outline: none;
 }
 
-.form-control:focus, .form-select:focus {
+/* Estados Focus */
+.form-control:focus {
   border-color: #0d6efd;
   background-color: #fff;
   box-shadow: none;
 }
 
-.form-label {
-  font-size: 11px;
-  letter-spacing: 0.7px;
-  margin-bottom: 6px;
-  
+/* Mensajes de Validación */
+.error-message {
+  color: #dc3545;
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+
+/* 
+   Botones y Acciones
+    */
+.btn-close {
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: #aaa;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0;
+}
+
+.btn-secondary, 
+.btn-primary {
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.btn-secondary {
+  padding: 9px 22px;
+  background: #9c9c9c;
+  color: #ffffff;
 }
 
 .btn-primary {
+  padding: 9px 24px;
   background-color: #1a3c8f;
   border-color: #1a3c8f;
-  
+  color: white;
+  font-weight: 500;
 }
 
 .btn-primary:hover {

@@ -6,24 +6,26 @@
 
 <div class="header-container">
   <p class="parrafo-modulo">
-    Panel de administración para la gestión integral de los ramos. Permite registrar nuevos ramos, 
+    Panel de administración para la gestión integral de los ramos. Permite registrar nuevos ramos,
      actualizar información, y eliminar registros.
   </p>
 
   <div class="header-actions">
-    <a href="docs/base_ramos.xlsx" download="base_ramos.xlsx" 
-     class="btn btn-secondary">
-    <i class="pi pi-download"></i> Descargar Plantilla
+    <a href="docs/base_ramos.xlsx" download="base_ramos.xlsx" class="btn btn-secondary">
+      <i class="pi pi-download"></i> Descargar Plantilla
     </a>
-    <button class="btn btn-outline">
+
+    <input type="file" #fileInput (change)="leerExcel($event)" accept=".xlsx, .ods" style="display: none;">
+
+    <button class="btn btn-outline" (click)="fileInput.click()">
       <i class="pi pi-file-arrow-up"></i> Importar Excel
     </button>
+
     <button class="btn btn-primary" (click)="abrirRegistro()">
       <i class="pi pi-book"></i> Registrar +
     </button>
   </div>
 </div>
-
 
 <div class="filters">
   <p class="texto-filtro-nombre">Filtrar por nombre: </p>
@@ -54,8 +56,13 @@
       <td>{{ d.horas_laboratorio }}</td>
 
       <td>
-        <button class="action-btn"><i class="pi pi-pencil"></i></button>
-        <button class="action-btn del"><i class="pi pi-trash"></i></button>
+        <button class="action-btn" (click)="editar(d)"><i class="pi pi-pencil"></i></button>
+        <button class="action-btn del" (click)="eliminar(d)"><i class="pi pi-trash"></i></button>
+      </td>
+    </tr>
+    <tr *ngIf="filtrados.length === 0">
+      <td colspan="8" style="text-align: center; color: #888; padding: 20px;">
+        No se encontraron ramos con los filtros aplicados.
       </td>
     </tr>
   </tbody>
@@ -68,4 +75,3 @@
           [class.active]="p === currentPage">{{ p }}</button>
   <button class="page-btn" (click)="goTo(currentPage + 1)" [disabled]="currentPage === totalPages">›</button>
 </div>
-

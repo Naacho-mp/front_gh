@@ -26,10 +26,10 @@ export class RamoFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.ramoForm = this.fb.group({
-      nombre_ramo: ['', [Validators.required, Validators.minLength(2)]],
+      nombre: ['', [Validators.required, Validators.minLength(2)]],
       nivel: ['', [Validators.required]],
       cantidad_secciones:    ['', [Validators.required, Validators.min(1)]],
-      cupos_seccion:    ['', [Validators.required, Validators.min(1)]],
+      cupos_por_seccion:    ['', [Validators.required, Validators.min(1)]],
       horas_catedra:    ['', [Validators.required, Validators.min(1)]],
       horas_laboratorio:    ['', [Validators.required, Validators.min(1)]],
     });
@@ -47,10 +47,10 @@ export class RamoFormComponent implements OnInit {
     this.dialogRef.close(null);
   }
 
-  get nombre_ramo() { return this.ramoForm.get('nombre_ramo'); }
+  get nombre() { return this.ramoForm.get('nombre'); }
   get nivel()   { return this.ramoForm.get('nivel'); }
   get cantidad_secciones()    { return this.ramoForm.get('cantidad_secciones'); }
-  get cupos_seccion()    { return this.ramoForm.get('cupos_seccion'); }
+  get cupos_por_seccion()    { return this.ramoForm.get('cupos_por_seccion'); }
   get horas_catedra()    { return this.ramoForm.get('horas_catedra'); }
   get horas_laboratorio()    { return this.ramoForm.get('horas_laboratorio'); }
 }

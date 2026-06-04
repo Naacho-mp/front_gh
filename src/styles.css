@@ -310,6 +310,21 @@ tr:hover td {
   font-weight: 800; 
 }
 
+.snack-eliminar .mdc-snackbar__surface {
+  background-color: #dc3545 !important;
+}
+
+.snack-eliminar .mdc-snackbar__label {
+  color: white !important;
+}
+
+.snack-success .mdc-snackbar__surface {
+  background-color: #189d5f !important;
+}
+.snack-success .mdc-snackbar__label {
+  color: white !important;
+}
+
 .blue { color: #003366; }
 .green { color: #28a745; }
 .red { color: #dc3545; }

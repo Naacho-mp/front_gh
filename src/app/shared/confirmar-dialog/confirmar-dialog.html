@@ -1,0 +1,18 @@
+<div class="modal-wrapper">
+  <div class="modal-header">
+    <h5 class="modal-titulo">
+        <i class="bi bi-exclamation-triangle-fill"></i> {{ data.titulo }}
+    </h5>
+  </div>
+
+  <div class="modal-body">
+    <p class="modal-mensaje" [innerHTML]="data.mensaje"></p>
+  </div>
+
+  <div class="modal-footer">
+    <button class="btn-cancelar" (click)="respuesta.close(false)">Cancelar</button>
+    <button class="btn-confirmar" [style.background]="color" (click)="respuesta.close(true)">
+      {{ data.boton }}
+    </button>
+  </div>
+</div>

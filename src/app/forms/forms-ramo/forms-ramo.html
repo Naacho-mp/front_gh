@@ -16,10 +16,10 @@
     <div class="form-group">
       <label class="form-label">Nombre del Ramo</label>
       <input type="text" 
-             formControlName="nombre_ramo"
+             formControlName="nombre"
              placeholder="Ej: Matemáticas"
              class="form-control" />
-      <div class="error-message" *ngIf="nombre_ramo?.touched && nombre_ramo?.hasError('required')">
+      <div class="error-message" *ngIf="nombre?.touched && nombre?.hasError('required')">
         El nombre del ramo es requerido
       </div>
     </div>
@@ -53,10 +53,10 @@
     <div class="form-group">
       <label class="form-label">Cupos por sección</label>
       <input type="number" 
-             formControlName="cupos_seccion"
+             formControlName="cupos_por_seccion"
              placeholder="Ej: 30"
              class="form-control" />
-      <div class="error-message" *ngIf="cupos_seccion?.touched && cupos_seccion?.hasError('required')">
+      <div class="error-message" *ngIf="cupos_por_seccion?.touched && cupos_por_seccion?.hasError('required')">
         Los cupos por sección son requeridos
       </div>
     </div>

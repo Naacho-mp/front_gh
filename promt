@@ -1,0 +1,195 @@
+tengo un proyecto con angular y quiero agregar la capacidad de leer un excel
+
+
+{
+  "name": "front-gh",
+  "version": "0.0.0",
+  "scripts": {
+    "ng": "ng",
+    "start": "ng serve",
+    "build": "ng build",
+    "watch": "ng build --watch --configuration development",
+    "test": "ng test"
+  },
+  "private": true,
+  "packageManager": "npm@11.5.1",
+  "dependencies": {
+    "@angular/cdk": "^21.2.11",
+    "@angular/common": "^21.2.0",
+    "@angular/compiler": "^21.2.0",
+    "@angular/core": "^21.2.0",
+    "@angular/forms": "^21.2.0",
+    "@angular/material": "^21.2.11",
+    "@angular/platform-browser": "^21.2.0",
+    "@angular/router": "^21.2.0",
+    "bootstrap-icons": "^1.13.1",
+    "primeicons": "^7.0.0",
+    "rxjs": "~7.8.0",
+    "tslib": "^2.3.0"
+  },
+  "devDependencies": {
+    "@angular/build": "^21.2.9",
+    "@angular/cli": "^21.2.9",
+    "@angular/compiler-cli": "^21.2.0",
+    "jsdom": "^28.0.0",
+    "prettier": "^3.8.1",
+    "typescript": "~5.9.2",
+    "vitest": "^4.0.8"
+  }
+}
+
+debe ser algo como esto:
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visor de Cursos e Infraestructura Académica</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+</head>
+<body class="bg-gray-900 text-gray-100 min-h-screen font-sans">
+
+    <div class="max-w-6xl mx-auto px-4 py-8">
+        <header class="mb-8 border-b border-gray-800 pb-6">
+            <h1 class="text-3xl font-bold text-white tracking-tight">Planificación de Cursos</h1>
+            <p class="text-gray-400 mt-2">Carga un archivo .xlsx/.ods o usa los datos de prueba para visualizar las secciones y carga horaria.</p>
+        </header>
+
+        <div class="bg-gray-800 p-6 rounded-xl border border-gray-700 shadow-md flex flex-col sm:flex-row gap-4 items-center justify-between mb-8">
+            <div class="w-full sm:w-auto">
+                <label class="block text-sm font-medium text-gray-300 mb-2">Seleccionar archivo (.xlsx, .ods):</label>
+                <input type="file" id="input-archivo" accept=".xlsx, .ods"
+                    class="block w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-indigo-600 file:text-white hover:file:bg-indigo-700 file:cursor-pointer bg-gray-900 rounded-lg p-1 border border-gray-600">
+            </div>
+            <div class="w-full sm:w-auto text-center">
+                <span class="text-gray-500 text-sm block sm:inline mb-2 sm:mb-0 sm:mr-4">ó</span>
+                <button id="btn-demo" class="w-full sm:w-auto px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-medium text-sm rounded-md transition shadow-sm">
+                    Cargar datos de ejemplo
+                </button>
+            </div>
+        </div>
+
+        <main id="grid-cursos" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div id="sin-datos" class="col-span-full text-center py-12 bg-gray-800/50 rounded-xl border border-dashed border-gray-700 text-gray-500">
+                No hay cursos cargados. Selecciona un archivo o usa los datos de ejemplo.
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Datos crudos de tu ejemplo estructurados para simular la lectura de SheetJS
+        const datosEjemplo = [
+            { "Código Curso": "ICI-314", "Nombre": "Estructuras de Datos y Algoritmos", "Cantidad de Secciones": 2, "Cupos por Sección": 35, "Horas Cátedra": 4, "Horas Laboratorio": 2 },
+            { "Código Curso": "INF-421", "Nombre": "Sistemas Operativos", "Cantidad de Secciones": 3, "Cupos por Sección": 30, "Horas Cátedra": 4, "Horas Laboratorio": 3 },
+            { "Código Curso": "MAT-212", "Nombre": "Cálculo Multivariable", "Cantidad de Secciones": 4, "Cupos por Sección": 40, "Horas Cátedra": 6, "Horas Laboratorio": 0 },
+            { "Código Curso": "ICI-511", "Nombre": "Ingeniería de Software", "Cantidad de Secciones": 2, "Cupos por Sección": 25, "Horas Cátedra": 4, "Horas Laboratorio": 2 }
+        ];
+
+        // Escuchar la subida de un archivo real
+        document.getElementById('input-archivo').addEventListener('change', function(e) {
+            const archivo = e.target.files[0];
+            if (!archivo) return;
+
+            const lector = new FileReader();
+            lector.onload = function(evento) {
+                const bytes = evento.target.result;
+                // Parseo binario automático con SheetJS
+                const libro = XLSX.read(bytes, { type: 'binary' });
+                const nombreHoja = libro.SheetNames[0];
+                const hoja = libro.Sheets[nombreHoja];
+
+                // Mapear filas a formato JSON estructurado
+                const datosJSON = XLSX.utils.sheet_to_json(hoja);
+                renderizarTarjetas(datosJSON);
+            };
+            lector.readAsBinaryString(archivo);
+        });
+
+        // Escuchar el botón de datos simulados
+        document.getElementById('btn-demo').addEventListener('click', () => {
+            renderizarTarjetas(datosEjemplo);
+        });
+
+        // Función encargada de inyectar las tarjetas al DOM de forma limpia
+        function renderizarTarjetas(listaCursos) {
+            const grid = document.getElementById('grid-cursos');
+            grid.innerHTML = ''; // Limpiar el contenedor
+
+            if (listaCursos.length === 0) {
+                grid.innerHTML = `<div class="col-span-full text-center py-12 text-gray-500">El archivo está vacío o no contiene el formato adecuado.</div>`;
+                return;
+            }
+
+            listaCursos.forEach(curso => {
+                // Controlar posibles variaciones menores en las cabeceras del excel
+                const codigo = curso["Código Curso"] || curso["codigo"] || "S/C";
+                const nombre = curso["Nombre"] || curso["nombre"] || "Curso sin nombre";
+                const secciones = curso["Cantidad de Secciones"] || curso["secciones"] || 0;
+                const cupos = curso["Cupos por Sección"] || curso["cupos"] || 0;
+                const catedra = curso["Horas Cátedra"] || curso["catedra"] || 0;
+                const laboratorio = curso["Horas Laboratorio"] || curso["laboratorio"] || 0;
+
+                // Calcular total de alumnos proyectados en tiempo de ejecución
+                const totalAlumnos = secciones * cupos;
+
+                // Generar el componente HTML de la tarjeta
+                const tarjetaHtml = `
+                    <div class="bg-gray-800 rounded-xl border border-gray-700 shadow-lg hover:border-indigo-500/50 transition duration-200 overflow-hidden flex flex-col justify-between">
+                        <div class="p-6">
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="px-2.5 py-1 bg-indigo-950 text-indigo-400 border border-indigo-800/60 rounded-md text-xs font-mono font-bold uppercase tracking-wider">
+                                    ${codigo}
+                                </span>
+                                <span class="text-xs text-gray-400 flex items-center gap-1">
+                                    <span class="w-2 h-2 rounded-full ${laboratorio > 0 ? 'bg-amber-400' : 'bg-sky-400'}"></span>
+                                    ${laboratorio > 0 ? 'Teoría + Lab' : 'Solo Cátedra'}
+                                </span>
+                            </div>
+
+                            <h3 class="text-xl font-bold text-white leading-snug mb-4">${nombre}</h3>
+
+                            <div class="grid grid-cols-2 gap-3 bg-gray-900/60 p-3 rounded-lg border border-gray-700/50 text-sm mb-4">
+                                <div>
+                                    <span class="block text-xs text-gray-500 uppercase font-semibold">Secciones</span>
+                                    <span class="text-base font-medium text-gray-200">${secciones}</span>
+                                </div>
+                                <div>
+                                    <span class="block text-xs text-gray-500 uppercase font-semibold">Cupos por Sec.</span>
+                                    <span class="text-base font-medium text-gray-200">${cupos} <span class="text-xs text-gray-500">pax</span></span>
+                                </div>
+                            </div>
+
+                            <div class="space-y-2 text-sm">
+                                <div class="flex justify-between items-center text-gray-400">
+                                    <span>Horas Cátedra:</span>
+                                    <span class="font-mono text-gray-200 font-medium">${catedra} hrs</span>
+                                </div>
+                                <div class="flex justify-between items-center text-gray-400">
+                                    <span>Horas Laboratorio:</span>
+                                    <span class="font-mono text-gray-200 font-medium">${laboratorio} hrs</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-gray-800/40 border-t border-gray-700/60 px-6 py-3.5 flex justify-between items-center text-xs">
+                            <span class="text-gray-400">Carga total: <strong class="text-gray-300 font-mono text-sm">${parseInt(catedra) + parseInt(laboratorio)}</strong> hrs/sem</span>
+                            <span class="text-gray-400">Matrícula Est.: <strong class="text-emerald-400 text-sm">${totalAlumnos}</strong></span>
+                        </div>
+                    </div>
+                `;
+                grid.insertAdjacentHTML('beforeend', tarjetaHtml);
+            });
+        }
+    </script>
+</body>
+</html>
+
+
+
+pero usando otros campos:
+Código Ramo	Nombre Ramo	Nivel	Cantidad Secciones	Cupos Sección	Horas Cátedra	Horas Laboratorio
+#INF-201	Introducción a la Programación	II	2	15	4	4
+
+dime primero si es que tengo que instalar algo en angular, no me des codigo todavia

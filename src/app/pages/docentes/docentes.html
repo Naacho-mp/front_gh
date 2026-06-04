@@ -11,9 +11,8 @@
   </p>
 
   <div class="header-actions">
-    <a href="docs/base_docentes.xlsx" download="base_docentes.xlsx" 
-     class="btn btn-secondary">
-    <i class="pi pi-download"></i> Descargar Plantilla
+    <a href="docs/base_docentes.xlsx" download="base_docentes.xlsx" class="btn btn-secondary">
+      <i class="pi pi-download"></i> Descargar Plantilla
     </a>
     <button class="btn btn-outline" (click)="mostrarModalImportar=true">
       <i class="pi pi-file-arrow-up"></i> Importar Excel
@@ -24,25 +23,22 @@
   </div>
 </div>
 
-<!-- Cartas para metricas-->  
-
 <div class="metrics-container">
   <div class="card">
     <span class="label">Total Docentes</span>
-    <span class="value blue">12</span>
+    <span class="value blue">{{ totalDocentes }}</span>
   </div>
 
   <div class="card">
     <span class="label">Docentes Full-time</span>
-    <span class="value green">7</span>
+    <span class="value green">{{ totalFullTime }}</span>
   </div>
 
   <div class="card">
     <span class="label">Docentes Part-time</span>
-    <span class="value red">5</span>
+    <span class="value red">{{ totalPartTime }}</span>
   </div>
 </div>
-
 
 <div class="filters">
   <p class="texto-filtro-nombre">Filtrar por nombre: </p>
@@ -79,6 +75,11 @@
         <button class="action-btn del" (click)="eliminar(d)"><i class="pi pi-trash"></i></button>
       </td>
     </tr>
+    <tr *ngIf="filtrados.length === 0">
+      <td colspan="4" style="text-align: center; color: #888; padding: 20px;">
+        No se encontraron docentes con los filtros aplicados.
+      </td>
+    </tr>
   </tbody>
 </table>
 
@@ -90,9 +91,6 @@
   <button class="page-btn" (click)="goTo(currentPage + 1)" [disabled]="currentPage === totalPages">›</button>
 </div>
 
-
-
-<!-- Modal Importar -->
 <div *ngIf="mostrarModalImportar"
   style="position:fixed; top:0; left:0; width:100%; height:100%;
     background:rgba(0,0,0,0.45); display:flex; align-items:center;
@@ -103,7 +101,7 @@
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; font-family:'Segoe UI',sans-serif;">
       <div style="display:flex; align-items:center; gap:8px;">
         <i class="bi bi-file-earmark-arrow-up" style="font-size:20px; color:#1a3c8f;"></i>
-        <h5 style="margin:0; font-weight:600; font-size:20px;">Importar Docentes</h5>
+        <h5 style="margin:0; font-weight:600; font-size:20px; color: #333;">Importar Docentes</h5>
       </div>
       <button (click)="mostrarModalImportar=false"
         style="background:none; border:none; font-size:20px; color:#aaa; cursor:pointer;">✕</button>
@@ -116,17 +114,17 @@
     <div style="border:2px dashed #ccc; border-radius:10px; padding:32px;
       text-align:center; background:#fafafa; margin-bottom:16px;">
       <i class="pi pi-upload" style="font-size:32px; color:#aaa; display:block; margin-bottom:10px;"></i>
-      <p style="font-size:13px; color:#666; ">
+      <p style="font-size:13px; color:#666; margin: 0 0 8px 0; word-break: break-all;">
         {{ archivoSeleccionado ? archivoSeleccionado.name : 'Seleccione un archivo de su directorio' }}
       </p>
-      <p style="font-size:12px; color:#999;">
+      <p style="font-size:12px; color:#999; margin: 0 0 12px 0;">
         Solo soporta archivos .xlsx, .xls (Máx: 10MB)
       </p>
-      <input #fileInput type="file" accept=".xlsx,.xls,.csv"
+      <input #fileInput type="file" accept=".xlsx,.xls,.ods"
         style="display:none;" (change)="onArchivoSeleccionado($event)" />
       <button (click)="fileInput.click()"
         style="padding:8px 18px; border:1.5px solid #1a3c8f; background:white;
-          color:#1a3c8f; border-radius:8px; font-size:13px; cursor:pointer;">
+          color:#1a3c8f; border-radius:8px; font-size:13px; cursor:pointer; font-weight: 500;">
         Examinar archivos
       </button>
     </div>
@@ -139,8 +137,10 @@
       </button>
       <button (click)="subir()" [disabled]="!archivoSeleccionado"
         style="padding:9px 20px; border:none; background:#1a3c8f; color:white;
-          border-radius:8px; font-size:13px; cursor:pointer;">Subir</button>
+          border-radius:8px; font-size:13px; cursor:pointer; font-weight: 500; opacity: id">
+        Subir
+      </button>
     </div>
 
   </div>
-</div> 
+</div>

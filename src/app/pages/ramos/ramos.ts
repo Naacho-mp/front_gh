@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component} from '@angular/core';
+import { Component, ChangeDetectorRef} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { RamoFormComponent } from '../../forms/forms-ramo/forms-ramo';
@@ -17,6 +17,10 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 //   horas_laboratorio: number;
 // }
 
+import * as XLSX from 'xlsx';
+
+
+
 @Component({
   selector: 'app-ramos',
   imports: [CommonModule, FormsModule],
@@ -29,25 +33,83 @@ export class Ramos {
   currentPage = 1;
   readonly perPage = 5;
 
-  // salas: Ramo[] = [
-  //   { id: '#INF-201', nombre: 'Introducción a la Programación',nivel: 'II', cantidad_secciones: 2, cupos_por_seccion: 15, horas_catedra: 4, horas_laboratorio: 4 },
-  //   { id: '#ECI-302', nombre: 'Matemáticas', nivel:'I', cantidad_secciones: 3, cupos_por_seccion: 20, horas_catedra: 4, horas_laboratorio: 4 },
-  //   { id: '#ECI-102', nombre: 'Taller Software', nivel: 'III', cantidad_secciones: 2, cupos_por_seccion: 15, horas_catedra: 5, horas_laboratorio: 4 },
-  //   { id: '#INE-202', nombre: 'Apps Móviles', nivel: 'II', cantidad_secciones: 1, cupos_por_seccion: 30, horas_catedra: 4, horas_laboratorio: 2 },
-  //   { id: '#ECI-135', nombre: 'Cloud', nivel: 'I', cantidad_secciones: 1, cupos_por_seccion: 25, horas_catedra: 4, horas_laboratorio: 3 },
-
-  // ];
 
 
+  // Inyectamos ChangeDetectorRef para forzar el renderizado síncrono
   constructor(
-    private dialog: MatDialog,  
+    private dialog: MatDialog,
+    private cdr: ChangeDetectorRef,
     private ramosService: RamosService,
-    private snackBar: MatSnackBar) 
-    {}
+    private snackBar: MatSnackBar
+  ) {}
+
+  // Maneja la carga e interpretación del documento Excel
+  leerExcel(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (!input.files || input.files.length === 0) return;
+
+    const archivo = input.files[0];
+    const lector = new FileReader();
+
+    lector.onload = (e: ProgressEvent<FileReader>) => {
+      const target = e.target;
+      if (!target || !target.result) return;
+
+      const datosBinarios = target.result;
+      const libro = XLSX.read(datosBinarios, { type: 'binary' });
+      const primeraHojaNombre = libro.SheetNames[0];
+      const hoja = libro.Sheets[primeraHojaNombre];
+
+      // Convertimos el contenido de la primera pestaña en un arreglo JSON
+      const filasRaw = XLSX.utils.sheet_to_json<any>(hoja);
+
+      // Normalizamos y mapeamos los nombres de las columnas en español al objeto Ramo
+      const nuevosRamos: Ramo[] = filasRaw.map(fila => ({
+        id: String(fila['Código Ramo'] || fila['codigo'] || '').trim(),
+        nombre: String(fila['Nombre Ramo'] || fila['nombre'] || 'Sin nombre').trim(),
+        nivel: String(fila['Nivel'] || fila['nivel'] || 'I').trim(),
+        cantidad_secciones: Number(fila['Cantidad Secciones'] || fila['Cantidad de Secciones'] || 0),
+        cupos_por_seccion: Number(fila['Cupos Sección'] || fila['Cupos por Sección'] || 0),
+        horas_catedra: Number(fila['Horas Cátedra'] || 0),
+        horas_laboratorio: Number(fila['Horas Laboratorio'] || 0)
+      })).filter(ramo => ramo.nombre !== 'Sin nombre'); // Filtra filas vacías fantasmas
+
+      if (nuevosRamos.length > 0) {
+      nuevosRamos.forEach(ramo => this.ramosService.agregar(ramo));
+      this.currentPage = 1;
+      console.log('Ramos importados con éxito:', nuevosRamos);
+      this.cdr.detectChanges();
+    }
+
+      // Limpia el input para que permita cargar el mismo archivo consecutivamente si se modifica
+      input.value = '';
+    };
+
+    lector.readAsBinaryString(archivo);
+  }
+
+
 
 
   get ramos(): Ramo[] {
     return this.ramosService.getAll();
+    
+  //   dialogRef.afterClosed().subscribe((result) => {
+  //     if (result) {
+  //       console.log('Ramo guardado desde formulario:', result);
+  //       const nuevoRamo: Ramo = {
+  //         id: `#RAMO-${Math.floor(Math.random() * 1000)}`,
+  //         nombre: result.nombre_ramo,
+  //         nivel: result.nivel,
+  //         cantidad_secciones: Number(result.cantidad_secciones),
+  //         cupos_por_seccion: Number(result.cupos_seccion),
+  //         horas_catedra: Number(result.horas_catedra),
+  //         horas_laboratorio: Number(result.horas_laboratorio)
+  //       };
+  //       this.salas = [nuevoRamo, ...this.salas];
+  //       this.cdr.detectChanges(); // Aseguramos renderizado si el diálogo cierra fuera del ciclo principal
+  //     }
+  //   });
   }
 
   abrirRegistro(): void {
@@ -87,7 +149,9 @@ export class Ramos {
     return Array.from({ length: this.totalPages }, (_, i) => i + 1);
   }
 
-  onFilter() { this.currentPage = 1; }
+  onFilter() {
+    this.currentPage = 1;
+  }
 
   goTo(page: number) {
     if (page >= 1 && page <= this.totalPages) this.currentPage = page;

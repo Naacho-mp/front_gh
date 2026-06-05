@@ -6,17 +6,6 @@ import { RamoFormComponent } from '../../forms/forms-ramo/forms-ramo';
 import { RamosService, Ramo } from '../../services/ramo.service';
 import { ConfirmarDialog } from '../../shared/confirmar-dialog/confirmar-dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-
-// interface Ramo {
-//   id: string;
-//   nombre: string;
-//   nivel:string;
-//   cantidad_secciones: number;
-//   cupos_por_seccion: number;
-//   horas_catedra: number;
-//   horas_laboratorio: number;
-// }
-
 import * as XLSX from 'xlsx';
 
 
@@ -32,8 +21,6 @@ export class Ramos {
   filterType = '';
   currentPage = 1;
   readonly perPage = 5;
-
-
 
   // Inyectamos ChangeDetectorRef para forzar el renderizado síncrono
   constructor(

@@ -1,7 +1,461 @@
 @import "primeicons/primeicons.css";
 
+/* ESTILOS GENERALES Y TIPOGRAFÍA */
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: #f8fafc; 
+  margin: 0;
+}
 .titulo-modulo{
   margin-top: 50px; 
   font-size: 35px; 
   font-family: 'Segoe UI', sans-serif;
 }
+
+/* Contenedor principal que envuelve los filtros y la grilla */
+.modulo-container {
+  padding: 16px 24px 24px 24px;
+}
+
+.header-acciones {
+  display: flex;
+  justify-content: space-between; /* Envía los filtros a la izquierda y el botón a la derecha */
+  align-items: flex-end; /* Alinea el botón con la base del select (ignorando el label) */
+  margin-bottom: 24px;
+  background: white;
+  padding: 16px;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+}
+
+.filtro-group {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+}
+
+.filtro-group label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #64748b; 
+  letter-spacing: 0.5px;
+}
+
+.select-filtro {
+  padding: 10px 16px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  background-color: white;
+  min-width: 200px;
+  font-size: 14px;
+  color: #1e293b;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.select-filtro:focus {
+  border-color: #3b82f6;
+}
+
+.btn-aplicar {
+  background-color: #003366;; /* Negro/Gris oscuro moderno */
+  color: white;
+  border: none;
+  padding: 11px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-aplicar:hover {
+  background-color:#003366;;
+}
+
+/* LAYOUT DEL WORKSPACE (DISTRIBUCIÓN EN DOS COLUMNAS) */
+.workspace-layout {
+  display: grid;
+  grid-template-columns: 320px 1fr; /* Columna fija a la izquierda, grilla flexible a la derecha */
+  gap: 24px;
+  align-items: start;
+}
+
+/* PANEL LATERAL IZQUIERDO (SECCIONES) */
+.panel-lateral {
+  background: white;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  height: auto;
+  max-height: 820px;
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  border-bottom: 1px solid #f1f5f9;
+  padding-bottom: 12px;
+}
+
+.panel-header h2 {
+  font-size: 15px;
+  color: #334155;
+  margin: 0;
+  font-weight: 600;
+}
+
+.badge-contador {
+  background: #f1f5f9;
+  color: #475569;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.lista-tarjetas {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+/* Estilos de las tarjetas de secciones */
+.card-seccion {
+  background: #ffffff;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 14px;
+  transition: all 0.2s ease;
+}
+
+/* Estado inicial: Falta configurar Docente y Sala */
+.card-bloqueada {
+  border-left: 4px solid #d7d407; 
+}
+
+/* Estado listo: Ya se guardó, se puede arrastrar */
+.card-seccion[draggable="true"] {
+  cursor: grab;
+  border-left: 4px solid #3b82f6; 
+  background: #f8fafc;
+}
+.card-seccion[draggable="true"]:active {
+  cursor: grabbing;
+}
+
+
+.card-info-header {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.codigo-ramo {
+  font-size: 10px;
+  background: #e0e7ff;
+  color: #4338ca;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: 600;
+  align-self: flex-start;
+}
+
+.nombre-ramo {
+  font-size: 14px;
+  margin: 4px 0 12px 0;
+  color: #1e293b;
+  font-weight: 600;
+}
+
+/* Formulario interno de la tarjeta */
+.card-body-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.input-block label {
+  font-size: 9px;
+  font-weight: 700;
+  color: #64748b;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.card-select {
+  width: 100%;
+  padding: 8px;
+  font-size: 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  background-color: #fff;
+  color: #334155;
+}
+
+.btn-guardar-card {
+  width: 100%;
+  background: #003366;;
+  color: white;
+  border: none;
+  padding: 9px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 4px;
+  transition: background 0.2s;
+}
+
+.btn-guardar-card:hover {
+  background: #0a2672;
+}
+
+/* Vista estática interna de la tarjeta guardada */
+.card-body-fijo p {
+  margin: 4px 0;
+  font-size: 12px;
+  color: #475569;
+}
+
+.card-footer-status {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px dashed #e2e8f0;
+}
+
+.status-badge {
+  font-size: 11px;
+  color: #4338ca; 
+}
+
+.btn-editar-card {
+  background: #f1f5f9;
+  border: none;
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: background 0.2s;
+}
+
+.btn-editar-card:hover {
+  background: #e2e8f0;
+}
+
+/*GRILLA HORARIA (TABLA DE PLANIFICACIÓN)*/
+.contenedor-grilla {
+  background: white;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  
+}
+
+.tabla-horario {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed; 
+  margin: 0;
+}
+
+.tabla-horario th {
+  background: #f1f5f9;
+  color: #475569;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 14px;
+  border-bottom: 1px solid #e2e8f0;
+  text-align: center;
+  letter-spacing: 0.5px;
+}
+
+.tabla-horario td.celda-modulo-hora {
+  padding: 0;
+  background-color: #f8fafc; 
+  vertical-align: middle;    
+  text-align: center;
+}
+
+.col-hora {
+  width: 90px; 
+}
+
+.tabla-horario td {
+  border: 1px solid #e2e8f0;
+  height: 90px;
+  vertical-align: top;
+  padding: 6px;
+}
+
+.celda-hora-container {
+  display: block;
+  padding: 6px;
+  box-sizing: border-box; 
+}
+
+.rango-horas {
+  font-size: 12px;
+  color: #161718;
+  margin: 0;
+  display: inline-block;
+  font-family: 'Inter', sans-serif;
+  
+}
+
+/* Celdas receptoras del drag and drop */
+.celda-drop {
+  background-color: #ffffff;
+  transition: background-color 0.15s ease;
+}
+
+.celda-drop:hover {
+  background-color: #f1f5f9; 
+}
+
+/* Elementos renderizados dentro de la celda de la grilla */
+.item-horario-asignado {
+  background: #eff6ff; /* Fondo azul sutil */
+  border: 1px solid #bfdbfe;
+  border-left: 4px solid #2563eb;
+  border-radius: 6px;
+  padding: 8px;
+  position: relative;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+  animation: fadeIn 0.2s ease-out;
+}
+
+.ramo-titulo-item {
+  font-size: 11px;
+  font-weight: 700;
+  color: #1e3a8a;
+  padding-right: 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.meta-item {
+  font-size: 10px;
+  color: #2563eb;
+  font-weight: 600;
+  margin: 3px 0;
+}
+
+.docente-item {
+  font-size: 10px;
+  color: #475569;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Botón "X" para remover de la grilla */
+.close-btn {
+  position: absolute;
+  top: 4px;
+  right: 6px;
+  cursor: pointer;
+  color: #ef4444;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 1;
+  transition: color 0.15s;
+}
+
+/* Animación de entrada al soltar */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(2px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Bloque contenedor del acordeón */
+.item-acordeon {
+  margin-bottom: 10px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* Encabezado del botón del ramo */
+.acordeon-header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.2s ease;
+}
+
+.acordeon-header:hover {
+  background-color: #f1f5f9;
+  border-color: #cbd5e1;
+}
+
+/* Modificación de bordes cuando está desplegado para unirse con las tarjetas */
+.acordeon-header.activo {
+  background-color: #ffffff;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  border-bottom: 1px dashed #e2e8f0;
+}
+
+.ramo-titulo {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+/* Control visual de la flecha dropdown */
+.icono-flecha {
+  font-size: 11px;
+  color: #64748b;
+  transition: transform 0.2s ease;
+}
+
+/* Rotación magnética de la flecha cuando se expande */
+.icono-flecha.rotado {
+  transform: rotate(180deg);
+  color: #003366;
+}
+
+/* Contenedor interno que aloja tus tarjetas originales */
+.acordeon-contenido {
+  display: none;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-top: none;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+  padding: 12px;
+}
+
+.acordeon-contenido.mostrar {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: 500px;   
+  overflow-y: auto;    
+  padding-right: 8px;
+}
+

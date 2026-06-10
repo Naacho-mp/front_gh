@@ -3,3 +3,134 @@
 </head>
 
 <h1 class="titulo-modulo">Gestión de Horario</h1>
+
+<div class="modulo-container">
+  <header class="header-acciones">
+    <div class="filtro-group">
+      <label>FILTRAR POR NIVEL:</label>
+      <select [(ngModel)]="nivelSeleccionado" class="select-filtro">
+        <option *ngFor="let n of niveles" [value]="n">{{ n }}</option>
+      </select>
+    </div>
+    
+    <button (click)="aplicarFiltro()" class="btn-aplicar">
+     APLICAR
+    </button>
+  </header>
+
+  <div class="workspace-layout">
+  
+  <aside class="panel-lateral">
+    <div class="panel-header">
+      <h2>Secciones a asignar</h2>
+      <span class="badge-contador">
+        {{ (secciones | slice:0).length }}
+      </span>
+    </div>
+
+    <div class="lista-tarjetas">
+      
+      <div *ngFor="let ramo of ramos" class="item-acordeon">
+        
+        <button class="acordeon-header" 
+                (click)="ramo.expandido = !ramo.expandido" 
+                [class.activo]="ramo.expandido">
+          <span class="ramo-titulo">{{ ramo.nombre }}</span>
+          <span class="icono-flecha" [class.rotado]="ramo.expandido">▼</span>
+        </button>
+
+        <div class="acordeon-contenido" [class.mostrar]="ramo.expandido">
+          
+          <div *ngFor="let sec of ramo.secciones" 
+               class="card-seccion"
+               [class.card-bloqueada]="!sec.guardado"
+               [class.card-lista]="sec.guardado && sec.dia"
+               [draggable]="sec.guardado"
+               (dragstart)="onDragStart($event, sec)">
+            
+            <div class="card-info-header">
+              <span class="codigo-ramo">{{ sec.codigo }}</span>
+              <h3 class="nombre-ramo">{{ sec.ramo }}</h3>
+            </div>
+
+            <div class="card-body-form" *ngIf="!sec.guardado">
+              <div class="input-block">
+                <label>PROFESOR</label>
+                <select [(ngModel)]="sec.docente" class="card-select">
+                  <option value="" disabled selected>Seleccione Profesor</option>
+                  <option *ngFor="let doc of docentesDisponibles" [value]="doc">{{ doc }}</option>
+                </select>
+              </div>
+
+              <div class="input-block">
+                <label>LABORATORIO / SALA</label>
+                <select [(ngModel)]="sec.sala" class="card-select">
+                  <option value="" disabled selected>Seleccione Ubicación</option>
+                  <option *ngFor="let sala of salasDisponibles" [value]="sala">{{ sala }}</option>
+                </select>
+              </div>
+
+              <button (click)="guardarConfiguracionSeccion(sec)" class="btn-guardar-card">
+                Guardar
+              </button>
+            </div>
+
+            <div class="card-body-fijo" *ngIf="sec.guardado">
+              <p><strong>Docente:</strong> {{ sec.docente }}</p>
+              <p><strong>Sala:</strong> {{ sec.sala }}</p>
+              
+              <div class="card-footer-status">
+                <span class="status-badge" [class.ubicado]="sec.dia">
+                  {{ sec.dia ? 'Asignado en Grilla' : 'Listo para arrastrar' }}
+                </span>
+                <button (click)="editarConfiguracionSeccion(sec)" class="btn-editar-card">Editar ✏️</button>
+              </div>
+            </div>
+
+          </div> 
+        </div> 
+      </div> 
+    </div>
+  </aside>
+
+
+    <main class="contenedor-grilla">
+      <table class="tabla-horario">
+        <thead>
+          <tr>
+            <th class="col-hora">
+              <span class="icon-clock">Módulo / Día</span>
+            </th>
+            <th *ngFor="let dia of dias">{{ dia }}</th>
+          </tr>
+        </thead> 
+        <tbody>
+          <tr *ngFor="let mod of modulos">
+            <td class="celda-modulo-hora">
+              <div class="celda-hora-container">
+                <span class="rango-horas"><strong>{{ mod.id }}) </strong> {{ mod.horas }}</span>
+              </div>
+            </td>
+
+            <td *ngFor="let dia of dias" 
+                class="celda-drop"
+                (dragover)="allowDrop($event)"
+                (drop)="onDrop($event, dia, mod.id)">
+              
+              <div *ngFor="let sec of secciones">
+                <div class="item-horario-asignado" *ngIf="sec.dia === dia && sec.modulo === mod.id">
+                  <span class="close-btn" (click)="removerDeGrilla(sec)">×</span>
+                  <div class="ramo-titulo-item">{{ sec.ramo }}</div>
+                  <div class="meta-item">{{ sec.codigo }} - {{ sec.sala }}</div>
+                  <div class="docente-item">{{ sec.docente }}</div>
+                </div>
+              </div>
+
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </main>
+
+  </div>
+</div>

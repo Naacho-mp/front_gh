@@ -1,13 +1,27 @@
 import { Injectable } from '@angular/core';
 
-interface Docente {
+// 1. Creamos una interfaz para definir la forma de la disponibilidad
+export interface DisponibilidadSlot {
+  modulo: number;
+  lunes: boolean;
+  martes: boolean;
+  miercoles: boolean;
+  jueves: boolean;
+  viernes: boolean;
+  sabado: boolean;
+}
+
+// 2. Actualizamos la interfaz Docente (exportándola para usarla en tus componentes)
+export interface Docente {
   id: string;
   nombre: string;
   contrato: 'Full-time' | 'Part-time';
+  disponibilidad?: DisponibilidadSlot[]; // Lo hacemos opcional con "?"
 }
 
 @Injectable({ providedIn: 'root' })
 export class DocenteService {
+  // 3. Tus datos mockeados siguen funcionando porque "disponibilidad" es opcional
   private docentes: Docente[] = [
     { id: '#DOC-1001', nombre: 'Ricardo Aranda', contrato: 'Full-time' },
     { id: '#DOC-1002', nombre: 'Elena Martínez', contrato: 'Part-time' },
@@ -23,19 +37,17 @@ export class DocenteService {
     { id: '#DOC-1012', nombre: 'Gabriela Reyes', contrato: 'Full-time' },
   ];
 
-  private nextId = 1013;
-
   getAll(): Docente[] {
-    return this.docentes
+    return this.docentes;
   }
 
- agregar(docente: Omit<Docente, 'id'>): void {
-  const nuevo: Docente = {
-    id: `#DOC-${Math.floor(Math.random() * 9000 + 1000)}`,          
-    ...docente,
-  };
-  this.docentes.push(nuevo);                
-}
+  agregar(docente: Omit<Docente, 'id'>): void {
+    const nuevo: Docente = {
+      id: `#DOC-${Math.floor(Math.random() * 9000 + 1000)}`,          
+      ...docente,
+    };
+    this.docentes = [nuevo, ...this.docentes];                
+  }
 
   eliminar(id: string): void {
     this.docentes = this.docentes.filter(d => d.id !== id);
@@ -43,7 +55,8 @@ export class DocenteService {
 
   editar(id: string, datos: Partial<Omit<Docente, 'id'>>): void {
     const idx = this.docentes.findIndex(d => d.id === id);
-    if (idx !== -1) this.docentes[idx] = { ...this.docentes[idx], ...datos };
+    if (idx !== -1) {
+      this.docentes[idx] = { ...this.docentes[idx], ...datos };
+    }
   }
-
 }

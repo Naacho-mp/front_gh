@@ -8,7 +8,7 @@ export interface Ramo {
   cupos_por_seccion: number;
   horas_catedra: number;
   horas_laboratorio: number;
-}
+} 
 
 @Injectable({ providedIn: 'root' })
 export class RamosService {

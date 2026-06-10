@@ -48,6 +48,10 @@ export class Salas {
     });
   }
 
+  get totalSalas(): number { return this.salas.length; }
+  get totalLaboratorio(): number { return this.salas.filter(d => d.tipo === 'Laboratorio').length; }
+  get totalSala(): number { return this.salas.filter(d => d.tipo === 'Sala').length; }
+
   get filtrados(): Sala[] {
     return this.salas.filter(s =>
       s.nombre.toLowerCase().includes(this.searchName.toLowerCase()) &&

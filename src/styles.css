@@ -325,6 +325,16 @@ tr:hover td {
   color: white !important;
 }
 
+
+/*para modal de disponibilidad*/
+
+.modal-disponibilidad .mat-mdc-dialog-container .mdc-dialog__surface {
+  border-radius: 12px !important;
+  padding: 0 !important;
+  overflow: hidden;
+}
+
+
 .blue { color: #003366; }
 .green { color: #28a745; }
 .red { color: #dc3545; }

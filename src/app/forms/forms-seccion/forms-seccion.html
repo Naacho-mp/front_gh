@@ -26,16 +26,22 @@
     </div>
 
     <div class="form-group">
-      <label class="form-label">
-        Número de Sección
-      </label>
-      <input type="text" 
-             formControlName="numero_seccion"
-             placeholder="Ej: 01"
-             class="form-control" />
-      <div class="error-message" *ngIf="numero_seccion?.touched && numero_seccion?.hasError('required')">
-        El número de sección es requerido
-      </div>
+          <label class="form-label">
+            Número de Sección
+          </label>
+          
+          <select formControlName="numero_seccion" class="form-select"> 
+            <option value="" disabled selected>Seleccione el número de la sección</option>
+            <option [value]="1">01</option>
+            <option [value]="2">02</option>
+            <option [value]="3">03</option>
+            <option [value]="4">04</option>
+            <option [value]="5">05</option>
+          </select>
+
+          <div class="error-message" *ngIf="numero_seccion?.touched && numero_seccion?.hasError('required')">
+            El número de sección es requerido
+          </div>
     </div>
   
     <div class="form-group">

@@ -8,8 +8,6 @@ import { ConfirmarDialog } from '../../shared/confirmar-dialog/confirmar-dialog'
 import { MatSnackBar } from '@angular/material/snack-bar';
 import * as XLSX from 'xlsx';
 
-
-
 @Component({
   selector: 'app-ramos',
   imports: [CommonModule, FormsModule],
@@ -75,28 +73,9 @@ export class Ramos {
     lector.readAsBinaryString(archivo);
   }
 
-
-
-
+  
   get ramos(): Ramo[] {
     return this.ramosService.getAll();
-    
-  //   dialogRef.afterClosed().subscribe((result) => {
-  //     if (result) {
-  //       console.log('Ramo guardado desde formulario:', result);
-  //       const nuevoRamo: Ramo = {
-  //         id: `#RAMO-${Math.floor(Math.random() * 1000)}`,
-  //         nombre: result.nombre_ramo,
-  //         nivel: result.nivel,
-  //         cantidad_secciones: Number(result.cantidad_secciones),
-  //         cupos_por_seccion: Number(result.cupos_seccion),
-  //         horas_catedra: Number(result.horas_catedra),
-  //         horas_laboratorio: Number(result.horas_laboratorio)
-  //       };
-  //       this.salas = [nuevoRamo, ...this.salas];
-  //       this.cdr.detectChanges(); // Aseguramos renderizado si el diálogo cierra fuera del ciclo principal
-  //     }
-  //   });
   }
 
   abrirRegistro(): void {

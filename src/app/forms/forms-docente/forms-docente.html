@@ -62,7 +62,7 @@
             <small class="grid-mod-hora d-inline-block">{{ mod.rango }}</small>
           </td>
 
-          <td *ngFor="let dia of diasSemana; let i = index" [formGroupName]="i">
+          <td *ngFor="let dia of diasSemana; let i = index" [formArrayName]="i">
             <label class="celda-interactiva">
               <input type="checkbox" [formControlName]="j" class="grid-checkbox">
               <div class="celda-diseno-box"></div>

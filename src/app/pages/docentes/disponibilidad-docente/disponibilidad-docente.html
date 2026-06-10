@@ -1,0 +1,74 @@
+<div class="modal-wrapper">
+
+  <!-- HEADER -->
+  <div class="modal-header">
+    <div class="docente-info">
+      <div class="avatar">
+        {{ getIniciales() }}
+      </div>
+      <div class="docente-meta">
+        <div class="badges">
+          <span class="badge badge-role">DOCENTE</span>
+          <span class="badge" [ngClass]="data.contrato === 'Full-time' ? 'badge-fulltime' : 'badge-parttime'">
+            {{ data.contrato | uppercase }}
+          </span>
+        </div>
+        <h2 class="docente-nombre">{{ data.nombre }}</h2>
+      </div>
+    </div>
+    <button class="btn-close" (click)="cerrar()" title="Cerrar">
+      <i class="ti ti-x"></i>
+    </button>
+  </div>
+
+  <!-- GRID -->
+  <div class="grid-section">
+    <div class="grid-section-header">
+      <div>
+        <p class="grid-title">Disponibilidad Horaria</p>
+        <p class="grid-subtitle">Ciclo Académico 2024-S2</p>
+      </div>
+    </div>
+
+    <div class="grid-container">
+      <!-- Cabecera de días -->
+      <div class="grid-header">
+        <div class="cell-modulo-header">MÓDULO / DÍA</div>
+        <div class="cell-dia-header" *ngFor="let dia of DIAS_LABELS">{{ dia }}</div>
+      </div>
+
+      <!-- Filas de módulos -->
+      <div class="grid-row" *ngFor="let modulo of MODULOS">
+        <div class="cell-modulo">
+          <span class="modulo-num">{{ modulo.numero }}</span>
+          <span class="modulo-horario">{{ modulo.horario }}</span>
+        </div>
+        <div
+          class="cell-slot"
+          *ngFor="let dia of DIAS"
+          [ngClass]="isDisponible(modulo.numero, dia) ? 'slot-disponible' : 'slot-vacio'"
+        >
+          <ng-container *ngIf="isDisponible(modulo.numero, dia)">
+            <i class="ti ti-check"></i>
+            <span class="slot-texto">Disponible</span>
+          </ng-container>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="modal-footer">
+    <div class="leyenda">
+      <div class="leyenda-item">
+        <span class="leyenda-dot dot-disponible"></span>
+        <span>Disponible</span>
+      </div>
+      <div class="leyenda-item">
+        <span class="leyenda-dot dot-vacio"></span>
+        <span>No disponible</span>
+      </div>
+    </div>
+    <button class="btn-cerrar" (click)="cerrar()">Cerrar</button>
+  </div>
+
+</div>

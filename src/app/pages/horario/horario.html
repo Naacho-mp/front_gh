@@ -50,7 +50,7 @@
             
             <div class="card-info-header">
               <span class="codigo-ramo">{{ sec.codigo }}</span>
-              <h3 class="nombre-ramo">{{ sec.ramo }}</h3>
+              <h2 class="nombre-ramo">{{ sec.ramo }}</h2>
             </div>
 
             <div class="card-body-form" *ngIf="!sec.guardado">
@@ -83,7 +83,7 @@
                 <span class="status-badge" [class.ubicado]="sec.dia">
                   {{ sec.dia ? 'Asignado en Grilla' : 'Listo para arrastrar' }}
                 </span>
-                <button (click)="editarConfiguracionSeccion(sec)" class="btn-editar-card">Editar ✏️</button>
+                <button (click)="editarConfiguracionSeccion(sec)" class="btn-editar-card"><i class="pi pi-pencil"></i></button>
               </div>
             </div>
 

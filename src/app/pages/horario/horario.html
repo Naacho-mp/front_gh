@@ -55,15 +55,16 @@
 
             <div class="card-body-form" *ngIf="!sec.guardado">
               <div class="input-block">
-                <label>PROFESOR</label>
+                <label>PROFESOR:</label>
                 <select [(ngModel)]="sec.docente" class="card-select">
                   <option value="" disabled selected>Seleccione Profesor</option>
+                  <option value="">-- Sin Docente --</option>
                   <option *ngFor="let doc of docentesDisponibles" [value]="doc">{{ doc }}</option>
                 </select>
               </div>
 
               <div class="input-block">
-                <label>LABORATORIO / SALA</label>
+                <label>LABORATORIO / SALA:</label>
                 <select [(ngModel)]="sec.sala" class="card-select">
                   <option value="" disabled selected>Seleccione Ubicación</option>
                   <option *ngFor="let sala of salasDisponibles" [value]="sala">{{ sala }}</option>
@@ -118,11 +119,16 @@
                 (drop)="onDrop($event, dia, mod.id)">
               
               <div *ngFor="let sec of secciones">
-                <div class="item-horario-asignado" *ngIf="sec.dia === dia && sec.modulo === mod.id">
+                <div class="item-horario-asignado" 
+                    *ngIf="sec.dia === dia && sec.modulo === mod.id"
+                    [ngStyle]="{'background': getColorRamo(sec.ramo).bg,'border-left-color': getColorRamo(sec.ramo).borde}">
                   <span class="close-btn" (click)="removerDeGrilla(sec)">×</span>
-                  <div class="ramo-titulo-item">{{ sec.ramo }}</div>
-                  <div class="meta-item">{{ sec.codigo }} - {{ sec.sala }}</div>
-                  <div class="docente-item">{{ sec.docente }}</div>
+                  <div class="ramo-titulo-item" [ngStyle]="{ 'color': getColorRamo(sec.ramo).titulo }">{{ sec.ramo }}</div>
+                  <div class="meta-item" [ngStyle]="{ 'color': getColorRamo(sec.ramo).meta }">{{ sec.codigo }} - {{ sec.sala }}</div>
+                  <div class="docente-item">Doc: 
+                    <span *ngIf="sec.docente">{{ sec.docente }}</span>
+                    <span *ngIf="!sec.docente" class="texto-alerta">Sin docente</span>
+                  </div>
                 </div>
               </div>
 

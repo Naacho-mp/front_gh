@@ -32,8 +32,8 @@ export class Horario {
   niveles: string[] = ['Nivel I', 'Nivel II', 'Nivel III', 'Nivel IV', 'Nivel V'];
 
   // Datos hardcodeados para los selectores internos de las tarjetas
-  docentesDisponibles: string[] = ['Dr. Arancibia', 'Mg. Gomez', 'Ing. Vera', 'Dra. Muñoz'];
-  salasDisponibles: string[] = ['Sala 201', 'Lab. Computación', 'Lab. 18.2', 'Sala 105'];
+  docentesDisponibles: string[] = ['Marco Toranzo', 'Felipe Tirado', 'Raúl Durán', 'Carlos Castro'];
+  salasDisponibles: string[] = ['Sala 411', 'Lab 3', 'Lab 4', 'Sala 19'];
 
   // Definición de la estructura de la grilla horaria
   dias: string[] = ['LUNES', 'MARTES', 'MIÉRCOLES', 'JUEVES', 'VIERNES'];
@@ -55,8 +55,16 @@ export class Horario {
   secciones: Seccion[] = [
     { id: 1, ramo: 'Cálculo Diferencial', codigo: 'INF-102-S1', docente: '', sala: '', guardado: false },
     { id: 2, ramo: 'Cálculo Diferencial', codigo: 'INF-102-S2', docente: '', sala: '', guardado: false },
-    { id: 3, ramo: 'Álgebra Lineal', codigo: 'INF-103-S1', docente: '', sala: '', guardado: false },
-    { id: 4, ramo: 'Física Mecánica', codigo: 'INF-104-S1', docente: '', sala: '', guardado: false },
+    { id: 3, ramo: 'Cálculo Diferencial', codigo: 'INF-102-S3', docente: '', sala: '', guardado: false },
+
+    { id: 4, ramo: 'Álgebra Lineal', codigo: 'INF-103-S1', docente: '', sala: '', guardado: false },
+    { id: 5, ramo: 'Física Mecánica', codigo: 'INF-104-S1', docente: '', sala: '', guardado: false },
+
+    { id: 6, ramo: 'Módulo I', codigo: 'INL-101-S1', docente: '', sala: '', guardado: false },
+
+    { id: 7, ramo: 'Apps Móviles', codigo: 'ANF-119-S1', docente: '', sala: '', guardado: false },
+
+    { id: 8, ramo: 'Matemáticas I', codigo: 'MAT-129-S1', docente: '', sala: '', guardado: false },
     
   ];
 
@@ -85,15 +93,61 @@ export class Horario {
         { id: 5, ramo: 'Física Mecánica', codigo: 'INF-104-S1', docente: '', sala: '', guardado: false },
       ]
     }
+    ,
+    {
+      nombre: 'Módulo I',
+      expandido: false,
+      secciones: [
+        { id: 6, ramo: 'Módulo I', codigo: 'INL-101-S1', docente: '', sala: '', guardado: false },
+      ]
+    }
+    ,
+    {
+      nombre: 'Apps Móviles',
+      expandido: false,
+      secciones: [
+        { id: 7, ramo: 'Apps Móviles', codigo: 'ANF-119-S1', docente: '', sala: '', guardado: false },
+      ]
+    }
+    ,
+    {
+      nombre: 'Matemáticas I',
+      expandido: false,
+      secciones: [
+        { id: 8, ramo: 'Matemáticas I', codigo: 'MAT-129-S1', docente: '', sala: '', guardado: false },
+      ]
+    }
   ];
+
+  //Para colores de los ramos de forma random
+  readonly colores = [
+  { bg: '#eff6ff', borde: '#2563eb', titulo: '#1e3a8a', meta: '#2563eb' }, 
+  { bg: '#f0fdf4', borde: '#16a34a', titulo: '#14532d', meta: '#16a34a' }, 
+  { bg: '#fdf4ff', borde: '#9333ea', titulo: '#581c87', meta: '#9333ea' }, 
+  { bg: '#fef2f2', borde: '#dc2626', titulo: '#7f1d1d', meta: '#dc2626' },  
+  { bg: '#fefce8', borde: '#ca8a04', titulo: '#713f12', meta: '#ca8a04' },  
+  { bg: '#ecfeff', borde: '#0891b2', titulo: '#164e63', meta: '#08c6f5' }, 
+];
+
+// guarda el índice de color asignado a cada ramo
+  private coloresAsignados: { [nombreRamo: string]: number } = {};
+  private contadorColor: number = 0;
+
+  getColorRamo(nombreRamo: string) {
+  if (this.coloresAsignados[nombreRamo] === undefined) {
+    this.coloresAsignados[nombreRamo] = this.contadorColor % this.colores.length;
+    this.contadorColor++;
+  }
+  return this.colores[this.coloresAsignados[nombreRamo]];
+}
 
 
   // Guarda la información interna de la tarjeta y la habilita para ser arrastrada
   guardarConfiguracionSeccion(seccion: Seccion) {
-    if (seccion.docente && seccion.sala) {
+    if (seccion.sala) {
       seccion.guardado = true;
     } else {
-      alert('Por favor, asigne un docente y una sala antes de guardar.');
+      alert('Por favor, asigne una sala antes de guardar.');
     }
   }
 
@@ -122,20 +176,32 @@ export class Horario {
   }
 
   // Se ejecuta cuando soltamos la sección dentro de una celda específica del horario
-  onDrop(event: DragEvent, dia: string, moduloId: number) {
-    event.preventDefault();
-    const seccionIdStr = event.dataTransfer?.getData('text/plain');
-    if (seccionIdStr) {
-      const seccionId = parseInt(seccionIdStr, 10);
-      const seccionTarget = this.secciones.find(s => s.id === seccionId);
-      
-      if (seccionTarget) {
-        // Asignamos las coordenadas de tiempo en la grilla
-        seccionTarget.dia = dia;
-        seccionTarget.modulo = moduloId;
+onDrop(event: DragEvent, dia: string, moduloId: number) {
+  event.preventDefault();
+  const seccionIdStr = event.dataTransfer?.getData('text/plain');
+  
+  if (seccionIdStr) {
+    const seccionId = parseInt(seccionIdStr, 10);
+    
+    // se busca la sección modificada dentro de los ramos
+    let seccionConDatos: Seccion | undefined;
+    for (const ramo of this.ramos) {
+      seccionConDatos = ramo.secciones.find(s => s.id === seccionId);
+      if (seccionConDatos) break;
+    }
+    
+    // si se encuentra, se actualiza también la lista de 'secciones' que lee la grilla
+    if (seccionConDatos) {
+      const seccionGrilla = this.secciones.find(s => s.id === seccionId);
+      if (seccionGrilla) {
+        seccionGrilla.docente = seccionConDatos.docente;
+        seccionGrilla.sala = seccionConDatos.sala;
+        seccionGrilla.dia = dia;
+        seccionGrilla.modulo = moduloId;
       }
     }
   }
+}
 
   // Permite remover un bloque de la grilla y devolverlo al panel izquierdo
   removerDeGrilla(seccion: Seccion) {

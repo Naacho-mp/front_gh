@@ -94,8 +94,9 @@ body {
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
-  height: auto;
-  max-height: 820px;
+  height: calc(100vh - 160px);
+  overflow: hidden;
+  
 }
 
 .panel-header {
@@ -128,6 +129,7 @@ body {
   flex-direction: column;
   gap: 12px;
   flex: 1;
+  min-height: 0;
   overflow-y: auto;
   padding-right: 4px;
 }
@@ -164,13 +166,14 @@ body {
 }
 
 .codigo-ramo {
-  font-size: 10px;
+  font-size: 11px;
   background: #003366;
   color: #ffffff;
   padding: 2px 6px;
   border-radius: 4px;
-  font-weight: 600;
+  font-weight: 580;
   align-self: flex-start; 
+
 }
 
 .nombre-ramo {
@@ -178,6 +181,7 @@ body {
   margin: 4px 0 12px 0;
   color: #1e293b;
   font-weight: 600;
+
 }
 
 /* Formulario interno de la tarjeta */
@@ -345,9 +349,10 @@ body {
   font-weight: 700;
   color: #1e3a8a;
   padding-right: 12px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  white-space: normal;
+  word-break: break-word; /*para despues quitar los 3 puntos del nombre del ramo*/
+  overflow: visible;
+  text-overflow: clip;
 }
 
 .meta-item {
@@ -355,15 +360,26 @@ body {
   color: #2563eb;
   font-weight: 600;
   margin: 3px 0;
+  word-break: break-word; /*nueva*/
 }
 
 .docente-item {
   font-size: 10px;
   color: #475569;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  white-space: normal;
+  word-break: break-word;
+ 
 }
+
+/*para cuando una seccion está sin profe*/
+
+.texto-alerta {
+  color: #dc2626;    
+  font-weight: 580;   
+  font-style: italic;  
+}
+
+
 
 /* Botón  con la x  para remover de la grilla */
 .close-btn {
@@ -388,7 +404,7 @@ body {
 .item-acordeon {
   margin-bottom: 10px;
   border-radius: 8px;
-  overflow: hidden;
+  overflow: visible;
 }
 
 /* Encabezado del botón del ramo */
@@ -454,8 +470,8 @@ body {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  max-height: 500px;   
-  overflow-y: auto;    
+  max-height: 340px; 
+  overflow-y: auto;
   padding-right: 8px;
 }
 

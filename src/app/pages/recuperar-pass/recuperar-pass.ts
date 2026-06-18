@@ -19,20 +19,20 @@ export class RecuperarPass {
     this.mensajeExito = '';
     this.mensajeError = '';
 
-    // 1. Validar que no esté vacío
+    // Validar que no esté vacío
     if (!this.correo.trim()) {
       this.mensajeError = 'Por favor ingrese su correo electrónico.';
       return;
     }
 
-    // 2. Validar formato de correo institucional
+    // Validar formato de correo institucional
     const correoValido = /^[a-zA-Z0-9._%+-]+@ucm\.cl$/.test(this.correo);
     if (!correoValido) {
       this.mensajeError = 'Ingrese un correo institucional válido (@ucm.cl).';
       return;
     }
 
-    // 3. Llamar al servicio
+    // Llamar al servicio a crear para la recuperacion 
     this.cargando = true;
 
     // this.authService.recuperarContrasena(this.correo).subscribe({
@@ -46,7 +46,7 @@ export class RecuperarPass {
     //   }
     // });
 
-    // Simulación mientras no tienes el servicio:
+    // Simulación
     setTimeout(() => {
       this.mensajeExito = 'Se enviaron las instrucciones a tu correo.';
       this.cargando = false;

@@ -19,8 +19,8 @@ body {
 
 .header-acciones {
   display: flex;
-  justify-content: space-between; /* Envía los filtros a la izquierda y el botón a la derecha */
-  align-items: flex-end; /* Alinea el botón con la base del select (ignorando el label) */
+  justify-content: space-between; 
+  align-items: flex-end; 
   margin-bottom: 24px;
   background: white;
   padding: 16px;
@@ -60,7 +60,7 @@ body {
 }
 
 .btn-aplicar {
-  background-color: #003366;; /* Negro/Gris oscuro moderno */
+  background-color: #003366;; 
   color: white;
   border: none;
   padding: 11px 24px;
@@ -80,7 +80,7 @@ body {
 /* LAYOUT DEL WORKSPACE (DISTRIBUCIÓN EN DOS COLUMNAS) */
 .workspace-layout {
   display: grid;
-  grid-template-columns: 320px 1fr; /* Columna fija a la izquierda, grilla flexible a la derecha */
+  grid-template-columns: 320px 1fr; 
   gap: 24px;
   align-items: start;
 }
@@ -141,12 +141,12 @@ body {
   transition: all 0.2s ease;
 }
 
-/* Estado inicial: Falta configurar Docente y Sala */
+/* Estado inicial: en dicion  para configurar Docente y Sala */
 .card-bloqueada {
   border-left: 4px solid #d7d407; 
 }
 
-/* Estado listo: Ya se guardó, se puede arrastrar */
+/* Estado listo: Ya se guardó, y se puede arrastrar */
 .card-seccion[draggable="true"] {
   cursor: grab;
   border-left: 4px solid #3b82f6; 
@@ -330,7 +330,7 @@ body {
 
 /* Elementos renderizados dentro de la celda de la grilla */
 .item-horario-asignado {
-  background: #eff6ff; /* Fondo azul sutil */
+  background: #eff6ff; 
   border: 1px solid #bfdbfe;
   border-left: 4px solid #2563eb;
   border-radius: 6px;
@@ -365,7 +365,7 @@ body {
   text-overflow: ellipsis;
 }
 
-/* Botón "X" para remover de la grilla */
+/* Botón  con la x  para remover de la grilla */
 .close-btn {
   position: absolute;
   top: 4px;
@@ -433,7 +433,7 @@ body {
   transition: transform 0.2s ease;
 }
 
-/* Rotación magnética de la flecha cuando se expande */
+/* Rotación de la flecha cuando se expande */
 .icono-flecha.rotado {
   transform: rotate(180deg);
   color: #003366;

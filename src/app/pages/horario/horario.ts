@@ -31,13 +31,14 @@ export class Horario {
   nivelSeleccionado: string = 'Nivel I';
   niveles: string[] = ['Nivel I', 'Nivel II', 'Nivel III', 'Nivel IV', 'Nivel V'];
 
-  // Datos maestros para los selectores internos de las tarjetas
+  // Datos hardcodeados para los selectores internos de las tarjetas
   docentesDisponibles: string[] = ['Dr. Arancibia', 'Mg. Gomez', 'Ing. Vera', 'Dra. Muñoz'];
   salasDisponibles: string[] = ['Sala 201', 'Lab. Computación', 'Lab. 18.2', 'Sala 105'];
 
   // Definición de la estructura de la grilla horaria
   dias: string[] = ['LUNES', 'MARTES', 'MIÉRCOLES', 'JUEVES', 'VIERNES'];
   
+  //modulos solo hasta el modulo 9 dado que es civil informatica
   modulos = [
     { id: 1, horas: '08:30 - 09:30' },
     { id: 2, horas: '09:35 - 10:35' },
@@ -50,7 +51,7 @@ export class Horario {
     { id: 9, horas: '17:55 - 18:55' }
   ];
 
-  // Listado inicial de secciones del nivel cargado
+  // Listado inicial de secciones del nivel cargado (hardcodeados)
   secciones: Seccion[] = [
     { id: 1, ramo: 'Cálculo Diferencial', codigo: 'INF-102-S1', docente: '', sala: '', guardado: false },
     { id: 2, ramo: 'Cálculo Diferencial', codigo: 'INF-102-S2', docente: '', sala: '', guardado: false },
@@ -104,7 +105,7 @@ export class Horario {
     seccion.modulo = undefined;
   }
 
-  // --- Lógica Nativa Drag & Drop ---
+  // --- Lógica  Drag & Drop ---
   
   // Se ejecuta en el costado izquierdo al empezar a arrastrar una tarjeta válida
   onDragStart(event: DragEvent, seccion: Seccion) {
@@ -144,6 +145,5 @@ export class Horario {
 
   aplicarFiltro() {
     console.log('Aplicando filtro para:', this.nivelSeleccionado);
-    // Aquí puedes añadir lógica con servicios para recargar "this.secciones" desde tu backend
   }
 }

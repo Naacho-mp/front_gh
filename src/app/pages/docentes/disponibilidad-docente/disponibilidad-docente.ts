@@ -70,7 +70,7 @@ export class DisponibilidadDocenteComponent implements OnInit {
         });
       });
     } else {
-      // Part-time: solo los módulos registrados al momento del alta
+      // Part-time: solo los módulos registrados al momento del registro
       this.data.disponibilidad?.forEach(slot => {
         this.disponibilidadMap.set(slot.modulo, slot);
       });

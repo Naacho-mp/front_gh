@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-// 1. Creamos una interfaz para definir la forma de la disponibilidad
+// interfaz para definir la forma de la disponibilidad
 export interface DisponibilidadSlot {
   modulo: number;
   lunes: boolean;
@@ -11,17 +11,17 @@ export interface DisponibilidadSlot {
   sabado: boolean;
 }
 
-// 2. Actualizamos la interfaz Docente (exportándola para usarla en tus componentes)
+// actualizar interfaz Docente y asi exportarla
 export interface Docente {
   id: string;
   nombre: string;
   contrato: 'Full-time' | 'Part-time';
-  disponibilidad?: DisponibilidadSlot[]; // Lo hacemos opcional con "?"
+  disponibilidad?: DisponibilidadSlot[]; // dejarla opcional por si el docente es fulltimee
 }
 
 @Injectable({ providedIn: 'root' })
 export class DocenteService {
-  // 3. Tus datos mockeados siguen funcionando porque "disponibilidad" es opcional
+  // datos hardcodeados en el front
   private docentes: Docente[] = [
     { id: '#DOC-1001', nombre: 'Ricardo Aranda', contrato: 'Full-time' },
     { id: '#DOC-1002', nombre: 'Elena Martínez', contrato: 'Part-time' },

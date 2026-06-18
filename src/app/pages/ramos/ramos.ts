@@ -28,7 +28,7 @@ export class Ramos {
     private snackBar: MatSnackBar
   ) {}
 
-  // Maneja la carga e interpretación del documento Excel
+  // Maneja la carga del documento Excel
   leerExcel(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (!input.files || input.files.length === 0) return;
@@ -125,6 +125,7 @@ export class Ramos {
 
   editar(d: Ramo) { console.log('Editar', d); }
 
+  // modal de retribucion de que si realmente se quiere eliminar un ramo
   eliminar(d: Ramo): void {
   this.dialog.open(ConfirmarDialog, {
     width: '350px',
@@ -133,7 +134,7 @@ export class Ramos {
       mensaje: `¿Estás seguro que deseas eliminar el Ramo <strong>"${d.nombre}"</strong>? Esta acción eliminará toda la información asociada a este ramo.`,
       boton: 'Eliminar',
       tipo: 'eliminar'
-    }
+    } //luego confirmacion mediante un toast o notificacion
   }).afterClosed().subscribe(confirmado => {
     if (confirmado === true){
     this.ramosService.eliminar(d.id);

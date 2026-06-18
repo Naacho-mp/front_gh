@@ -24,7 +24,7 @@ export class Docentes implements OnInit {
   readonly perPage = 5;
   estadoModal: boolean = false;
 
-  // 3. Declaramos la propiedad local que manejará la tabla
+  //Propiedad local que manejará la tabla
   docentes: Docente[] = [];
 
   mostrarModalImportar = false;
@@ -37,7 +37,7 @@ export class Docentes implements OnInit {
     private snackBar: MatSnackBar
   ) {}
 
-  // 4. Cargamos los datos del servicio apenas nazca el componente
+  // cargar los datos del servicio apenas salga el componente
   ngOnInit(): void {
     this.docentes = this.docenteService.getAll();
   }
@@ -142,6 +142,7 @@ export class Docentes implements OnInit {
 
   editar(d: Docente) { console.log('Editar', d); }
 
+  //Eliminar con notificacion de que realmente se eliminó
   eliminar(d: Docente): void {
     this.dialog.open(ConfirmarDialog, {
       width: '350px',
@@ -153,7 +154,7 @@ export class Docentes implements OnInit {
       }
     }).afterClosed().subscribe(confirmado => {
       if (confirmado === true) {
-        // 5. El servicio limpia el registro de su estado interno
+        // El servicio limpia el registro de su estado interno
         this.docenteService.eliminar(d.id);
         this.docentes = this.docenteService.getAll();
   
@@ -211,7 +212,7 @@ export class Docentes implements OnInit {
       }).filter(doc => doc.id !== '');
 
       if (nuevosDocentes.length > 0) {
-        // 7. Modificación para el Excel: Para que la importación persista tras un cambio de vista,
+        // Modificación para el Excel: Para que la importación persista tras un cambio de vista,
         // guardamos individualmente los registros procesados en el servicio.
         nuevosDocentes.forEach(doc => {
           this.docenteService.agregar(doc);

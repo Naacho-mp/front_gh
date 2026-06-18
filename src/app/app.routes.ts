@@ -5,7 +5,7 @@ import { Secciones } from './pages/secciones/secciones';
 import { Ramos } from './pages/ramos/ramos';
 import { Salas } from './pages/salas/salas';
 import { LoginComponent } from './pages/login/login';
-import { MainLayoutComponent } from './layouts/main-layout/main-layout';
+import { MainLayout } from './layouts/main-layout/main-layout';
 import { RecuperarPass } from './pages/recuperar-pass/recuperar-pass';
 
 
@@ -15,7 +15,7 @@ export const routes: Routes = [
   { path: 'login', component: LoginComponent}, 
   { path: 'recuperar-pass', component: RecuperarPass},
   {
-    path: '', component: MainLayoutComponent, 
+    path: '', component: MainLayout, 
     children: [
     { path: 'horario', component: Horario },
     { path: 'docentes', component: Docentes },

@@ -23,7 +23,7 @@ export class LoginComponent {
   }
 
   iniciarSesion() {
-    // Aquí conectas con tu backend
+    // conexion con backend 
     if (this.usuario && this.password) {
       this.router.navigate(['/horario']); 
     }

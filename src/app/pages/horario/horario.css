@@ -6,11 +6,7 @@ body {
   background-color: #f8fafc; 
   margin: 0;
 }
-.titulo-modulo{
-  margin-top: 50px; 
-  font-size: 35px; 
-  font-family: 'Segoe UI', sans-serif;
-}
+
 
 /* Contenedor principal que envuelve los filtros y la grilla */
 .modulo-container {
@@ -34,6 +30,7 @@ body {
   flex-direction: row;
   align-items: center;
   gap: 12px;
+  font-family: 'Segoe UI', sans-serif;
 }
 
 .filtro-group label {
@@ -106,6 +103,7 @@ body {
   margin-bottom: 16px;
   border-bottom: 1px solid #f1f5f9;
   padding-bottom: 12px;
+  font-family: 'Segoe UI', sans-serif;
 }
 
 .panel-header h2 {
@@ -163,6 +161,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 4px;
+  font-family: 'Segoe UI', sans-serif;
 }
 
 .codigo-ramo {
@@ -173,6 +172,7 @@ body {
   border-radius: 4px;
   font-weight: 580;
   align-self: flex-start; 
+  font-family: 'Segoe UI', sans-serif;
 
 }
 
@@ -181,6 +181,7 @@ body {
   margin: 4px 0 12px 0;
   color: #1e293b;
   font-weight: 600;
+  font-family: 'Segoe UI', sans-serif;
 
 }
 
@@ -189,6 +190,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 10px;
+  font-family: 'Segoe UI', sans-serif;
 }
 
 .input-block label {

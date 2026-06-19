@@ -87,3 +87,23 @@
 .logout:hover {
   background-color: #fef2f2;
 }
+
+.titulo-sistema{
+  font-family: 'Segoe UI', sans-serif; 
+  font-size: 18px; 
+  font-weight: bold; 
+  color: #003366;
+  margin-left: 25px;
+  margin-bottom: 10px;
+
+}
+
+.titulo-sistema-2  {
+  font-family: 'Segoe UI', sans-serif; 
+  font-size: 18px; 
+  font-weight: bold; 
+  color: #003366;
+  margin-left: 45px;
+  margin-bottom: 30px;
+
+}

@@ -2,7 +2,7 @@
 @import "primeicons/primeicons.css";
 
 .titulo-modulo{
-  margin-top: 50px; 
+  margin-top: 35px; 
   font-size: 35px; 
   font-family: 'Segoe UI', sans-serif;
 }
@@ -214,28 +214,42 @@ tr:hover td {
   gap: 8px;
 }
 
-.action-btn {
+.action-btn.dispo {
   background: none;
   border: none;
   outline: none;
   box-shadow: none;
   padding: 6px 8px;
   cursor: pointer;
-  color: #000000;
+  color: #003366;
   font-size: 15px;
   transition: color 0.12s;
 }
 
-.action-btn:hover {
+.action-btn.editar {
   background: none;
-  color: #003366;
+  border: none;
+  outline: none;
+  box-shadow: none;
+  padding: 6px 8px;
+  cursor: pointer;
+  color: #d7d407;
+  font-size: 15px;
+  transition: color 0.12s;
 }
 
-.action-btn.del:hover {
+.action-btn.del {
   background: none;
+  border: none;
+  outline: none;
+  box-shadow: none;
+  padding: 6px 8px;
+  cursor: pointer;
   color: #dc2626;
-  
+  font-size: 15px;
+  transition: color 0.12s;
 }
+
 
 .pagination {
   display: flex;
@@ -312,17 +326,21 @@ tr:hover td {
 
 .snack-eliminar .mdc-snackbar__surface {
   background-color: #dc3545 !important;
+  font-family: 'Segoe UI', sans-serif;
 }
 
 .snack-eliminar .mdc-snackbar__label {
   color: white !important;
+  font-family: 'Segoe UI', sans-serif;
 }
 
 .snack-success .mdc-snackbar__surface {
   background-color: #189d5f !important;
+  font-family: 'Segoe UI', sans-serif;
 }
 .snack-success .mdc-snackbar__label {
   color: white !important;
+  font-family: 'Segoe UI', sans-serif;
 }
 
 
@@ -339,3 +357,13 @@ tr:hover td {
 .green { color: #28a745; }
 .red { color: #dc3545; }
 .urgent { font-weight: bold; color: #dc3545; }
+
+.simple-footer {
+  text-align: center;         
+  padding: 25px 20px;        
+  color: #64748b;           
+  font-family: 'Segoe UI', sans-serif;
+  font-size: 13px;            
+  margin-top: auto;          
+  border-top: 1px solid #f1f5f9; 
+}

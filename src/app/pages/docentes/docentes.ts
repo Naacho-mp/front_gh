@@ -164,7 +164,7 @@ export class Docentes implements OnInit {
 
         this.cdr.detectChanges();
 
-        this.snackBar.open(`El Docente "${d.nombre}" ha sido eliminado correctamente`, 'Cerrar', {
+        this.snackBar.open(`Docente "${d.nombre}" ha sido eliminado correctamente`, 'Cerrar', {
           duration: 3000,
           horizontalPosition: 'center',
           verticalPosition: 'top',

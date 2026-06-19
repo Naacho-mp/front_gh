@@ -1,10 +1,15 @@
-<head>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-</head>
+
 
 <h1 class="titulo-modulo">Gestión de Horario</h1>
 
+  <p class="parrafo-modulo">
+    Panel centralizado para la administración integral de horarios académicos en Ingeniería Civil en Informática. 
+    Permite gestionar secciones, asignar docentes, y recursos físicos como salas y laboratorios, 
+    asegurando la validación automática de disponibilidad y la prevención de conflictos para la carrera.
+  </p>
+
 <div class="modulo-container">
+  
   <header class="header-acciones">
     <div class="filtro-group">
       <label>FILTRAR POR NIVEL:</label>
@@ -22,7 +27,7 @@
   
   <aside class="panel-lateral">
     <div class="panel-header">
-      <h2>Secciones a asignar</h2>
+      <h2>Secciones por asignar</h2>
       <span class="badge-contador">
         {{ (secciones | slice:0).length }}
       </span>
@@ -84,7 +89,7 @@
                 <span class="status-badge" [class.ubicado]="sec.dia">
                   {{ sec.dia ? 'Asignado en Grilla' : 'Listo para arrastrar' }}
                 </span>
-                <button (click)="editarConfiguracionSeccion(sec)" class="btn-editar-card"><i class="pi pi-pencil"></i></button>
+                <button (click)="editarConfiguracionSeccion(sec)" class="btn-editar-card"><i class="pi pi-pencil" title="Editar"></i></button>
               </div>
             </div>
 
@@ -111,7 +116,7 @@
               <div class="celda-hora-container">
                 <span class="rango-horas"><strong>{{ mod.id }}) </strong> {{ mod.horas }}</span>
               </div>
-            </td>
+            </td> 
 
             <td *ngFor="let dia of dias" 
                 class="celda-drop"

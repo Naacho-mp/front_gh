@@ -119,7 +119,7 @@ export class Horario {
     }
   ];
 
-  //Para colores de los ramos de forma random
+  //Para colores de los ramos de forma selectiva (6 colores, xq es el maximo de ramos que hay en un semestre en ici)
   readonly colores = [
   { bg: '#eff6ff', borde: '#2563eb', titulo: '#1e3a8a', meta: '#2563eb' }, 
   { bg: '#f0fdf4', borde: '#16a34a', titulo: '#14532d', meta: '#16a34a' }, 

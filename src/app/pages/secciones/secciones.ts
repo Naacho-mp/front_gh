@@ -1,83 +1,133 @@
-import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectorRef, OnInit, OnDestroy } from '@angular/core';
+import { CommonModule } from '@angular/common'; 
 import { FormsModule } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { SeccionFormComponent } from '../../forms/forms-seccion/forms-seccion';
-
-interface Seccion {
-  id:String;
-  codigo_ramo: String;
-  numero_seccion: String;
-  estudiantes_inscritos: number;
-}
+import { SeccionesService, Seccion } from '../../services/seccion.service';
+import { Subscription } from 'rxjs';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { ConfirmarDialog } from '../../shared/confirmar-dialog/confirmar-dialog';
 
 @Component({
   selector: 'app-secciones',
+  standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './secciones.html',
   styleUrl: './secciones.css',
 })
-export class Secciones {
+export class Secciones implements OnInit, OnDestroy {
   searchName = '';
   filterType = '';
   currentPage = 1;
   readonly perPage = 5;
 
-   secciones: Seccion[] = [
-    { id: '#S-01', codigo_ramo: '#INF-201', numero_seccion: '01', estudiantes_inscritos: 15 },
-    { id: '#S-02', codigo_ramo: '#ECI-302', numero_seccion: '02', estudiantes_inscritos: 20 },
-    { id: '#S-03', codigo_ramo: '#ECI-102', numero_seccion: '03', estudiantes_inscritos: 15 },
-    { id: '#S-04', codigo_ramo: '#INE-202', numero_seccion: '04', estudiantes_inscritos: 30 },
-    { id: '#S-05', codigo_ramo: '#ECI-135', numero_seccion: '05', estudiantes_inscritos: 25 },
-    { id: '#S-06', codigo_ramo: '#ECI-136', numero_seccion: '06', estudiantes_inscritos: 40 },
+  secciones: Seccion[] = [];
+  private seccionesSub!: Subscription;
 
-  ];
+  constructor(
+    private dialog: MatDialog,
+    private cdr: ChangeDetectorRef,
+    private seccionesService: SeccionesService,
+    private snackBar: MatSnackBar
+  ) {}
 
- constructor(private dialog: MatDialog) {}
+  ngOnInit(): void {
 
-  abrirRegistro(): void {
-    const dialogRef = this.dialog.open(SeccionFormComponent, {
-      width: '560px',
-      disableClose: true,
-    });
-
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        console.log('Sección guardada:', result);
-        //this.seccionService.crear(result).subscribe(...)
-      }
+    this.seccionesSub = this.seccionesService.getAll().subscribe({
+      next: (data) => {
+        this.secciones = data;
+        this.cdr.detectChanges();
+      },
+      error: (err) => console.error('Error al escuchar el flujo de secciones:', err)
     });
   }
 
-
-
-
-    get filtrados(): Seccion[] {
-    return this.secciones.filter(s =>
-      s.codigo_ramo.toLowerCase().includes(this.searchName.toLowerCase()) &&
-      (this.filterType === '' || s.numero_seccion === this.filterType)
-    );
+  ngOnDestroy(): void {
+    if (this.seccionesSub) {
+      this.seccionesSub.unsubscribe();
+    }
   }
 
-   get paginados(): Seccion[] {
+  abrirFormulario(seccion?: Seccion): void {
+  this.dialog.open(SeccionFormComponent, {
+    width: '560px',
+    disableClose: true,
+    data: seccion ?? null
+  }).afterClosed().subscribe((result) => {
+    if (!result) return;
+
+    if (seccion) {
+      this.seccionesService.editar(seccion.id, result);
+      this.snackBar.open(`La Sección "${result.numero_seccion}" del ramo "${result.codigo_ramo}" ha sido actualizada correctamente`, 'Cerrar', {
+        duration: 3000,
+        horizontalPosition: 'center',
+        verticalPosition: 'top',
+        panelClass: ['snack-success']
+      });
+    } else {
+      this.seccionesService.agregar(result);
+      this.snackBar.open(`La Sección "${result.numero_seccion}" del ramo "${result.codigo_ramo}" ha sido registrada correctamente`, 'Cerrar', {
+        duration: 3000,
+        horizontalPosition: 'center',
+        verticalPosition: 'top',
+        panelClass: ['snack-success']
+      });
+    }
+  });
+}
+
+  get filtrados(): Seccion[] {
+  return this.secciones.filter(s =>
+    s.codigo_ramo.toLowerCase().includes(this.searchName.toLowerCase()) &&
+    (this.filterType === '' || String(s.numero_seccion) === this.filterType)
+  );
+}
+
+  get paginados(): Seccion[] {
     const start = (this.currentPage - 1) * this.perPage;
     return this.filtrados.slice(start, start + this.perPage);
   }
 
-   get totalPages(): number {
+  get totalPages(): number {
     return Math.max(1, Math.ceil(this.filtrados.length / this.perPage));
   }
 
-   totalPagesArray(): number[] {
+  totalPagesArray(): number[] {
     return Array.from({ length: this.totalPages }, (_, i) => i + 1);
   }
 
-  onFilter() { this.currentPage = 1; }
+  onFilter() { 
+    this.currentPage = 1; 
+  }
 
   goTo(page: number) {
     if (page >= 1 && page <= this.totalPages) this.currentPage = page;
   }
 
-  editar(d: Seccion) { console.log('Editar', d); }
-  eliminar(d: Seccion) { console.log('Eliminar', d); }
+  eliminar(s: Seccion): void {
+  this.dialog.open(ConfirmarDialog, {
+    width: '350px',
+    data: {
+      titulo: 'ELIMINAR SECCIÓN',
+      mensaje: `¿Estás seguro que deseas eliminar la Sección <strong>"${s.codigo_ramo} - S-${s.numero_seccion}"</strong>? Esta acción eliminará toda la información asociada a esta sección.`,
+      boton: 'Eliminar',
+      tipo: 'eliminar'
+    }
+  }).afterClosed().subscribe(confirmado => {
+    if (confirmado === true) {
+      this.seccionesService.eliminar(s.id);
+
+      if (this.paginados.length === 0 && this.currentPage > 1) {
+        this.currentPage--;
+      }
+
+      this.snackBar.open(`La Sección "${s.codigo_ramo} - S-${s.numero_seccion}" ha sido eliminada correctamente`, 'Cerrar', {
+        duration: 3000,
+        horizontalPosition: 'center',
+        verticalPosition: 'top',
+        panelClass: ['snack-eliminar']
+      });
+    }
+  });
+}
 }

@@ -10,4 +10,6 @@ import { SidebarComponent } from '../../components/sidebar/sidebar';
   templateUrl: './main-layout.html',
   styleUrl: './main-layout.css'
 })
-export class MainLayout {}
+export class MainLayout {
+
+}

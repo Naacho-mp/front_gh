@@ -14,7 +14,7 @@
     <a href="https://www.ucm.cl/mapa-ucm-y-salas-de-clase/" target="_blank" class="btn btn-outline">
       <i class="pi pi-map-marker"></i> Mapas de Salas
     </a>
-    <button class="btn btn-primary" (click)="abrirRegistro()">
+    <button class="btn btn-primary" (click)="abrirFormulario()">
       <i class="pi pi-building"></i> Registrar +
     </button>
   </div>
@@ -27,17 +27,17 @@
 <div class="metrics-container">
   <div class="card">
     <span class="label">Total Salas</span>
-    <span class="value blue">{{totalSalas}}</span>
+    <span class="value celeste">{{totalSalas}}</span>
   </div>
 
   <div class="card">
     <span class="label">Salas de Cátedra</span>
-    <span class="value green">{{totalSala}}</span>
+    <span class="value blue">{{totalSala}}</span>
   </div>
 
   <div class="card">
     <span class="label">Salas de Laboratorio</span>
-    <span class="value red">{{totalLaboratorio}}</span>
+    <span class="value green">{{totalLaboratorio}}</span>
   </div>
 </div>
 
@@ -48,13 +48,13 @@
   <input class="filtro-nombre" type="text" [(ngModel)]="searchName" (input)="onFilter()" placeholder="Buscar sala por nombre..." >
   <p class="texto-filtro-sala">Filtrar por tipo de sala: </p>
   <select class="filtro-sala" [(ngModel)]="filterType" (change)="onFilter()">
-    <option value="">Tipo de sala</option>
-    <option value="Sala">Cátedra</option>
+    <option value="">Todas las salas</option>
+    <option value="Sala">Sala</option>
     <option value="Laboratorio">Laboratorio</option>
   </select>
 </div>
 
-
+<div class="table-container">
 <table>
   <thead>
     <tr>
@@ -66,24 +66,29 @@
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let d of paginados">
-      <td class="id-cell">{{ d.id }}</td>
-      <td>{{ d.nombre }}</td>
+    <tr *ngFor="let s of paginados">
+      <td class="id-cell">{{ s.id }}</td>
+      <td>{{ s.nombre }}</td>
       <td>
-        <span [class]="d.tipo === 'Laboratorio' ? 'badge badge-lab' : 'badge badge-sala'">
-          {{ d.tipo }}
+        <span [class]="s.tipo === 'Laboratorio' ? 'badge badge-lab' : 'badge badge-sala'">
+          {{ s.tipo }}
         </span>
       </td>
-      <td>{{ d.capacidad }}</td>
+      <td>{{ s.capacidad }}</td>
       <td>
-        <button class="action-btn dispo" (click)="disponibilidad(d)"><i class="pi pi-calendar" title="Disponibilidad"></i></button>
-        <button class="action-btn editar" (click)="editar(d)"><i class="pi pi-pencil" title="Editar"></i></button>
-        <button class="action-btn del" (click)="eliminar(d)"><i class="pi pi-trash" title="Eliminar"></i></button>
+        <button class="action-btn dispo" (click)="disponibilidad(s)"><i class="pi pi-calendar" title="Disponibilidad"></i></button>
+        <button class="action-btn editar" (click)="abrirFormulario(s)"><i class="pi pi-pencil" title="Editar"></i></button>
+        <button class="action-btn del" (click)="eliminar(s)"><i class="pi pi-trash" title="Eliminar"></i></button>
+      </td>
+    </tr>
+     <tr *ngIf="filtrados.length === 0">
+      <td colspan="5" style="text-align: center; padding: 40px; color: #64748b; font-size: 14px;">
+        No se encontraron salas
       </td>
     </tr>
   </tbody>
 </table>
-
+</div>
 <div class="pagination">
   <button class="page-btn" (click)="goTo(currentPage - 1)" [disabled]="currentPage === 1">‹</button>
   <button *ngFor="let p of totalPagesArray()" class="page-btn"

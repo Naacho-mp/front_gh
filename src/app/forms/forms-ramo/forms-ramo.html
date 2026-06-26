@@ -3,8 +3,9 @@
 
   <div class="modal-header">
     <div>
-      <h5 class="titulo-modal-registro">Registrar Ramo</h5>
-      <p class="subtitulo-registro">Ingrese la información del ramo para el registro.</p>
+      <h5 class="titulo-modal-registro">{{ esEdicion ? 'Editar Ramo' : 'Registrar Ramo' }}</h5>
+      <p class="subtitulo-registro">{{ esEdicion ? 'Ingrese la información para editar el ramo':'Ingrese la información del ramo para el registro' }} </p>
+
     </div>
     <button (click)="cancelar()" class="btn-close">
       ✕
@@ -21,6 +22,9 @@
              class="form-control" />
       <div class="error-message" *ngIf="nombre?.touched && nombre?.hasError('required')">
         El nombre del ramo es requerido
+      </div>
+      <div class="error-message" *ngIf="nombre?.touched && nombre?.hasError('pattern')">
+        El nombre solo debe contener letras
       </div>
     </div>
 
@@ -48,6 +52,9 @@
       <div class="error-message" *ngIf="cantidad_secciones?.touched && cantidad_secciones?.hasError('required')">
         La cantidad de secciones es requerida
       </div>
+      <div class="error-message" *ngIf="cantidad_secciones?.touched && cantidad_secciones?.hasError('min')">
+        Solo se aceptan valores positivos
+      </div>
     </div>
 
     <div class="form-group">
@@ -58,6 +65,9 @@
              class="form-control" />
       <div class="error-message" *ngIf="cupos_por_seccion?.touched && cupos_por_seccion?.hasError('required')">
         Los cupos por sección son requeridos
+      </div>
+      <div class="error-message" *ngIf="cupos_por_seccion?.touched && cupos_por_seccion?.hasError('min')">
+        Solo se aceptan valores positivos
       </div>
     </div>
 
@@ -70,6 +80,9 @@
       <div class="error-message" *ngIf="horas_catedra?.touched && horas_catedra?.hasError('required')">
         La cantidad de horas cátedra es requerida
       </div>
+      <div class="error-message" *ngIf="horas_catedra?.touched && horas_catedra?.hasError('min')">
+        Solo se aceptan valores positivos
+      </div>
     </div>
 
     <div class="form-group">
@@ -81,6 +94,9 @@
       <div class="error-message" *ngIf="horas_laboratorio?.touched && horas_laboratorio?.hasError('required')">
         La cantidad de horas laboratorio es requerida
       </div>
+      <div class="error-message" *ngIf="horas_laboratorio?.touched && horas_laboratorio?.hasError('min')">
+        Solo se aceptan valores positivos
+      </div>
     </div>
 
   </div>
@@ -89,9 +105,11 @@
     <button (click)="cancelar()" class="btn-secondary">
       Cancelar
     </button>
-    <button (click)="guardar()" class="btn-primary">
-      Registrar
-    </button>
+    <button (click)="guardar()" 
+      class="btn-primary"
+      [style.background-color]="esEdicion ? '#b6b308' : '#004a99'">
+      {{ esEdicion ? 'Editar' : 'Registrar' }}
+    </button> 
   </div>
 
 </div>

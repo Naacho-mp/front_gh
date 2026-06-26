@@ -30,6 +30,16 @@ export class Docentes implements OnInit {
   mostrarModalImportar = false;
   archivoSeleccionado: File | null = null;
 
+  // Estados para manejar si esta registrando o editando un docente
+  mostrarModalDocente = false;
+  esEdicion = false;
+  docenteIdActivo: string | null = null;
+
+  docenteForm = {
+    nombre: '',
+    contrato: ''
+  };
+
   constructor(
     private dialog: MatDialog,
     private cdr: ChangeDetectorRef,
@@ -39,66 +49,84 @@ export class Docentes implements OnInit {
 
   // cargar los datos del servicio apenas salga el componente
   ngOnInit(): void {
-    this.docentes = this.docenteService.getAll();
-  }
+  this.docenteService.getAll().subscribe(data => {
+    this.docentes = data;
+    this.cdr.detectChanges(); 
+  });
+}
 
   get totalDocentes(): number { return this.docentes.length; }
   get totalFullTime(): number { return this.docentes.filter(d => d.contrato === 'Full-time').length; }
   get totalPartTime(): number { return this.docentes.filter(d => d.contrato === 'Part-time').length; }
 
-  abrirRegistro(): void {
-    this.dialog.open(DocenteFormComponent, {
-      width: '560px',
-      disableClose: true,
-    }).afterClosed().subscribe((result) => {
-      if (result) {
-        const contrato = (result.tipo_contrato === 'full-time'
-          ? 'Full-time' 
-          : 'Part-time') as 'Full-time' | 'Part-time';
-        
-        const disponibilidad: DisponibilidadSlot[] = [];
 
-        if (contrato === 'Part-time' && result.matrizDisponibilidad) {
-          for (let modIndex = 0; modIndex < 12; modIndex++) {
-            const slot = {
-              modulo: modIndex + 1,
-              lunes:     result.matrizDisponibilidad[0]?.[modIndex] ?? false,
-              martes:    result.matrizDisponibilidad[1]?.[modIndex] ?? false,
-              miercoles: result.matrizDisponibilidad[2]?.[modIndex] ?? false,
-              jueves:    result.matrizDisponibilidad[3]?.[modIndex] ?? false,
-              viernes:   result.matrizDisponibilidad[4]?.[modIndex] ?? false,
-              sabado:    result.matrizDisponibilidad[5]?.[modIndex] ?? false,
-            };
-            
-            const tieneAlgunDia = Object.values(slot).some(
-              (v, i) => i > 0 && v === true
-            );
-            if (tieneAlgunDia) disponibilidad.push(slot);
-          }
-        }
-        
-        const nuevoDocente: Omit<Docente, 'id'> = {
-          nombre: result.nombre_completo,
-          contrato: contrato,
-          disponibilidad: disponibilidad
+//unifica el registro y editar de un docente
+abrirFormulario(docente?: Docente): void {
+  this.dialog.open(DocenteFormComponent, {
+    width: '560px',
+    disableClose: true,
+    // pasamos los datos del docente si es edición, o nada si es registro
+    data: docente ? {
+      nombre_completo: docente.nombre,
+      tipo_contrato: docente.contrato === 'Full-time' ? 'full-time' : 'part-time',
+      disponibilidad: docente.disponibilidad ?? []
+    } : null
+  }).afterClosed().subscribe((result) => {
+    if (!result) return;
+
+    const contrato = (result.tipo_contrato === 'full-time'
+      ? 'Full-time'
+      : 'Part-time') as 'Full-time' | 'Part-time';
+
+    const disponibilidad: DisponibilidadSlot[] = [];
+
+    if (contrato === 'Part-time' && result.matrizDisponibilidad) {
+      for (let modIndex = 0; modIndex < 12; modIndex++) {
+        const slot = {
+          modulo: modIndex + 1,
+          lunes:     result.matrizDisponibilidad[0]?.[modIndex] ?? false,
+          martes:    result.matrizDisponibilidad[1]?.[modIndex] ?? false,
+          miercoles: result.matrizDisponibilidad[2]?.[modIndex] ?? false,
+          jueves:    result.matrizDisponibilidad[3]?.[modIndex] ?? false,
+          viernes:   result.matrizDisponibilidad[4]?.[modIndex] ?? false,
+          sabado:    result.matrizDisponibilidad[5]?.[modIndex] ?? false,
         };
-        
-        this.docenteService.agregar(nuevoDocente);
-        
-        // Sincronizamos la vista
-        this.docentes = this.docenteService.getAll();
-        this.cdr.detectChanges();
-
-        this.snackBar.open(`El Docente "${nuevoDocente.nombre}" ha sido registrado correctamente`, 'Cerrar', {
-          duration: 3000,
-          horizontalPosition: 'center',
-          verticalPosition: 'top',
-          panelClass: ['snack-success']
-        });
+        const tieneAlgunDia = Object.values(slot).some((v, i) => i > 0 && v === true);
+        if (tieneAlgunDia) disponibilidad.push(slot);
       }
-    });
-  }
+    }
 
+    if (docente) {
+      // EDICIÓN: actualizamos el docente existente
+      this.docenteService.actualizar(docente.id, {
+        nombre: result.nombre_completo,
+        contrato,
+        disponibilidad
+      });
+      this.snackBar.open(`Docente "${result.nombre_completo}" actualizado correctamente`, 'Cerrar', {
+        duration: 3000,
+        horizontalPosition: 'center',
+        verticalPosition: 'top',
+        panelClass: ['snack-success']
+      });
+    } else {
+      // REGISTRO: agregamos uno nuevo
+      this.docenteService.agregar({
+        nombre: result.nombre_completo,
+        contrato,
+        disponibilidad
+      });
+      this.snackBar.open(`Docente "${result.nombre_completo}" registrado correctamente`, 'Cerrar', {
+        duration: 3000,
+        horizontalPosition: 'center',
+        verticalPosition: 'top',
+        panelClass: ['snack-success']
+      });
+    }
+  });
+}
+
+//filtro por tipo de contrato
   get filtrados(): Docente[] {
     return this.docentes.filter(d =>
       d.nombre.toLowerCase().includes(this.searchName.toLowerCase()) &&
@@ -140,7 +168,6 @@ export class Docentes implements OnInit {
     });
   }
 
-  editar(d: Docente) { console.log('Editar', d); }
 
   //Eliminar con notificacion de que realmente se eliminó
   eliminar(d: Docente): void {
@@ -156,8 +183,7 @@ export class Docentes implements OnInit {
       if (confirmado === true) {
         // El servicio limpia el registro de su estado interno
         this.docenteService.eliminar(d.id);
-        this.docentes = this.docenteService.getAll();
-  
+          
         if (this.paginados.length === 0 && this.currentPage > 1) {
           this.currentPage--;
         }
@@ -177,10 +203,11 @@ export class Docentes implements OnInit {
   onArchivoSeleccionado(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.files?.[0]) {
-      this.archivoSeleccionado = input.files[0];
+      this.archivoSeleccionado = input.files[0]; 
     }
   }
 
+  //subir el excel
   subir(): void {
     if (!this.archivoSeleccionado) return;
 
@@ -218,7 +245,7 @@ export class Docentes implements OnInit {
           this.docenteService.agregar(doc);
         });
         
-        this.docentes = this.docenteService.getAll();
+        
         this.currentPage = 1;
         this.cdr.detectChanges();
       }

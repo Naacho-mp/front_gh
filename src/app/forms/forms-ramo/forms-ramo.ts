@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,Inject, Optional } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA  } from '@angular/material/dialog';
+import { Ramo } from '../../services/ramo.service';
 
 
 @Component({
@@ -18,21 +19,37 @@ import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 export class RamoFormComponent implements OnInit {
 
   ramoForm!: FormGroup;
+  esEdicion = false;
 
   constructor(
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<RamoFormComponent>,
+    @Optional() @Inject(MAT_DIALOG_DATA) public data: Ramo | null
   ) {}
 
   ngOnInit(): void {
+
+    this.esEdicion = !!this.data;
+
     this.ramoForm = this.fb.group({
-      nombre: ['', [Validators.required, Validators.minLength(2)]],
+      nombre: ['', [Validators.required, Validators.minLength(2), Validators.pattern('^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$')]],
       nivel: ['', [Validators.required]],
       cantidad_secciones:    ['', [Validators.required, Validators.min(1)]],
       cupos_por_seccion:    ['', [Validators.required, Validators.min(1)]],
       horas_catedra:    ['', [Validators.required, Validators.min(1)]],
       horas_laboratorio:    ['', [Validators.required, Validators.min(1)]],
     });
+
+    if (this.data) {
+      this.ramoForm.patchValue({
+        nombre:             this.data.nombre,
+        nivel:              this.data.nivel,
+        cantidad_secciones: this.data.cantidad_secciones,
+        cupos_por_seccion:  this.data.cupos_por_seccion,
+        horas_catedra:      this.data.horas_catedra,
+        horas_laboratorio:  this.data.horas_laboratorio
+      });
+    }
   }
 
   guardar(): void {

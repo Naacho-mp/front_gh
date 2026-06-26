@@ -2,8 +2,8 @@
 
   <div class="modal-header">
     <div>
-      <h5 class="titulo-modal-registro">Registrar Docente</h5>
-      <p class="subtitulo-registro">Ingrese la información del docente para el registro.</p>
+      <h5 class="titulo-modal-registro">{{ esEdicion ? 'Editar Docente' : 'Registrar Docente' }}</h5>
+      <p class="subtitulo-registro">{{ esEdicion ? 'Ingrese la información para editar el docente':'Ingrese la información del docente para el registro' }} </p>
     </div>
     <button (click)="cancelar()" class="btn-close">
       ✕
@@ -22,6 +22,9 @@
              class="form-control" />
       <div class="error-message" *ngIf="nombre_completo?.touched && nombre_completo?.hasError('required')">
         El nombre completo es requerido
+      </div>
+      <div class="error-message" *ngIf="nombre_completo?.touched && nombre_completo?.hasError('pattern')">
+        El nombre solo debe contener letras
       </div>
     </div>
 
@@ -82,8 +85,10 @@
     <button (click)="cancelar()" class="btn-secondary">
       Cancelar
     </button>
-    <button (click)="guardar()" class="btn-primary">
-      Registrar
+    <button (click)="guardar()" 
+      class="btn-primary"
+      [style.background-color]="esEdicion ? '#b6b308' : '#004a99'">
+      {{ esEdicion ? 'Editar' : 'Registrar' }}
     </button>
   </div>
 

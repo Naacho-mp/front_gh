@@ -2,8 +2,8 @@
 
   <div class="modal-header">
     <div>
-      <h5 class="titulo-modal-registro">Registrar Sala</h5>
-      <p class="subtitulo-registro">Ingrese la información de la sala para el registro.</p>
+      <h5 class="titulo-modal-registro">{{ esEdicion ? 'Editar Sala' : 'Registrar Sala' }}</h5>
+      <p class="subtitulo-registro">{{ esEdicion ? 'Ingrese la información para editar la sala':'Ingrese la información de la sala para el registro' }} </p>
     </div>
     <button (click)="cancelar()" class="btn-close">
       ✕
@@ -17,11 +17,14 @@
         Nombre de la Sala
       </label>
       <input type="text" 
-             formControlName="nombre_sala"
+             formControlName="nombre"
              placeholder="Ej: Sala de Computación"
              class="form-control" />
-      <div class="error-message" *ngIf="nombre_sala?.touched && nombre_sala?.hasError('required')">
+      <div class="error-message" *ngIf="nombre?.touched && nombre?.hasError('required')">
         El nombre de la sala es requerido
+      </div>
+      <div class="error-message" *ngIf="nombre?.touched && nombre?.hasError('pattern')">
+         El nombre debe contener al menos una letra
       </div>
     </div>
 
@@ -29,12 +32,12 @@
       <label class="form-label">
         Tipo de Sala
       </label>
-      <select formControlName="tipo_sala" class="form-select">
+      <select formControlName="tipo" class="form-select">
         <option value="" disabled selected>Seleccione tipo de sala</option>
-        <option value="Full-time">Laboratorio</option>
-        <option value="Part-time">Sala</option>
+        <option value="Laboratorio">Laboratorio</option>
+        <option value="Sala">Sala</option>
       </select>
-      <div class="error-message" *ngIf="tipo_sala?.touched && tipo_sala?.hasError('required')">
+      <div class="error-message" *ngIf="tipo?.touched && tipo?.hasError('required')">
         El tipo de sala es requerido
       </div>
     </div>
@@ -58,8 +61,10 @@
     <button (click)="cancelar()" class="btn-secondary">
       Cancelar
     </button>
-    <button (click)="guardar()" class="btn-primary">
-      Registrar
+    <button (click)="guardar()" 
+      class="btn-primary"
+      [style.background-color]="esEdicion ? '#b6b308' : '#004a99'">
+      {{ esEdicion ? 'Editar' : 'Registrar' }}
     </button>
   </div>
 

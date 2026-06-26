@@ -1,0 +1,7 @@
+[
+  { "id": "SALA-1001", "nombre": "Laboratorio 3", "tipo": "Laboratorio", "capacidad": 30 },
+  { "id": "SALA-1002", "nombre": "Laboratorio 4", "tipo": "Laboratorio", "capacidad": 40 },
+  { "id": "SALA-1003", "nombre": "Laboratorio 19", "tipo": "Laboratorio", "capacidad": 30 },
+  { "id": "SALA-1004", "nombre": "Sala 401", "tipo": "Sala", "capacidad": 30 },
+  { "id": "SALA-1005", "nombre": "Sala 302", "tipo": "Sala", "capacidad": 25 }
+]

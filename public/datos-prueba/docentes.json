@@ -1,0 +1,14 @@
+[
+  { "id": "DOC-1001", "nombre": "Ricardo Aranda", "contrato": "Full-time" },
+  { "id": "DOC-1002", "nombre": "Elena Martínez", "contrato": "Part-time" },
+  { "id": "DOC-1003", "nombre": "Julio Paredes", "contrato": "Full-time" },
+  { "id": "DOC-1004", "nombre": "Sofía Vargas", "contrato": "Full-time" },
+  { "id": "DOC-1005", "nombre": "Andrés Rojas", "contrato": "Part-time" },
+  { "id": "DOC-1006", "nombre": "Camila Torres", "contrato": "Full-time" },
+  { "id": "DOC-1007", "nombre": "Felipe Muñoz", "contrato": "Part-time" },
+  { "id": "DOC-1008", "nombre": "Valentina Soto", "contrato": "Full-time" },
+  { "id": "DOC-1009", "nombre": "Diego Fuentes", "contrato": "Part-time" },
+  { "id": "DOC-1010", "nombre": "Isabel Herrera", "contrato": "Full-time" },
+  { "id": "DOC-1011", "nombre": "Matías Castillo", "contrato": "Part-time" },
+  { "id": "DOC-1012", "nombre": "Gabriela Reyes", "contrato": "Full-time" }
+]

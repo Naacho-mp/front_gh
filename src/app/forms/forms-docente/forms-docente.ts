@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,Inject, Optional } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { MatDialogModule, MatDialogRef,MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { DisponibilidadSlot } from '../../services/docente.service';
 
 @Component({
   selector: 'app-docente-form',
@@ -17,6 +18,7 @@ import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 export class DocenteFormComponent implements OnInit {
 
   docenteForm!: FormGroup;
+  esEdicion = false;
 
   diasSemana = [
     { id: 'lunes', nombre: 'Lunes', abreviacion: 'Lun' },
@@ -40,17 +42,36 @@ export class DocenteFormComponent implements OnInit {
  
   constructor(
     private fb: FormBuilder,
-    private dialogRef: MatDialogRef<DocenteFormComponent>
+    private dialogRef: MatDialogRef<DocenteFormComponent>,
+    @Optional() @Inject(MAT_DIALOG_DATA) public data: {
+      nombre_completo: string;
+      tipo_contrato: string;
+      disponibilidad: DisponibilidadSlot[];
+    } | null
   ) {}
 
   ngOnInit(): void {
+
+    this.esEdicion = !!this.data;
+
     this.docenteForm = this.fb.group({
-      nombre_completo: ['', [Validators.required, Validators.minLength(2)]],
+      nombre_completo: ['', [Validators.required, Validators.minLength(2),Validators.pattern('^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$')]],
       tipo_contrato:   ['', [Validators.required]],
       matrizDisponibilidad: this.fb.array([])
     });
       this.inicializarMatriz();
 
+     if (this.data) {
+      this.docenteForm.patchValue({
+        nombre_completo: this.data.nombre_completo,
+        tipo_contrato:   this.data.tipo_contrato
+      });
+
+      // si es part-time y tiene disponibilidad, cargamos la matriz
+      if (this.data.tipo_contrato === 'part-time' && this.data.disponibilidad?.length) {
+        this.cargarDisponibilidadEnMatriz(this.data.disponibilidad);
+      }
+    }
 
     this.docenteForm.get('tipo_contrato')?.valueChanges.subscribe(value => {
     if (value !== 'part-time') {
@@ -63,7 +84,7 @@ export class DocenteFormComponent implements OnInit {
   inicializarMatriz() {
     const matriz = this.docenteForm.get('matrizDisponibilidad') as FormArray;
     
-    // 6 FormArrays para cada dia de la semana
+    // FormArrays para cada dia de la semana
     for (let d = 0; d < this.diasSemana.length; d++) {
       const filaModulos = this.fb.array([]);
       // Cada día con 12 controles booleanos (uno por módulo)
@@ -73,6 +94,20 @@ export class DocenteFormComponent implements OnInit {
       matriz.push(filaModulos);
     }
   }
+
+  private cargarDisponibilidadEnMatriz(disponibilidad: DisponibilidadSlot[]): void {
+    const matriz = this.docenteForm.get('matrizDisponibilidad') as FormArray;
+    const dias = ['lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'sabado'] as const;
+
+    disponibilidad.forEach(slot => {
+      const modIdx = slot.modulo - 1; // modulo 1 → índice 0
+      dias.forEach((dia, diaIdx) => {
+        const fila = matriz.at(diaIdx) as FormArray;
+        fila.at(modIdx)?.setValue(slot[dia]);
+      });
+    });
+  }
+
 
   get filasDias(): FormArray {
     return this.docenteForm.get('matrizDisponibilidad') as FormArray;

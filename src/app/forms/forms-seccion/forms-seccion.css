@@ -116,6 +116,55 @@
   box-shadow: none;
 }
 
+.overlay-invisible {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 999;
+}
+
+.dropdown-lista {
+  z-index: 1000;   
+}
+
+
+.autocomplete-wrapper {
+  position: relative;
+  padding-bottom: 14px;
+}
+
+.dropdown-lista {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: #ffffff;
+  border: 1.5px solid #e0e0e0;
+  border-radius: 8px;
+  margin-top: 4px;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 1000;
+  list-style: none;
+  padding: 4px 0;
+  margin: 4px 0 0 0;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.dropdown-lista li {
+  padding: 10px 14px;
+  font-size: 14px;
+  color: #1e293b;
+  cursor: pointer;
+  transition: background 0.12s;
+}
+
+.dropdown-lista li:hover {
+  background-color: #f1f5f9;
+}
+
 
 
 /* 

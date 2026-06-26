@@ -1,56 +1,94 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectorRef, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common'; 
 import { FormsModule } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { SalaFormComponent } from '../../forms/forms-sala/forms-sala';
-
-interface Sala {
-  id: string;
-  nombre: string;
-  tipo: 'Laboratorio' | 'Sala';
-  capacidad: number;
-}
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { SalasService, Sala } from '../../services/sala.service';
+import { ConfirmarDialog } from '../../shared/confirmar-dialog/confirmar-dialog';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-salas',
+  standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './salas.html',
   styleUrl: './salas.css',
 })
-export class Salas {
+export class Salas implements OnInit, OnDestroy {
   searchName = '';
   filterType = '';
   currentPage = 1;
   readonly perPage = 5;
 
-  salas: Sala[] = [
-    { id: '#SALA-1001', nombre: 'Laboratorio 3', tipo: 'Laboratorio', capacidad: 30 },
-    { id: '#SALA-1002', nombre: 'Laboratorio 4', tipo: 'Laboratorio', capacidad: 40 },
-    { id: '#SALA-1003', nombre: 'Laboratorio 19', tipo: 'Laboratorio',capacidad: 30, },
-    { id: '#SALA-1004', nombre: 'Sala 401', tipo: 'Sala', capacidad: 30 },
-    { id: '#SALA-1005', nombre: 'Sala 302', tipo: 'Sala', capacidad: 25 },
+  salas: Sala[] = [];
+  private salasSub!: Subscription;
 
-  ];
+  constructor(
+    private dialog: MatDialog,
+    private cdr: ChangeDetectorRef,
+    private salasService: SalasService,
+    private snackBar: MatSnackBar
+  ) {}
 
- constructor(private dialog: MatDialog) {}
+  ngOnInit(): void {
+    // Escuchamos el BehaviorSubject de las salas de forma permanente
+    this.salasSub = this.salasService.getAll().subscribe({
+      next: (data) => {
+        this.salas = data;
+        this.cdr.detectChanges(); 
+      },
+      error: (err) => console.error('Error al escuchar flujo de salas:', err)
+    });
+  }
 
-  abrirRegistro(): void {
-    const dialogRef = this.dialog.open(SalaFormComponent, {
+  ngOnDestroy(): void {
+    if (this.salasSub) {
+      this.salasSub.unsubscribe();
+    }
+  }
+
+   abrirFormulario(sala?: Sala): void {
+    this.dialog.open(SalaFormComponent, {
       width: '560px',
       disableClose: true,
-    });
+      data: sala ?? null
+    }).afterClosed().subscribe((result) => {
+      if (!result) return;
 
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        console.log('Sala guardada:', result);
-        //this.salaService.crear(result).subscribe(...)
+      if (sala) {
+        // edición
+        this.salasService.editar(sala.id, {
+          nombre:    result.nombre,
+          tipo:      result.tipo,
+          capacidad: Number(result.capacidad)
+        });
+        this.snackBar.open(`La Sala "${result.nombre}" ha sido actualizada correctamente`, 'Cerrar', {
+          duration: 3000,
+          horizontalPosition: 'center',
+          verticalPosition: 'top',
+          panelClass: ['snack-success']
+        });
+      } else {
+        // registro nuevo
+        this.salasService.agregar({
+          nombre:    result.nombre,
+          tipo:      result.tipo,
+          capacidad: Number(result.capacidad)
+        });
+        this.snackBar.open(`La Sala "${result.nombre}" ha sido registrada correctamente`, 'Cerrar', {
+          duration: 3000,
+          horizontalPosition: 'center',
+          verticalPosition: 'top',
+          panelClass: ['snack-success']
+        });
       }
     });
   }
 
   get totalSalas(): number { return this.salas.length; }
-  get totalLaboratorio(): number { return this.salas.filter(d => d.tipo === 'Laboratorio').length; }
-  get totalSala(): number { return this.salas.filter(d => d.tipo === 'Sala').length; }
+  get totalLaboratorio(): number { return this.salas.filter(s => s.tipo === 'Laboratorio').length; }
+  get totalSala(): number { return this.salas.filter(s => s.tipo === 'Sala').length; }
 
   get filtrados(): Sala[] {
     return this.salas.filter(s =>
@@ -79,8 +117,33 @@ export class Salas {
   }
 
   disponibilidad(s: Sala) {
-  console.log('Consultando disponibilidad de:', s.nombre);
-}
-  editar(d: Sala) { console.log('Editar', d); }
-  eliminar(d: Sala) { console.log('Eliminar', d); }
+    console.log('Consultando disponibilidad de:', s.nombre);
+  }
+
+ eliminar(s: Sala): void {
+    this.dialog.open(ConfirmarDialog, {
+      width: '350px',
+      data: {
+        titulo: 'ELIMINAR SALA',
+        mensaje: `¿Estás seguro que deseas eliminar la Sala <strong>"${s.nombre}"</strong>?`,
+        boton: 'Eliminar',
+        tipo: 'eliminar'
+      }
+    }).afterClosed().subscribe(confirmado => {
+      if (confirmado === true) {
+        this.salasService.eliminar(s.id);
+
+        if (this.paginados.length === 0 && this.currentPage > 1) {
+          this.currentPage--;
+        }
+
+        this.snackBar.open(`La Sala "${s.nombre}" ha sido eliminada correctamente`, 'Cerrar', {
+          duration: 3000,
+          horizontalPosition: 'center',
+          verticalPosition: 'top',
+          panelClass: ['snack-eliminar']
+        });
+      }
+    });
+  }
 }

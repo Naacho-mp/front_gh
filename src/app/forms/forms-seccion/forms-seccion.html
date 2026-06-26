@@ -2,8 +2,8 @@
 
   <div class="modal-header">
     <div>
-      <h5 class="titulo-modal-registro">Registrar Sección</h5>
-      <p class="subtitulo-registro">Ingrese la información de la sección para el registro.</p>
+      <h5 class="titulo-modal-registro">{{ esEdicion ? 'Editar Sección' : 'Registrar Sección' }}</h5>
+      <p class="subtitulo-registro">{{ esEdicion ? 'Ingrese la información para editar la sección':'Ingrese la información de la sección para el registro' }} </p>
     </div>
     <button (click)="cancelar()" class="btn-close">
       ✕
@@ -11,15 +11,32 @@
   </div>
 
   <div class="modal-body">
+    <label class="form-label">
+        Código Ramo
+    </label>
 
-    <div class="form-group">
-      <label class="form-label">
-        Código del Ramo
-      </label>
-      <input type="text" 
-             formControlName="codigo_ramo"
-             placeholder="Ej: CS-101"
-             class="form-control" />
+    <div class="autocomplete-wrapper">
+      <input
+      type="text"
+      formControlName="codigo_ramo"
+      placeholder="Ej: INF-201"
+      class="form-control"
+      (input)="filtrarRamos($event)"
+      (focus)="mostrarDropdown = true;"
+      (blur)="ocultarDropdown()">
+      
+      <div class="overlay-invisible" 
+          *ngIf="mostrarDropdown" 
+          (click)="mostrarDropdown = false">
+      </div>
+
+      <ul class="dropdown-lista" *ngIf="mostrarDropdown && ramosFiltrados.length > 0">
+        <li *ngFor="let ramo of ramosFiltrados" 
+            (mousedown)="seleccionarRamo(ramo)">
+          {{ ramo.id }} - {{ ramo.nombre }}
+        </li>
+      </ul>
+
       <div class="error-message" *ngIf="codigo_ramo?.touched && codigo_ramo?.hasError('required')">
         El código del ramo es requerido
       </div>
@@ -55,6 +72,9 @@
       <div class="error-message" *ngIf="estudiantes_inscritos?.touched && estudiantes_inscritos?.hasError('required')">
         Los estudiantes inscritos son requeridos
       </div>
+      <div class="error-message" *ngIf="estudiantes_inscritos?.touched && estudiantes_inscritos?.hasError('min')">
+        Solo se aceptan valores positivos
+      </div>
     </div>
 
   </div>
@@ -63,8 +83,10 @@
     <button (click)="cancelar()" class="btn-secondary">
       Cancelar
     </button>
-    <button (click)="guardar()" class="btn-primary">
-      Registrar
+    <button (click)="guardar()" 
+      class="btn-primary"
+      [style.background-color]="esEdicion ? '#b6b308' : '#004a99'">
+      {{ esEdicion ? 'Editar' : 'Registrar' }}
     </button>
   </div>
 

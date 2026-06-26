@@ -1,4 +1,6 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 // interfaz para definir la forma de la disponibilidad
 export interface DisponibilidadSlot {
@@ -8,55 +10,126 @@ export interface DisponibilidadSlot {
   miercoles: boolean;
   jueves: boolean;
   viernes: boolean;
-  sabado: boolean;
+  sabado: boolean;  
 }
 
-// actualizar interfaz Docente y asi exportarla
+// interfaz de docente
 export interface Docente {
   id: string;
   nombre: string;
   contrato: 'Full-time' | 'Part-time';
-  disponibilidad?: DisponibilidadSlot[]; // dejarla opcional por si el docente es fulltimee
+  disponibilidad?: DisponibilidadSlot[]; // opcional por si el docente es fulltime
 }
 
 @Injectable({ providedIn: 'root' })
 export class DocenteService {
-  // datos hardcodeados en el front
-  private docentes: Docente[] = [
-    { id: '#DOC-1001', nombre: 'Ricardo Aranda', contrato: 'Full-time' },
-    { id: '#DOC-1002', nombre: 'Elena Martínez', contrato: 'Part-time' },
-    { id: '#DOC-1003', nombre: 'Julio Paredes', contrato: 'Full-time' },
-    { id: '#DOC-1004', nombre: 'Sofía Vargas', contrato: 'Full-time' },
-    { id: '#DOC-1005', nombre: 'Andrés Rojas', contrato: 'Part-time' },
-    { id: '#DOC-1006', nombre: 'Camila Torres', contrato: 'Full-time' },
-    { id: '#DOC-1007', nombre: 'Felipe Muñoz', contrato: 'Part-time' },
-    { id: '#DOC-1008', nombre: 'Valentina Soto', contrato: 'Full-time' },
-    { id: '#DOC-1009', nombre: 'Diego Fuentes', contrato: 'Part-time' },
-    { id: '#DOC-1010', nombre: 'Isabel Herrera', contrato: 'Full-time' },
-    { id: '#DOC-1011', nombre: 'Matías Castillo', contrato: 'Part-time' },
-    { id: '#DOC-1012', nombre: 'Gabriela Reyes', contrato: 'Full-time' },
-  ];
+  private url = '/datos-prueba/docentes.json';
+  private storageKey = 'info_docentes'; // para identificar en localstorage
+  private docentes$ = new BehaviorSubject<Docente[]>([]);
 
-  getAll(): Docente[] {
-    return this.docentes;
+  constructor(private http: HttpClient) {
+    this.inicializarDatos();
+  }
+  private inicializarDatos(): void {
+    const datosLocales = localStorage.getItem(this.storageKey);
+
+    if (datosLocales) {
+      // Si ya existen registros modificados en el disco, los montamos directo a la RAM
+      this.docentes$.next(JSON.parse(datosLocales));
+    } else {
+      // Si el navegador está vacío, consumimos los datos prueba del json
+      this.http.get<Docente[]>(this.url).subscribe({
+        next: (data) => {
+          this.docentes$.next(data);
+          this.guardarEnLocalStorage(data);
+        },
+        error: (err) => console.error('Error cargando docentes desde JSON:', err)
+      });
+    }
   }
 
+ 
+  private guardarEnLocalStorage(docentes: Docente[]): void {
+    localStorage.setItem(this.storageKey, JSON.stringify(docentes));
+  }
+
+  getAll(): Observable<Docente[]> {
+    return this.docentes$.asObservable();
+  }
+
+  getById(id: string): Docente | undefined {
+    return this.docentes$.getValue().find(d => d.id === id);
+  }
+
+  //para agregar docente
   agregar(docente: Omit<Docente, 'id'>): void {
     const nuevo: Docente = {
-      id: `#DOC-${Math.floor(Math.random() * 9000 + 1000)}`,          
+      id: `DOC-${Math.floor(Math.random() * 9000 + 1000)}`,          
       ...docente,
+      disponibilidad: docente.contrato === 'Part-time'
+        ? (docente.disponibilidad ?? this.disponibilidadVacia())
+        : undefined
     };
-    this.docentes = [nuevo, ...this.docentes];                
+    
+    const actual = this.docentes$.getValue();
+    const nuevoListado = [nuevo, ...actual];
+
+    this.docentes$.next(nuevoListado); 
+    this.guardarEnLocalStorage(nuevoListado);        
   }
 
+  //eliminar docente
   eliminar(id: string): void {
-    this.docentes = this.docentes.filter(d => d.id !== id);
+    const actual = this.docentes$.getValue();
+    const nuevoListado = actual.filter(d => d.id !== id);
+
+    this.docentes$.next(nuevoListado);
+    this.guardarEnLocalStorage(nuevoListado);
   }
 
-  editar(id: string, datos: Partial<Omit<Docente, 'id'>>): void {
-    const idx = this.docentes.findIndex(d => d.id === id);
-    if (idx !== -1) {
-      this.docentes[idx] = { ...this.docentes[idx], ...datos };
-    }
+  //actualizar docente
+  actualizar(id: string, datos: Partial<Omit<Docente, 'id'>>): void {
+    const actual = this.docentes$.getValue();
+    const idx = actual.findIndex(d => d.id === id);
+    if (idx === -1) return;
+
+    const docenteActual = actual[idx];
+    const actualizado: Docente = {
+      ...docenteActual,
+      ...datos,
+      disponibilidad: datos.contrato === 'Full-time'
+        ? undefined
+        : datos.disponibilidad ?? docenteActual.disponibilidad ?? this.disponibilidadVacia()
+    };
+
+    const nuevaLista = [...actual];
+    nuevaLista[idx] = actualizado;
+
+    this.docentes$.next(nuevaLista);
+    this.guardarEnLocalStorage(nuevaLista);
+  }
+
+  actualizarDisponibilidad(id: string, disponibilidad: DisponibilidadSlot[]): void {
+    const actual = this.docentes$.getValue();
+    const idx = actual.findIndex(d => d.id === id);
+    if (idx === -1) return;
+
+    const nuevaLista = [...actual];
+    nuevaLista[idx] = { ...nuevaLista[idx], disponibilidad };
+
+    this.docentes$.next(nuevaLista);
+    this.guardarEnLocalStorage(nuevaLista);
+  }
+
+  private disponibilidadVacia(): DisponibilidadSlot[] {
+    return Array.from({ length: 8 }, (_, i) => ({
+      modulo: i + 1,
+      lunes: false,
+      martes: false,
+      miercoles: false,
+      jueves: false,
+      viernes: false,
+      sabado: false
+    }));
   }
 }

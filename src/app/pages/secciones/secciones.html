@@ -14,7 +14,7 @@
     <a href="https://files.griddo.ucm.cl/malla-ingenieria-civil-informatica-ucm-2018.pdf" target="_blank" class="btn btn-outline">
       <i class="pi pi-external-link"></i> Malla Curricular ICI
     </a>
-    <button class="btn btn-primary" (click)="abrirRegistro()">
+    <button class="btn btn-primary" (click)="abrirFormulario()">
       <i class="pi pi-users"></i> Registrar +
     </button>
   </div>
@@ -22,9 +22,19 @@
 
 <div class="filters">
   <p class="texto-filtro-nombre">Filtrar por código : </p>
-  <input class="filtro-nombre" type="text" [(ngModel)]="searchName" (input)="onFilter()" placeholder="Buscar por código de sección..." >
-</div>
+  <input class="filtro-nombre" type="text" [(ngModel)]="searchName" (input)="onFilter()" placeholder="Buscar por código de ramo..." >
+  <p class="texto-filtro-seccion">Filtrar por númer sección: </p>
+  <select [(ngModel)]="filterType" (ngModelChange)="onFilter()" class="form-select-filtro">
+  <option value="">Todas las secciones</option>
+    <option value="1">Sección 1</option>
+    <option value="2">Sección 2</option>
+    <option value="3">Sección 3</option>
+    <option value="4">Sección 4</option>
+    <option value="5">Sección 5</option>
+  </select>
+</div> 
 
+<div class="table-container">
 <table>
   <thead>
     <tr>
@@ -36,19 +46,24 @@
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let d of paginados">
-      <td class="id-cell">{{ d.id }}</td>
-      <td>{{ d.codigo_ramo }}</td>
-      <td>{{ d.numero_seccion }}</td>
-      <td>{{ d.estudiantes_inscritos }}</td>
+    <tr *ngFor="let s of paginados">
+      <td class="id-cell">{{ s.id }}</td>
+      <td>{{ s.codigo_ramo }}</td>
+      <td>{{ s.numero_seccion }}</td>
+      <td>{{ s.estudiantes_inscritos }}</td>
       <td>
-        <button class="action-btn editar" (click)="editar(d)"><i class="pi pi-pencil" title="Editar"></i></button>
-        <button class="action-btn del" (click)="eliminar(d)"><i class="pi pi-trash" title="Eliminar"></i></button>
+        <button class="action-btn editar" (click)="abrirFormulario(s)"><i class="pi pi-pencil" title="Editar"></i></button>
+        <button class="action-btn del" (click)="eliminar(s)"><i class="pi pi-trash" title="Eliminar"></i></button>
       </td>
     </tr>
+    <tr *ngIf="filtrados.length === 0">
+      <td colspan="5" style="text-align: center; padding: 40px; color: #64748b; font-size: 14px;">
+        No se encontraron secciones
+      </td>
+  </tr>
   </tbody>
 </table>
-
+</div>
 <div class="pagination">
   <button class="page-btn" (click)="goTo(currentPage - 1)" [disabled]="currentPage === 1">‹</button>
   <button *ngFor="let p of totalPagesArray()" class="page-btn"

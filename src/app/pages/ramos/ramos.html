@@ -21,7 +21,7 @@
       <i class="pi pi-file-arrow-up"></i> Importar Excel
     </button>
 
-    <button class="btn btn-primary" (click)="abrirRegistro()">
+    <button class="btn btn-primary" (click)="abrirFormulario()">
       <i class="pi pi-book"></i> Registrar +
     </button>
   </div>
@@ -30,8 +30,18 @@
 <div class="filters">
   <p class="texto-filtro-nombre">Filtrar por nombre: </p>
   <input class="filtro-nombre" type="text" [(ngModel)]="searchName" (input)="onFilter()" placeholder="Buscar ramo por nombre..." >
+  <p class="texto-filtro-ramo">Filtrar por nivel ramo: </p>
+  <select class="filtro-ramo" [(ngModel)]="filterType" (change)="onFilter()">
+    <option value="">Todos los niveles</option>
+    <option value="I">Nivel I</option>
+    <option value="II">Nivel II</option>
+    <option value="III">Nivel III</option>
+    <option value="IV">Nivel VI</option>
+    <option value="V">Nivel V</option>    
+  </select>
 </div>
 
+<div class="table-container">
 <table>
   <thead>
     <tr>
@@ -46,28 +56,28 @@
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let d of paginados">
-      <td class="id-cell">{{ d.id }}</td>
-      <td>{{ d.nombre }}</td>
-      <td>{{ d.nivel }}</td>
-      <td>{{ d.cantidad_secciones }}</td>
-      <td>{{ d.cupos_por_seccion }}</td>
-      <td>{{ d.horas_catedra }}</td>
-      <td>{{ d.horas_laboratorio }}</td>
+    <tr *ngFor="let r of paginados">
+      <td class="id-cell">{{ r.id }}</td>
+      <td>{{ r.nombre }}</td>
+      <td>{{ r.nivel }}</td>
+      <td>{{ r.cantidad_secciones }}</td>
+      <td>{{ r.cupos_por_seccion }}</td>
+      <td>{{ r.horas_catedra }}</td>
+      <td>{{ r.horas_laboratorio }}</td>
 
       <td>
-        <button class="action-btn editar" (click)="editar(d)"><i class="pi pi-pencil" title="Editar"></i></button>
-        <button class="action-btn del" (click)="eliminar(d)"><i class="pi pi-trash" title="Eliminar"></i></button>
+        <button class="action-btn editar" (click)="abrirFormulario(r)"><i class="pi pi-pencil" title="Editar"></i></button>
+        <button class="action-btn del" (click)="eliminar(r)"><i class="pi pi-trash" title="Eliminar"></i></button>
       </td>
     </tr>
     <tr *ngIf="filtrados.length === 0">
       <td colspan="8" style="text-align: center; color: #888; padding: 20px;">
-        No se encontraron ramos con los filtros aplicados.
+        No se encontraron ramos
       </td>
     </tr>
   </tbody>
 </table>
-
+</div>
 <div class="pagination">
   <button class="page-btn" (click)="goTo(currentPage - 1)" [disabled]="currentPage === 1">‹</button>
   <button *ngFor="let p of totalPagesArray()" class="page-btn"

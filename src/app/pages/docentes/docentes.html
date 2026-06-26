@@ -17,7 +17,7 @@
     <button class="btn btn-outline" (click)="mostrarModalImportar=true">
       <i class="pi pi-file-arrow-up"></i> Importar Excel
     </button>
-    <button class="btn btn-primary" (click)="abrirRegistro()">
+    <button class="btn btn-primary" (click)="abrirFormulario()">
       <i class="pi pi-graduation-cap"></i>Registrar +
     </button>
   </div>
@@ -26,17 +26,17 @@
 <div class="metrics-container">
   <div class="card">
     <span class="label">Total Docentes</span>
-    <span class="value blue">{{ totalDocentes }}</span>
+    <span class="value celeste">{{ totalDocentes }}</span>
   </div>
 
   <div class="card">
     <span class="label">Docentes Full-time</span>
-    <span class="value green">{{ totalFullTime }}</span>
+    <span class="value blue">{{ totalFullTime }}</span>
   </div>
 
   <div class="card">
     <span class="label">Docentes Part-time</span>
-    <span class="value red">{{ totalPartTime }}</span>
+    <span class="value green">{{ totalPartTime }}</span>
   </div>
 </div>
 
@@ -51,6 +51,7 @@
   </select>
 </div>
 
+<div class="table-container">
 <table>
   <thead>
     <tr>
@@ -71,18 +72,18 @@
       </td>
       <td>
         <button class="action-btn dispo" (click)="disponibilidad(d)"><i class="pi pi-calendar" title="Disponibilidad" ></i></button>
-        <button class="action-btn editar" (click)="editar(d)"><i class="pi pi-pencil" title="Editar"></i></button>
+        <button class="action-btn editar" (click)="abrirFormulario(d)"><i class="pi pi-pencil" title="Editar"></i></button>
         <button class="action-btn del" (click)="eliminar(d)"><i class="pi pi-trash" title="Eliminar"></i></button>
       </td>
     </tr>
     <tr *ngIf="filtrados.length === 0">
       <td colspan="4" style="text-align: center; color: #888; padding: 20px;">
-        No se encontraron docentes con los filtros aplicados.
+        No se encontraron docentes
       </td>
     </tr>
   </tbody>
 </table>
-
+</div>
 <div class="pagination">
   <button class="page-btn" (click)="goTo(currentPage - 1)" [disabled]="currentPage === 1">‹</button>
   <button *ngFor="let p of totalPagesArray()" class="page-btn"
@@ -90,6 +91,7 @@
           [class.active]="p === currentPage">{{ p }}</button>
   <button class="page-btn" (click)="goTo(currentPage + 1)" [disabled]="currentPage === totalPages">›</button>
 </div>
+
 
 <!-- Para el modal de importar docentes en el excel -->
 <div *ngIf="mostrarModalImportar"

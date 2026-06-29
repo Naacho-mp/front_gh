@@ -64,6 +64,18 @@ export class RamosService {
     this.guardarEnLocalStorage(nuevoListado);
   }
 
+  agregarDesdeExcel(ramo: Ramo): boolean {
+    const actual = this.ramos$.getValue();
+    if (actual.some(r => r.id === ramo.id)) return false;
+
+    const nuevoListado = [ramo, ...actual];
+    this.ramos$.next(nuevoListado);
+    this.guardarEnLocalStorage(nuevoListado);
+    return true;
+  }
+
+
+
   eliminar(id: string): void {
     const actual = this.ramos$.getValue();
     const nuevoListado = actual.filter(r => r.id !== id);

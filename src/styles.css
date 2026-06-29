@@ -360,6 +360,15 @@ tr:hover td {
   font-family: 'Segoe UI', sans-serif;
 }
 
+.snack-warning .mdc-snackbar__surface {
+  background-color: #88b13d !important;
+  font-family: 'Segoe UI', sans-serif;
+}
+.snack-warning .mdc-snackbar__label {
+  color: white !important;
+  font-family: 'Segoe UI', sans-serif;
+}
+
 
 /*para modal de disponibilidad*/
 

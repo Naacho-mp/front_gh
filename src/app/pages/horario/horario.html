@@ -33,6 +33,21 @@
       </span>
     </div>
 
+   <div class="panel-header sin-borde">
+      <h2>Estados de asignación:</h2>
+    </div>
+  <div class="leyenda">
+    <span class="leyenda-item">
+      <span class="bolita rojo"></span> Sin asignar
+    </span>
+    <span class="leyenda-item">
+      <span class="bolita amarillo"></span> Parcialmente 
+    </span>
+    <span class="leyenda-item">
+      <span class="bolita verde"></span> Asignado
+    </span>
+  </div>
+
     <div class="lista-tarjetas">
       
       <div *ngFor="let ramo of ramos" class="item-acordeon">
@@ -41,10 +56,21 @@
                 (click)="ramo.expandido = !ramo.expandido" 
                 [class.activo]="ramo.expandido">
           <span class="ramo-titulo">{{ ramo.nombre }}</span>
+          <span class="badge-ramo" 
+            [class.completo]="ramo.secciones.filter(s => !!s.dia).length === ramo.secciones.length"
+            [class.parcial]="ramo.secciones.filter(s => !!s.dia).length > 0 && ramo.secciones.filter(s => !!s.dia).length < ramo.secciones.length"
+            [class.pendiente]="ramo.secciones.filter(s => !!s.dia).length < ramo.secciones.length">
+            {{ ramo.secciones.filter(s => !!s.dia).length }}/{{ ramo.secciones.length }}
+          </span>
           <span class="icono-flecha" [class.rotado]="ramo.expandido">▼</span>
         </button>
 
         <div class="acordeon-contenido" [class.mostrar]="ramo.expandido">
+
+          <p style="font-size: 12px; text-align: center; font-family:'Segoe UI', sans-serif; color: rgb(136, 135, 133);" 
+            *ngIf="ramo.secciones.length === 0" class="sin-secciones">
+            No hay secciones asociadas a este ramo
+          </p>
           
           <div *ngFor="let sec of ramo.secciones" 
                class="card-seccion"

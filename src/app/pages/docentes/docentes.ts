@@ -31,7 +31,7 @@ export class Docentes implements OnInit {
   archivoSeleccionado: File | null = null;
 
   // Estados para manejar si esta registrando o editando un docente
-  mostrarModalDocente = false;
+  mostrarModalDocente = false; 
   esEdicion = false;
   docenteIdActivo: string | null = null;
 
@@ -224,34 +224,64 @@ abrirFormulario(docente?: Docente): void {
 
       const filasRaw = XLSX.utils.sheet_to_json<any>(hoja);
 
-      const nuevosDocentes: Docente[] = filasRaw.map(fila => {
-        let tipoContrato: 'Full-time' | 'Part-time' = 'Full-time';
-        const contratoRaw = String(fila['Tipo de contrato'] || fila['contrato'] || '').trim();
-        if (contratoRaw.toLowerCase().includes('part')) {
-          tipoContrato = 'Part-time';
-        }
+      const nuevosDocentes = filasRaw.map(fila => {
+      let tipoContrato: 'Full-time' | 'Part-time' = 'Full-time';
+      const contratoRaw = String(fila['Tipo de contrato'] || fila['contrato'] || '').trim();
+      if (contratoRaw.toLowerCase().includes('part')) {
+        tipoContrato = 'Part-time';
+      }
 
-        return {
-          id: String(fila['ID Docente'] || fila['id'] || '').trim(),
-          nombre: String(fila['Nombre del docente'] || fila['nombre'] || 'Docente sin nombre').trim(),
-          contrato: tipoContrato
-        };
-      }).filter(doc => doc.id !== '');
+      return {
+        nombre: String(fila['Nombre del docente'] || fila['nombre'] || '').trim(),
+        contrato: tipoContrato
+      };
+    }).filter(doc => doc.nombre !== '');
 
       if (nuevosDocentes.length > 0) {
+        let exitosos = 0;
+        let fallidos = 0;
         // Modificación para el Excel: Para que la importación persista tras un cambio de vista,
         // guardamos individualmente los registros procesados en el servicio.
         nuevosDocentes.forEach(doc => {
-          this.docenteService.agregar(doc);
-        });
+          const ok = this.docenteService.agregarDesdeExcel(doc);
+          if (ok) exitosos++;
+          else fallidos++;
+    });
+
+      const msgExitosos = exitosos === 1 ? '1 docente importado exitosamente' : `${exitosos} docentes importados exitosamente`;
+      const msgFallidos = fallidos === 1 ? '1 ya existía' : `${fallidos} docentes existían anteriormente`;
+
+        if (fallidos === 0) {
+      this.snackBar.open(`Los ${exitosos} docentes han sido importados correctamente.`, 'Cerrar', {
+        duration: 3000,
+        horizontalPosition: 'center',
+        verticalPosition: 'top',
+        panelClass: ['snack-success']
+     });
+    } else if (exitosos === 0) {
+      this.snackBar.open('Error, No se pudo importar ningún docente. Verifica docentes duplicados.', 'Cerrar', { 
+        duration: 3000,
+        horizontalPosition: 'center',
+        verticalPosition: 'top',
+        panelClass: ['snack-eliminar']
+       });
+    } else {
+      this.snackBar.open(`${msgExitosos}. Mientras que ${msgFallidos}.`, 'Cerrar',  { 
+        duration: 5000,
+        horizontalPosition: 'center',
+        verticalPosition: 'top',
+        panelClass: ['snack-warning']
+       });
+    }
+  
         
-        
-        this.currentPage = 1;
-        this.cdr.detectChanges();
+      this.currentPage = 1;
+      this.cdr.detectChanges();
       }
 
       this.mostrarModalImportar = false;
       this.archivoSeleccionado = null;
+      this.cdr.detectChanges();
     };
 
     lector.readAsBinaryString(this.archivoSeleccionado);

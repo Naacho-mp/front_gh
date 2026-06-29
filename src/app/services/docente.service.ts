@@ -78,6 +78,30 @@ export class DocenteService {
     this.guardarEnLocalStorage(nuevoListado);        
   }
 
+  agregarDesdeExcel(docente: Omit<Docente, 'id'>): boolean {
+  const actual = this.docentes$.getValue();
+
+  // Verifica por nombre en vez de ID
+  if (actual.some(d => d.nombre.toLowerCase() === docente.nombre.toLowerCase())) return false;
+
+  try {
+    const nuevo: Docente = {
+      id: `DOC-${Math.floor(Math.random() * 9000 + 1000)}`,
+      ...docente,
+      disponibilidad: docente.contrato === 'Part-time'
+        ? (docente.disponibilidad ?? this.disponibilidadVacia())
+        : undefined
+    };
+
+    const nuevoListado = [nuevo, ...actual];
+    this.docentes$.next(nuevoListado);
+    this.guardarEnLocalStorage(nuevoListado);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
   //eliminar docente
   eliminar(id: string): void {
     const actual = this.docentes$.getValue();

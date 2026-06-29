@@ -172,4 +172,6 @@ export class Horario implements OnInit, OnDestroy {
     seccion.dia = undefined;
     seccion.modulo = undefined;
   }
+
+
 }

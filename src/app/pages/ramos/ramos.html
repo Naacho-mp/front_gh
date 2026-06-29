@@ -15,9 +15,7 @@
       <i class="pi pi-download"></i> Descargar Plantilla
     </a>
 
-    <input type="file" #fileInput (change)="leerExcel($event)" accept=".xlsx, .ods" style="display: none;">
-
-    <button class="btn btn-outline" (click)="fileInput.click()">
+    <button class="btn btn-outline" (click)="mostrarModalImportar=true">
       <i class="pi pi-file-arrow-up"></i> Importar Excel
     </button>
 
@@ -85,3 +83,57 @@
           [class.active]="p === currentPage">{{ p }}</button>
   <button class="page-btn" (click)="goTo(currentPage + 1)" [disabled]="currentPage === totalPages">›</button>
 </div>
+
+<!--Para mostrar modal importar-->
+<div *ngIf="mostrarModalImportar"
+  style="position:fixed; top:0; left:0; width:100%; height:100%;
+    background:rgba(0,0,0,0.45); display:flex; align-items:center;
+    justify-content:center; z-index:1050;">
+
+  <div style="background:#fff; border-radius:12px; width:440px; padding:24px;">
+
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; font-family:'Segoe UI',sans-serif;">
+      <div style="display:flex; align-items:center; gap:8px;">
+        <i class="bi bi-file-earmark-arrow-up" style="font-size:20px; color:#1a3c8f;"></i>
+        <h5 style="margin:0; font-weight:600; font-size:20px; color: #333;">Importar Ramos</h5>
+      </div>
+      <button (click)="mostrarModalImportar=false"
+        style="background:none; border:none; font-size:20px; color:#aaa; cursor:pointer;">✕</button>
+    </div>
+
+    <p style="font-family: 'Segoe UI', sans-serif; font-size: 14px; color: #666; margin: 0 0 16px;text-align: justify;">
+      Cargue su archivo de ramos de acuerdo a la <strong>plantilla proporcionada</strong>. Asegúrese de que el formato sea correcto para evitar errores en la importación.
+    </p>
+
+    <div style="border:2px dashed #ccc; border-radius:10px; padding:32px;
+      text-align:center; background:#fafafa; margin-bottom:16px;">
+      <i class="pi pi-upload" style="font-size:32px; color:#aaa; display:block; margin-bottom:10px;"></i>
+      <p style="font-size:13px; color:#666; margin: 0 0 8px 0; word-break: break-all;">
+        {{ archivoSeleccionado ? archivoSeleccionado.name : 'Seleccione un archivo de su directorio' }}
+      </p>
+      <p style="font-size:12px; color:#999; margin: 0 0 12px 0;">
+        Solo soporta archivos .xlsx, .xls (Máx: 10MB)
+      </p>
+      <input #fileInput type="file" accept=".xlsx,.xls,.ods"
+        style="display:none;" (change)="onArchivoSeleccionado($event)" />
+      <button (click)="fileInput.click()"
+        style="padding:8px 18px; border:1.5px solid #1a3c8f; background:white;
+          color:#1a3c8f; border-radius:8px; font-size:13px; cursor:pointer; font-weight: 500;">
+        Examinar archivos
+      </button>
+    </div>
+
+    <div style="display:flex; justify-content:flex-end; gap:10px;">
+      <button (click)="mostrarModalImportar=false"
+        style="padding:9px 20px; border:none; background:#9c9c9c;
+          color:white; border-radius:8px; font-size:13px; cursor:pointer;">
+        Cancelar
+      </button>
+      <button (click)="subirRamos()" [disabled]="!archivoSeleccionado"
+        style="padding:9px 20px; border:none; background:#1a3c8f; color:white;
+          border-radius:8px; font-size:13px; cursor:pointer; font-weight: 500; opacity: id">
+        Subir
+      </button>
+    </div>
+
+  </div>

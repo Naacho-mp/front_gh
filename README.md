@@ -1,59 +1,83 @@
-# FrontGh
+Frontend Sistema de Gestión Horaria
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.9.
+Frontend del **Sistema de Gestión Horaria**, desarrollado con [Angular](https://angular.dev/) y Angular Material. Permite administrar y visualizar la información relacionada con el control de horarios para la carrera de Ingeniería Civil en Informática - UCM.
 
-## Development server
+## Tecnologías
 
-To start a local development server, run:
+- **Angular** `21.x`
+- **Angular Material** y **Angular CDK**
+- **RxJS**
+- **Bootstrap Icons** / **PrimeIcons**
+- **xlsx** (lectura/escritura de archivos Excel)
+- **Vitest** (testing)
+- **Prettier** (formateo de código)
+
+## Estructura del proyecto
+
+```
+front_gh/
+├── public/        # Archivos estáticos
+├── src/           # Código fuente de la aplicación (Componentes, forms, layouts, pages, services, shared )
+├── angular.json   # Configuración de Angular CLI
+├── package.json   # Dependencias y scripts
+└── tsconfig*.json # Configuración de TypeScript
+```
+
+## Requisitos previos
+
+- [Node.js](https://nodejs.org/) (versión compatible con Angular 21)
+- [npm](https://www.npmjs.com/) `11.x` (o el gestor configurado en `packageManager`)
+- [Angular CLI](https://angular.dev/tools/cli) instalado globalmente (opcional, pero recomendado)
+
+```bash
+npm install -g @angular/cli
+```
+
+## Instalación
+
+1. Clonar el repositorio:
+
+```bash
+git clone https://github.com/Naacho-mp/front_gh.git
+cd front_gh
+```
+
+2. Instalar las dependencias:
+
+```bash
+npm install
+```
+
+## Servidor de desarrollo
+
+Para levantar el servidor local de desarrollo:
+
+```bash
+npm start
+```
+
+o bien:
 
 ```bash
 ng serve
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Luego abrir el navegador en `http://localhost:4200/`. La aplicación se recargará automáticamente cada vez que modifiques los archivos fuente.
 
-## Code scaffolding
+## Build
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
+Para compilar el proyecto:
 
 ```bash
 ng build
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+Los artefactos de compilación se guardarán en el directorio `dist/`. Por defecto, el build de producción optimiza la aplicación para mejorar el rendimiento y la velocidad.
 
-## Running unit tests
+## Code
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
+Para ver el listado completo de esquemas disponibles (`components`, `directives`, `pipes`, etc.):
 
 ```bash
-ng e2e
+ng generate --help
 ```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.

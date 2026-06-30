@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ChangeDetectorRef, OnInit, OnDestroy } from '@angular/core'; // 1. Importamos OnInit y OnDestroy
+import { Component, ChangeDetectorRef, OnInit, OnDestroy } from '@angular/core'; 
 import { FormsModule } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { RamoFormComponent } from '../../forms/forms-ramo/forms-ramo';
@@ -7,7 +7,7 @@ import { RamosService, Ramo } from '../../services/ramo.service';
 import { ConfirmarDialog } from '../../shared/confirmar-dialog/confirmar-dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import * as XLSX from 'xlsx';
-import { Subscription } from 'rxjs'; // 2. Importamos Subscription
+import { Subscription } from 'rxjs'; 
 
 @Component({
   selector: 'app-ramos',

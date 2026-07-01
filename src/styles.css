@@ -394,3 +394,11 @@ tr:hover td {
   margin-top: auto;          
   border-top: 1px solid #f1f5f9; 
 }
+
+.version {
+  font-size: 12px;
+  color: #9ca3af;
+  font-family: 'Segoe UI', sans-serif;
+  font-weight: 600;
+  text-align: center;
+}

@@ -72,6 +72,8 @@
 .bottom-section {
   padding: 16px 16px 32px;
   margin-top: auto;
+  margin-left: 10px;
+  text-align: center;
 }
 
 .divider {

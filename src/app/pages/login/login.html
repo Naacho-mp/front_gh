@@ -25,11 +25,16 @@
       <h2>Bienvenido(a)</h2>
       <p class="subtitle">Ingrese sus credenciales para acceder a la plataforma.</p>
 
+      <!-- Mensaje de Error -->
+      <div *ngIf="mensajeError" class="alert alert-danger" style="color: red; margin-bottom: 15px; font-weight: bold;">
+        <i class="pi pi-exclamation-triangle"></i> {{ mensajeError }}
+      </div>
+
       <div class="field">
         <label>USUARIO</label>
         <div class="input-wrap">
           <i class="pi pi-user"></i>
-          <input type="text" [(ngModel)]="usuario" placeholder="nombre.apellido@ucm.cl">
+          <input type="text" [(ngModel)]="usuario" placeholder="nombre.apellido">
         </div>
       </div>
 
@@ -50,8 +55,9 @@
         </div>
       </div>
 
-      <button class="btn-login" (click)="iniciarSesion()" routerLink="/horario">
-        Iniciar Sesión <i class="pi pi-sign-in"></i>
+      <!-- Eliminado routerLink="/horario" para que TypeScript maneje la redirección -->
+      <button class="btn-login" (click)="iniciarSesion()" [disabled]="cargando">
+        {{ cargando ? 'Verificando...' : 'Iniciar Sesión' }} <i class="pi pi-sign-in" *ngIf="!cargando"></i>
       </button>
 
       <div class="right-footer">

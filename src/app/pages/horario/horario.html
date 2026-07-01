@@ -1,12 +1,10 @@
-
-
 <h1 class="titulo-modulo">Gestión de Horario</h1>
 
-  <p class="parrafo-modulo">
-    Panel centralizado para la administración integral de horarios académicos en Ingeniería Civil en Informática. 
-    Permite gestionar secciones, asignar docentes, y recursos físicos como salas y laboratorios, 
-    asegurando la validación automática de disponibilidad y la prevención de conflictos para la carrera.
-  </p>
+<p class="parrafo-modulo">
+  Panel centralizado para la administración integral de horarios académicos en Ingeniería Civil en Informática. 
+  Permite gestionar secciones por bloques, asignar docentes, y recursos físicos como salas y laboratorios, 
+  asegurando la validación automática de disponibilidad y la prevención de conflictos para la carrera.
+</p>
 
 <div class="modulo-container">
   
@@ -18,114 +16,155 @@
       </select>
     </div>
     
-    <button (click)="aplicarFiltro()" class="btn-aplicar">
-     APLICAR
-    </button>
+    <div class="acciones-group" style="display: flex; gap: 12px;">
+      <button (click)="aplicarFiltro()" class="btn-aplicar">
+        <i class="pi pi-filter"></i> Aplicar Filtro
+      </button>
+      <button (click)="exportarAExcel()" 
+        class="btn-aplicar" 
+        [disabled]="bloquesGlobales.length === 0"
+        [style.background-color]="bloquesGlobales.length === 0 ? '#045338' : '#045338'"
+        [style.cursor]="bloquesGlobales.length === 0 ? 'not-allowed' : 'pointer'"
+        [title]="bloquesGlobales.length === 0 ? 'No hay bloques asignados en la grilla' : 'Exportar horario a Excel'">
+        <i class="pi pi-file-excel"></i> Exportar a Excel
+      </button>
+    </div>
   </header>
 
   <div class="workspace-layout">
   
-  <aside class="panel-lateral">
-    <div class="panel-header">
-      <h2>Secciones por asignar</h2>
-      <span class="badge-contador">
-        {{ (secciones | slice:0).length }}
-      </span>
-    </div>
+    <!-- PANEL LATERAL IZQUIERDO -->
+    <aside class="panel-lateral">
+      <div class="panel-header">
+        <h2>Secciones por asignar</h2>
+        <span class="badge-contador">
+          {{ secciones.length }}
+        </span>
+      </div>
 
-   <div class="panel-header sin-borde">
-      <h2>Estados de asignación:</h2>
-    </div>
-  <div class="leyenda">
-    <span class="leyenda-item">
-      <span class="bolita rojo"></span> Sin asignar
-    </span>
-    <span class="leyenda-item">
-      <span class="bolita amarillo"></span> Parcialmente 
-    </span>
-    <span class="leyenda-item">
-      <span class="bolita verde"></span> Asignado
-    </span>
-  </div>
+      <div class="panel-header sin-borde">
+        <h2>Estados de asignación global:</h2>
+      </div>
+      <div class="leyenda">
+        <span class="leyenda-item">
+          <span class="bolita rojo"></span> Incompleto
+        </span>
+        <span class="leyenda-item">
+          <span class="bolita amarillo"></span> Excedido
+        </span>
+        <span class="leyenda-item">
+          <span class="bolita verde"></span> Completado
+        </span>
+      </div>
 
-    <div class="lista-tarjetas">
-      
-      <div *ngFor="let ramo of ramos" class="item-acordeon">
+      <div class="lista-tarjetas">
         
-        <button class="acordeon-header" 
-                (click)="ramo.expandido = !ramo.expandido" 
-                [class.activo]="ramo.expandido">
-          <span class="ramo-titulo">{{ ramo.nombre }}</span>
-          <span class="badge-ramo" 
-            [class.completo]="ramo.secciones.filter(s => !!s.dia).length === ramo.secciones.length"
-            [class.parcial]="ramo.secciones.filter(s => !!s.dia).length > 0 && ramo.secciones.filter(s => !!s.dia).length < ramo.secciones.length"
-            [class.pendiente]="ramo.secciones.filter(s => !!s.dia).length < ramo.secciones.length">
-            {{ ramo.secciones.filter(s => !!s.dia).length }}/{{ ramo.secciones.length }}
-          </span>
-          <span class="icono-flecha" [class.rotado]="ramo.expandido">▼</span>
-        </button>
-
-        <div class="acordeon-contenido" [class.mostrar]="ramo.expandido">
-
-          <p style="font-size: 12px; text-align: center; font-family:'Segoe UI', sans-serif; color: rgb(136, 135, 133);" 
-            *ngIf="ramo.secciones.length === 0" class="sin-secciones">
-            No hay secciones asociadas a este ramo
-          </p>
+        <div *ngFor="let ramo of ramos" class="item-acordeon">
           
-          <div *ngFor="let sec of ramo.secciones" 
-               class="card-seccion"
-               [class.card-bloqueada]="!sec.guardado"
-               [class.card-lista]="sec.guardado && sec.dia"
-               [draggable]="sec.guardado"
-               (dragstart)="onDragStart($event, sec)">
+          <button class="acordeon-header" 
+                  (click)="ramo.expandido = !ramo.expandido" 
+                  [class.activo]="ramo.expandido">
+            <span class="ramo-titulo">{{ ramo.nombre }}</span>
+            <span class="icono-flecha" [class.rotado]="ramo.expandido">▼</span>
+          </button>
+
+          <div class="acordeon-contenido" [class.mostrar]="ramo.expandido">
+
+            <p style="font-size: 12px; text-align: center; font-family:'Segoe UI', sans-serif; color: rgb(136, 135, 133);" 
+              *ngIf="ramo.secciones.length === 0" class="sin-secciones">
+              No hay secciones asociadas a este ramo
+            </p>
             
-            <div class="card-info-header">
-              <span class="codigo-ramo">{{ sec.codigo }}</span>
-              <h2 class="nombre-ramo">{{ sec.ramo }}</h2>
-            </div>
-
-            <div class="card-body-form" *ngIf="!sec.guardado">
-              <div class="input-block">
-                <label>PROFESOR:</label>
-                <select [(ngModel)]="sec.docente" class="card-select">
-                  <option value="" disabled selected>Seleccione Profesor</option>
-                  <option value="">-- Sin Docente --</option>
-                  <option *ngFor="let doc of docentesDisponibles" [value]="doc">{{ doc }}</option>
-                </select>
-              </div>
-
-              <div class="input-block">
-                <label>LABORATORIO / SALA:</label>
-                <select [(ngModel)]="sec.sala" class="card-select">
-                  <option value="" disabled selected>Seleccione Ubicación</option>
-                  <option *ngFor="let sala of salasDisponibles" [value]="sala">{{ sala }}</option>
-                </select>
-              </div>
-
-              <button (click)="guardarConfiguracionSeccion(sec)" class="btn-guardar-card">
-                Guardar
-              </button>
-            </div>
-
-            <div class="card-body-fijo" *ngIf="sec.guardado">
-              <p><strong>Docente:</strong> {{ sec.docente }}</p>
-              <p><strong>Sala:</strong> {{ sec.sala }}</p>
+            <div *ngFor="let sec of ramo.secciones" 
+                 class="card-seccion"
+                 [class.card-bloqueada]="!sec.guardado"
+                 [style.border-left-color]="getBordeEstadoSeccion(sec)">
               
-              <div class="card-footer-status">
-                <span class="status-badge" [class.ubicado]="sec.dia">
-                  {{ sec.dia ? 'Asignado en Grilla' : 'Listo para arrastrar' }}
-                </span>
-                <button (click)="editarConfiguracionSeccion(sec)" class="btn-editar-card"><i class="pi pi-pencil" title="Editar"></i></button>
+              <div class="card-info-header">
+                <span class="codigo-ramo">{{ sec.codigo }}</span>
+                <h2 class="nombre-ramo">{{ sec.ramo }}</h2>
               </div>
-            </div>
 
+              <!-- FORMULARIO DE ASIGNACIÓN INICIAL -->
+              <div class="card-body-form" *ngIf="!sec.guardado">
+                <div class="input-block">
+                  <label>PROFESOR:</label>
+                  <select [(ngModel)]="sec.docente" class="card-select">
+                    <option value="" disabled selected>Seleccione Profesor</option>
+                    <option value="">-- Sin Docente --</option>
+                    <option *ngFor="let doc of docentesDisponibles" [value]="doc">{{ doc }}</option>
+                  </select>
+                </div>
+
+                <div class="input-block">
+                  <label>LABORATORIO / SALA:</label>
+                  <select [(ngModel)]="sec.sala" class="card-select">
+                    <option value="" disabled selected>Seleccione Ubicación</option>
+                    <option *ngFor="let sala of salasDisponibles" [value]="sala">{{ sala }}</option>
+                  </select>
+                </div>
+
+                <button (click)="guardarConfiguracionSeccion(sec)" class="btn-guardar-card">
+                  Guardar Configuración
+                </button>
+              </div>
+
+              <!-- VISTA DE BLOQUES DISPONIBLES PARA DRAG AND DROP -->
+              <div class="card-body-fijo" *ngIf="sec.guardado">
+                <p><strong>Docente:</strong> {{ sec.docente || 'Sin Asignar' }}</p>
+                <p><strong>Sala:</strong> {{ sec.sala }}</p>
+                
+                <!-- Indicadores de Cumplimiento de Bloques Horarios -->
+                <div class="bloques-contador-container" style="margin: 10px 0; display: flex; gap: 8px; font-size: 11px;">
+                  <span style="padding: 2px 6px; border-radius: 4px; font-weight: bold;"
+                        [style.background-color]="sec.horas_catedra_asig === sec.horas_catedra_req ? '#dcfce7' : (sec.horas_catedra_asig > sec.horas_catedra_req ? '#fee2e2' : '#fef9c3')"
+                        [style.color]="sec.horas_catedra_asig === sec.horas_catedra_req ? '#15803d' : (sec.horas_catedra_asig > sec.horas_catedra_req ? '#b91c1c' : '#a16207')">
+                    Cátedra (C): {{ sec.horas_catedra_asig }}/{{ sec.horas_catedra_req }}
+                  </span>
+                  <span style="padding: 2px 6px; border-radius: 4px; font-weight: bold;"
+                        [style.background-color]="sec.horas_laboratorio_asig === sec.horas_laboratorio_req ? '#dcfce7' : (sec.horas_laboratorio_asig > sec.horas_laboratorio_req ? '#fee2e2' : '#fef9c3')"
+                        [style.color]="sec.horas_laboratorio_asig === sec.horas_laboratorio_req ? '#15803d' : (sec.horas_laboratorio_asig > sec.horas_laboratorio_req ? '#b91c1c' : '#a16207')">
+                    Lab (L): {{ sec.horas_laboratorio_asig }}/{{ sec.horas_laboratorio_req }}
+                  </span>
+                </div>
+
+                <!-- Alertas visuales de estado -->
+                <div style="font-size: 11px; font-weight: bold; margin-bottom: 8px;">
+                  <span *ngIf="esAsignacionIncompleta(sec)" style="color: #b45309;"><i class="pi pi-exclamation-triangle"></i> Faltan bloques por asignar</span>
+                  <span *ngIf="esAsignacionExcedida(sec)" style="color: #b91c1c;"><i class="pi pi-times-circle"></i> Se han excedido los bloques</span>
+                  <span *ngIf="esAsignacionPerfecta(sec)" style="color: #15803d;"><i class="pi pi-check-circle"></i> Bloques totalmente asignados</span>
+                </div>
+
+                <!-- Contenedores draggables independientes por tipo de bloque -->
+                <div class="bloques-arrastrables" style="display: flex; flex-direction: column; gap: 6px; margin-top: 8px;">
+                  <div class="bloque-item-drag" 
+                       style="padding: 6px; background: #f1f5f9; border: 1px dashed #cbd5e1; border-radius: 4px; cursor: grab; font-size: 12px; display: flex; align-items: center; gap: 6px;"
+                       [draggable]="true"
+                       (dragstart)="onDragStart($event, sec, 'C')">
+                    <i class="pi pi-bars" style="color: #64748b;"></i> Arrastrar Bloque de <strong>Cátedra (C)</strong>
+                  </div>
+                  <div class="bloque-item-drag" 
+                       style="padding: 6px; background: #f1f5f9; border: 1px dashed #cbd5e1; border-radius: 4px; cursor: grab; font-size: 12px; display: flex; align-items: center; gap: 6px;"
+                       [draggable]="true"
+                       (dragstart)="onDragStart($event, sec, 'L')">
+                    <i class="pi pi-bars" style="color: #64748b;"></i> Arrastrar Bloque de <strong>Laboratorio (L)</strong>
+                  </div>
+                </div>
+                
+                <div class="card-footer-status">
+                  <button (click)="editarConfiguracionSeccion(sec)" class="btn-editar-card">
+                    <i class="pi pi-pencil" title="Editar Metadatos"></i> Editar Ajustes
+                  </button>
+                </div>
+              </div>
+
+            </div> 
           </div> 
         </div> 
-      </div> 
-    </div>
-  </aside>
+      </div>
+    </aside>
 
-
+    <!-- GRILLA HORARIA CENTRAL -->
     <main class="contenedor-grilla">
       <table class="tabla-horario">
         <thead>
@@ -149,16 +188,34 @@
                 (dragover)="allowDrop($event)"
                 (drop)="onDrop($event, dia, mod.id)">
               
-              <div *ngFor="let sec of secciones">
+              <!-- Renderización dinámica de bloques horarios asignados a la celda -->
+              <div *ngFor="let blk of getBloquesCelda(dia, mod.id)">
                 <div class="item-horario-asignado" 
-                    *ngIf="sec.dia === dia && sec.modulo === mod.id"
-                    [ngStyle]="{'background': getColorRamo(sec.ramo).bg,'border-left-color': getColorRamo(sec.ramo).borde}">
-                  <span class="close-btn" (click)="removerDeGrilla(sec)">×</span>
-                  <div class="ramo-titulo-item" [ngStyle]="{ 'color': getColorRamo(sec.ramo).titulo }">{{ sec.ramo }}</div>
-                  <div class="meta-item" [ngStyle]="{ 'color': getColorRamo(sec.ramo).meta }">{{ sec.codigo }} - {{ sec.sala }}</div>
-                  <div class="docente-item">Doc: 
-                    <span *ngIf="sec.docente">{{ sec.docente }}</span>
-                    <span *ngIf="!sec.docente" class="texto-alerta">Sin docente</span>
+                     [style.background]="blk.enConflicto ? '#fee2e2' : getColorRamo(blk.ramoNombre).bg"
+                     [style.border-left-color]="blk.enConflicto ? '#dc2626' : getColorRamo(blk.ramoNombre).borde"
+                     [style.border-color]="blk.enConflicto ? '#fca5a5' : ''"
+                     [attr.title]="blk.enConflicto ? 'CONFLICTOS DETECTADOS:\n' + (blk.conflictos?.join('\n') ?? '') : 'Bloque validado correctamente'"
+                     style="margin-bottom: 4px; transition: all 0.2s;">
+                  
+                  <span class="close-btn" (click)="removerBloqueDeGrilla(blk.id)">×</span>
+                  
+                  <div class="ramo-titulo-item" [ngStyle]="{ 'color': blk.enConflicto ? '#991b1b' : getColorRamo(blk.ramoNombre).titulo }">
+                    <strong>[{{ blk.tipo }}]</strong> {{ blk.ramoNombre }}
+                  </div>
+                  
+                  <div class="meta-item" [ngStyle]="{ 'color': blk.enConflicto ? '#b91c1c' : getColorRamo(blk.ramoNombre).meta }">
+                    {{ blk.codigoCompleto }} - {{ blk.sala }}
+                  </div>
+                  
+                  <div class="docente-item" [style.color]="blk.enConflicto ? '#7f1d1d' : ''">
+                    Doc: 
+                    <span *ngIf="blk.docente"><strong>{{ blk.docente }}</strong></span>
+                    <span *ngIf="!blk.docente" class="texto-alerta">Sin docente</span>
+                  </div>
+
+                  <!-- Pequeño indicador de error visual explícito -->
+                  <div *ngIf="blk.enConflicto" style="font-size: 9px; color: #dc2626; font-weight: bold; margin-top: 3px; display: flex; align-items: center; gap: 3px;">
+                    <i class="pi pi-exclamation-circle"></i> Conflicto (Pase el mouse)
                   </div>
                 </div>
               </div>

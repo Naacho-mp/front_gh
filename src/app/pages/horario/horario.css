@@ -7,7 +7,6 @@ body {
   margin: 0;
 }
 
-
 /* Contenedor principal que envuelve los filtros y la grilla */
 .modulo-container {
   padding: 16px 24px 24px 24px;
@@ -53,31 +52,39 @@ body {
 }
 
 .select-filtro:focus {
-  border-color: #3b82f6;
+  border-color: #003366;
 }
 
 .btn-aplicar {
-  background-color: #003366;; 
+  display: inline-flex;     
+  align-items: center;
+  justify-content: center;  
+  gap: 10px;                
+  padding: 12px 24px;       
+  border-radius: 6px;       
+  background-color: #003366; 
   color: white;
   border: none;
-  padding: 11px 24px;
-  border-radius: 8px;
-  font-weight: 600;
-  font-size: 13px;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 8px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  white-space: nowrap;
+  height: 44px;             
+  transition: all 0.3s ease;
+  
+
 }
 
 .btn-aplicar:hover {
-  background-color:#003366;;
+  background-color: #004a99;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 /* LAYOUT DEL WORKSPACE (DISTRIBUCIÓN EN DOS COLUMNAS) */
 .workspace-layout {
   display: grid;
-  grid-template-columns: 320px 1fr; 
+  grid-template-columns: 340px 1fr; 
   gap: 24px;
   align-items: start;
 }
@@ -93,7 +100,6 @@ body {
   box-sizing: border-box;
   height: calc(100vh - 160px);
   overflow: hidden;
-  
 }
 
 .panel-header {
@@ -136,26 +142,15 @@ body {
 .card-seccion {
   background: #ffffff;
   border: 2px solid #e2e8f0;
+  border-left: 5px solid #cbd5e1; 
   border-radius: 8px;
   padding: 14px;
   transition: all 0.2s ease;
 }
 
-/* Estado inicial: en dicion  para configurar Docente y Sala */
-.card-bloqueada {
-  border-left: 4px solid #d7d407; 
+.card-seccion:hover {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
 }
-
-/* Estado listo: Ya se guardó, y se puede arrastrar */
-.card-seccion[draggable="true"] {
-  cursor: grab;
-  border-left: 4px solid #3b82f6; 
-  background: #f8fafc;
-}
-.card-seccion[draggable="true"]:active {
-  cursor: grabbing;
-}
-
 
 .card-info-header {
   display: flex;
@@ -173,7 +168,6 @@ body {
   font-weight: 580;
   align-self: flex-start; 
   font-family: 'Segoe UI', sans-serif;
-
 }
 
 .nombre-ramo {
@@ -182,7 +176,6 @@ body {
   color: #1e293b;
   font-weight: 600;
   font-family: 'Segoe UI', sans-serif;
-
 }
 
 /* Formulario interno de la tarjeta */
@@ -213,7 +206,7 @@ body {
 
 .btn-guardar-card {
   width: 100%;
-  background: #003366;;
+  background: #003366;
   color: white;
   border: none;
   padding: 9px;
@@ -236,41 +229,56 @@ body {
   color: #475569;
 }
 
-.card-footer-status {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 10px;
-  padding-top: 8px;
-  border-top: 1px dashed #e2e8f0;
+/* Items individuales arrastrables dentro de la tarjeta */
+.bloque-item-drag {
+  transition: all 0.15s ease-in-out;
 }
 
-.status-badge {
-  font-size: 11px;
-  color: #4338ca; 
+.bloque-item-drag:hover {
+  background-color: #e2e8f0 !important;
+  border-color: #94a3b8 !important;
+  color: #0f172a;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+}
+
+.bloque-item-drag:active {
+  cursor: grabbing;
+}
+
+.card-footer-status {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-top: 12px;
+  padding-top: 8px;
+  border-top: 1px dashed #e2e8f0;
 }
 
 .btn-editar-card {
   background: #f1f5f9;
   border: none;
-  padding: 4px 8px;
+  padding: 6px 10px;
   border-radius: 4px;
   cursor: pointer;
-  font-size: 12px;
-  transition: background 0.2s;
+  font-size: 11px;
+  font-weight: 600;
+  color: #475569;
+  transition: all 0.2s;
 }
 
 .btn-editar-card:hover {
   background: #e2e8f0;
+  color: #1e293b;
 }
 
-/*GRILLA HORARIA (TABLA DE PLANIFICACIÓN)*/
+/* GRILLA HORARIA (TABLA DE PLANIFICACIÓN) */
 .contenedor-grilla {
   background: white;
   border-radius: 12px;
   border: 1px solid #e2e8f0;
   box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-  
+  overflow-x: auto;
 }
 
 .tabla-horario {
@@ -299,12 +307,12 @@ body {
 }
 
 .col-hora {
-  width: 90px; 
+  width: 100px; 
 }
 
 .tabla-horario td {
   border: 1px solid #e2e8f0;
-  height: 90px;
+  height: 110px; 
   vertical-align: top;
   padding: 6px;
 }
@@ -316,12 +324,11 @@ body {
 }
 
 .rango-horas {
-  font-size: 12px;
+  font-size: 11px;
   color: #161718;
   margin: 0;
   display: inline-block;
   font-family: 'Inter', sans-serif;
-  
 }
 
 /* Celdas receptoras del drag and drop */
@@ -331,12 +338,11 @@ body {
 }
 
 .celda-drop:hover {
-  background-color: #f1f5f9; 
+  background-color: #f8fafc; 
 }
 
 /* Elementos renderizados dentro de la celda de la grilla */
 .item-horario-asignado {
-  background: #eff6ff; 
   border: 1px solid #bfdbfe;
   border-left: 4px solid #2563eb;
   border-radius: 6px;
@@ -346,15 +352,24 @@ body {
   animation: fadeIn 0.2s ease-out;
 }
 
+/* Comportamiento cuando un bloque posee conflictos activos */
+.item-horario-asignado[title*="CONFLICTOS"] {
+  cursor: help;
+}
+
+.item-horario-asignado[title*="CONFLICTOS"]:hover {
+  box-shadow: 0 0 0 2px #fca5a5;
+  transform: scale(1.01);
+}
+
 .ramo-titulo-item {
   font-size: 11px;
   font-weight: 700;
   color: #1e3a8a;
-  padding-right: 12px;
+  padding-right: 14px;
   white-space: normal;
-  word-break: break-word; /*para despues quitar los 3 puntos del nombre del ramo*/
+  word-break: break-word; 
   overflow: visible;
-  text-overflow: clip;
 }
 
 .meta-item {
@@ -362,7 +377,7 @@ body {
   color: #2563eb;
   font-weight: 600;
   margin: 3px 0;
-  word-break: break-word; /*nueva*/
+  word-break: break-word; 
 }
 
 .docente-item {
@@ -370,10 +385,7 @@ body {
   color: #475569;
   white-space: normal;
   word-break: break-word;
- 
 }
-
-/*para cuando una seccion está sin profe*/
 
 .texto-alerta {
   color: #dc2626;    
@@ -381,9 +393,7 @@ body {
   font-style: italic;  
 }
 
-
-
-/* Botón  con la x  para remover de la grilla */
+/* Botón con la x para remover de la grilla */
 .close-btn {
   position: absolute;
   top: 4px;
@@ -394,6 +404,11 @@ body {
   font-size: 14px;
   line-height: 1;
   transition: color 0.15s;
+  z-index: 10;
+}
+
+.close-btn:hover {
+  color: #b91c1c;
 }
 
 /* Animación de entrada al soltar */
@@ -429,7 +444,6 @@ body {
   border-color: #cbd5e1;
 }
 
-/* Modificación de bordes cuando está desplegado para unirse con las tarjetas */
 .acordeon-header.activo {
   background-color: #ffffff;
   border-bottom-left-radius: 0;
@@ -439,7 +453,7 @@ body {
 
 .ramo-titulo {
   font-family: 'Inter', sans-serif;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
   color: #1e293b;
 }
@@ -451,7 +465,6 @@ body {
   transition: transform 0.2s ease;
 }
 
-/* Rotación de la flecha cuando se expande */
 .icono-flecha.rotado {
   transform: rotate(180deg);
   color: #003366;
@@ -472,52 +485,26 @@ body {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  max-height: 340px; 
+  max-height: 420px; 
   overflow-y: auto;
-  padding-right: 8px;
+  padding-right: 4px;
 }
 
-/*Estados para el badge de las secciones por asignar*/
-.badge-ramo {
-  padding: 2px 8px;
-  border-radius: 12px;
-  font-size: 11px;
-  font-weight: bold;
-  margin-left: auto;
-  margin-right: 8px;
-  font-family: 'Segoe UI', sans-serif;
-}
-
-.badge-ramo.completo {
-  background-color: #189d5f;
-  color: white;
-}
-
-.badge-ramo.pendiente {
-  background-color: #dc3545;
-  color: white;
-}
-
-.badge-ramo.parcial {
-  background-color: #d7d407;
-  color: white;
-}
-
-/*ESTADOS BOLITAS SECCIONES*/
+/* ESTADOS BOLITAS SECCIONES GLOBAL */
 .leyenda {
   display: flex;
-  gap: 10px;
-  font-size: 0.75rem;
-  color: #666;
-  margin-left: 16px;
+  gap: 12px;
+  font-size: 11px;
+  color: #64748b;
+  margin-left: 4px;
   margin-bottom: 20px;
-  margin-top: -8px;
+  margin-top: -4px;
 }
 
 .leyenda-item {
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 6px;
 }
 
 .bolita {
@@ -527,17 +514,17 @@ body {
   display: inline-block;
 }
 
-.bolita.rojo    { background-color: #dc3545; }
-.bolita.amarillo { background-color: #d7d407; }
-.bolita.verde   { background-color: #189d5f; }
+.bolita.rojo     { background-color: #d7d407; }
+.bolita.amarillo { background-color: #dc3545; } 
+.bolita.verde    { background-color: #189d5f; } 
 
 .panel-header.sin-borde h2 {
-  font-size: 12px;
-  font-weight: 600;
-  color: #8a96a9;
+  font-size: 11px;
+  font-weight: 700;
+  color: #64748b;
   letter-spacing: 0.5px;
   margin-top: 0;
-  padding-bottom: 0;
-  margin-bottom: 0;
-  margin-top: -8px;
+  padding-bottom: 4px;
+  margin-bottom: 4px;
+  margin-top: -4px;
 }

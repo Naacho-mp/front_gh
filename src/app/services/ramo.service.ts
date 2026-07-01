@@ -14,7 +14,6 @@ export interface Ramo {
 
 @Injectable({ providedIn: 'root' })
 export class RamosService {
-
   private url = '/datos-prueba/ramos.json';
   private storageKey = 'info_ramos'; 
   private ramos$ = new BehaviorSubject<Ramo[]>([]);
@@ -22,11 +21,11 @@ export class RamosService {
   constructor(private http: HttpClient) {
     this.inicializarDatos();
   }
+
   private inicializarDatos(): void {
     const datosLocales = localStorage.getItem(this.storageKey);
 
     if (datosLocales) {
-      
       this.ramos$.next(JSON.parse(datosLocales));
     } else {
       this.http.get<Ramo[]>(this.url).subscribe({
@@ -47,14 +46,17 @@ export class RamosService {
     return this.ramos$.asObservable();
   }
 
+  getRamosSync(): Ramo[] {
+    return this.ramos$.getValue();
+  }
+
   getById(id: string): Ramo | undefined {
     return this.ramos$.getValue().find(r => r.id === id);
   }
 
   agregar(ramo: Omit<Ramo, 'id'>): void {
     const nivelNum = { 'I': 1, 'II': 2, 'III': 3, 'IV': 4, 'V': 5 }[ramo.nivel] ?? 0;
-    
-    const id = `ECI-${nivelNum}${Math.floor(Math.random() * 90 + 10)}`; 
+    const id = `ICI-${nivelNum}${Math.floor(Math.random() * 90 + 10)}`; 
     
     const nuevo: Ramo = { id, ...ramo };
     const actual = this.ramos$.getValue();
@@ -73,8 +75,6 @@ export class RamosService {
     this.guardarEnLocalStorage(nuevoListado);
     return true;
   }
-
-
 
   eliminar(id: string): void {
     const actual = this.ramos$.getValue();

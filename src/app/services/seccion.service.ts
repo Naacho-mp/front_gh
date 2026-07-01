@@ -11,7 +11,6 @@ export interface Seccion {
 
 @Injectable({ providedIn: 'root' })
 export class SeccionesService {
-
   private url = '/datos-prueba/secciones.json';
   private storageKey = 'info_secciones';
   private secciones$ = new BehaviorSubject<Seccion[]>([]);
@@ -44,6 +43,10 @@ export class SeccionesService {
     return this.secciones$.asObservable();
   }
 
+  getSeccionesSync(): Seccion[] {
+    return this.secciones$.getValue();
+  }
+
   getById(id: string): Seccion | undefined {
     return this.secciones$.getValue().find(s => s.id === id);
   }
@@ -62,7 +65,6 @@ export class SeccionesService {
     const actual = this.secciones$.getValue();
     const nuevoListado = actual.filter(s => s.id !== id);
 
-    // Sincronización inmediata al remover la sección
     this.secciones$.next(nuevoListado);
     this.guardarEnLocalStorage(nuevoListado);
   }
@@ -73,16 +75,15 @@ export class SeccionesService {
     if (idx === -1) return;
 
     const nuevaLista = [...actual];
-      const seccionActualizada = { ...nuevaLista[idx], ...datos };
+    const seccionActualizada = { ...nuevaLista[idx], ...datos };
 
-  // recalcula el id si cambió el numero de la seccion
-  if (datos.numero_seccion !== undefined) {
-    seccionActualizada.id = `S-${datos.numero_seccion}`;
-  }
+    if (datos.numero_seccion !== undefined) {
+      seccionActualizada.id = `S-${datos.numero_seccion}`;
+    }
 
-  nuevaLista[idx] = seccionActualizada;
+    nuevaLista[idx] = seccionActualizada;
 
-  this.secciones$.next(nuevaLista);
-  this.guardarEnLocalStorage(nuevaLista);
+    this.secciones$.next(nuevaLista);
+    this.guardarEnLocalStorage(nuevaLista);
   }
 }

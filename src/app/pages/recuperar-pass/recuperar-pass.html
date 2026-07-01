@@ -18,21 +18,75 @@
         </p>
       </div>
     </div>
-    <div class="right">
-      <h2>Recuperar Contraseña</h2>
-      <p class="subtitle">Ingrese su correo institucional para recibir las instrucciones de recuperación.</p>
-      <div class="field">
-        <label>Correo Electrónico</label>
-        <div class="input-wrap">
-          <i class="pi pi-at"></i>
-          <input type="text" [(ngModel)]="correo" placeholder="nombre.apellido@ucm.cl">
-        </div>
-      </div>                              
-      <button class="btn-login" (click)="recuperarContrasena()">
-        Solicitar contraseña <i class="pi pi-send"></i>
-      </button>
 
-       <p class="texto-retorno"><a class="link-volver-inicio" routerLink="/login">Iniciar sesión</a> con tus credenciales actuales</p> 
+
+    <div class="right">
+      
+      <!-- Mensajes de Feedback Globales -->
+      <div *ngIf="mensajeError" class="alert alert-danger" style="color: red; margin-bottom: 15px; font-weight: bold;">
+        <i class="pi pi-times-circle"></i> {{ mensajeError }}
+      </div>
+      <div *ngIf="mensajeExito" class="alert alert-success" style="color: green; margin-bottom: 15px; font-weight: bold;">
+        <i class="pi pi-check-circle"></i> {{ mensajeExito }}
+      </div>
+
+      <!-- ================= PASO 1: SOLICITAR TOKEN ================= -->
+      <div *ngIf="paso === 1">
+        <h2>Recuperar Contraseña</h2>
+        <p class="subtitle">Ingrese su correo institucional para recibir las instrucciones de recuperación.</p>
+        
+        <div class="field">
+          <label>Correo Electrónico</label>
+          <div class="input-wrap">
+            <i class="pi pi-at"></i>
+            <input type="text" [(ngModel)]="correo" [disabled]="cargando" placeholder="nombre.apellido@ucm.cl">
+          </div>
+        </div>                              
+        
+        <button class="btn-login" (click)="recuperarContrasena()" [disabled]="cargando">
+          {{ cargando ? 'Procesando...' : 'Solicitar código' }} <i class="pi pi-send" *ngIf="!cargando"></i>
+        </button>
+      </div>
+
+      <!-- ================= PASO 2: INGRESAR TOKEN Y NUEVA PASS ================= -->
+      <div *ngIf="paso === 2">
+        <h2>Restablecer Contraseña</h2>
+        <p class="subtitle">Ingrese el código temporal enviado a su correo y defina su nueva contraseña.</p>
+        
+        <!-- Input Código/Token -->
+        <div class="field">
+          <label>Código de Recuperación</label>
+          <div class="input-wrap">
+            <i class="pi pi-key"></i>
+            <input type="text" [(ngModel)]="tokenrecuperar" [disabled]="cargando" placeholder="Ej: abc123xyz">
+          </div>
+        </div>
+
+        <!-- Input Nueva Contraseña -->
+        <div class="field">
+          <label>Nueva Contraseña</label>
+          <div class="input-wrap">
+            <i class="pi pi-lock"></i>
+            <input [type]="mostrarPassword ? 'text' : 'password'"
+                   [(ngModel)]="nuevaContrasena"
+                   [disabled]="cargando"
+                   placeholder="••••••••••••">
+            <i class="pi toggle-pw"
+               [class.pi-eye]="!mostrarPassword"
+               [class.pi-eye-slash]="mostrarPassword"
+               (click)="togglePassword()"></i>
+          </div>
+        </div>
+
+        <button class="btn-login" (click)="actualizarContrasena()" [disabled]="cargando">
+          {{ cargando ? 'Actualizando...' : 'Cambiar contraseña' }} <i class="pi pi-check" *ngIf="!cargando"></i>
+        </button>
+      </div>
+
+      <!-- Retorno al Login -->
+      <p class="texto-retorno">
+        <a class="link-volver-inicio" routerLink="/login">Iniciar sesión</a> con tus credenciales actuales
+      </p> 
    
       <div class="right-footer">
         <div class="help">
@@ -41,6 +95,7 @@
         </div>
         <span class="version">V1.0.0 © 2026 SGH</span>
       </div>
+
     </div>                               
   </div>                                  
-</div>                                    
+</div>

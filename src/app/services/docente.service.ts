@@ -2,7 +2,6 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
-// interfaz para definir la forma de la disponibilidad
 export interface DisponibilidadSlot {
   modulo: number;
   lunes: boolean;
@@ -13,31 +12,29 @@ export interface DisponibilidadSlot {
   sabado: boolean;  
 }
 
-// interfaz de docente
 export interface Docente {
   id: string;
   nombre: string;
   contrato: 'Full-time' | 'Part-time';
-  disponibilidad?: DisponibilidadSlot[]; // opcional por si el docente es fulltime
+  disponibilidad?: DisponibilidadSlot[];
 }
 
 @Injectable({ providedIn: 'root' })
 export class DocenteService {
   private url = '/datos-prueba/docentes.json';
-  private storageKey = 'info_docentes'; // para identificar en localstorage
+  private storageKey = 'info_docentes';
   private docentes$ = new BehaviorSubject<Docente[]>([]);
 
   constructor(private http: HttpClient) {
     this.inicializarDatos();
   }
+
   private inicializarDatos(): void {
     const datosLocales = localStorage.getItem(this.storageKey);
 
     if (datosLocales) {
-      // Si ya existen registros modificados en el disco, los montamos directo a la RAM
       this.docentes$.next(JSON.parse(datosLocales));
     } else {
-      // Si el navegador está vacío, consumimos los datos prueba del json
       this.http.get<Docente[]>(this.url).subscribe({
         next: (data) => {
           this.docentes$.next(data);
@@ -48,7 +45,6 @@ export class DocenteService {
     }
   }
 
- 
   private guardarEnLocalStorage(docentes: Docente[]): void {
     localStorage.setItem(this.storageKey, JSON.stringify(docentes));
   }
@@ -57,11 +53,14 @@ export class DocenteService {
     return this.docentes$.asObservable();
   }
 
+  getDocentesSync(): Docente[] {
+    return this.docentes$.getValue();
+  }
+
   getById(id: string): Docente | undefined {
     return this.docentes$.getValue().find(d => d.id === id);
   }
 
-  //para agregar docente
   agregar(docente: Omit<Docente, 'id'>): void {
     const nuevo: Docente = {
       id: `DOC-${Math.floor(Math.random() * 9000 + 1000)}`,          
@@ -79,30 +78,28 @@ export class DocenteService {
   }
 
   agregarDesdeExcel(docente: Omit<Docente, 'id'>): boolean {
-  const actual = this.docentes$.getValue();
+    const actual = this.docentes$.getValue();
 
-  // Verifica por nombre en vez de ID
-  if (actual.some(d => d.nombre.toLowerCase() === docente.nombre.toLowerCase())) return false;
+    if (actual.some(d => d.nombre.toLowerCase() === docente.nombre.toLowerCase())) return false;
 
-  try {
-    const nuevo: Docente = {
-      id: `DOC-${Math.floor(Math.random() * 9000 + 1000)}`,
-      ...docente,
-      disponibilidad: docente.contrato === 'Part-time'
-        ? (docente.disponibilidad ?? this.disponibilidadVacia())
-        : undefined
-    };
+    try {
+      const nuevo: Docente = {
+        id: `DOC-${Math.floor(Math.random() * 9000 + 1000)}`,
+        ...docente,
+        disponibilidad: docente.contrato === 'Part-time'
+          ? (docente.disponibilidad ?? this.disponibilidadVacia())
+          : undefined
+      };
 
-    const nuevoListado = [nuevo, ...actual];
-    this.docentes$.next(nuevoListado);
-    this.guardarEnLocalStorage(nuevoListado);
-    return true;
-  } catch {
-    return false;
+      const nuevoListado = [nuevo, ...actual];
+      this.docentes$.next(nuevoListado);
+      this.guardarEnLocalStorage(nuevoListado);
+      return true;
+    } catch {
+      return false;
+    }
   }
-}
 
-  //eliminar docente
   eliminar(id: string): void {
     const actual = this.docentes$.getValue();
     const nuevoListado = actual.filter(d => d.id !== id);
@@ -111,7 +108,6 @@ export class DocenteService {
     this.guardarEnLocalStorage(nuevoListado);
   }
 
-  //actualizar docente
   actualizar(id: string, datos: Partial<Omit<Docente, 'id'>>): void {
     const actual = this.docentes$.getValue();
     const idx = actual.findIndex(d => d.id === id);
@@ -146,7 +142,7 @@ export class DocenteService {
   }
 
   private disponibilidadVacia(): DisponibilidadSlot[] {
-    return Array.from({ length: 8 }, (_, i) => ({
+    return Array.from({ length: 9 }, (_, i) => ({
       modulo: i + 1,
       lunes: false,
       martes: false,

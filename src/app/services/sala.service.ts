@@ -11,7 +11,6 @@ export interface Sala {
 
 @Injectable({ providedIn: 'root' })
 export class SalasService {
-
   private url = '/datos-prueba/salas.json';
   private storageKey = 'info_salas'; 
   private salas$ = new BehaviorSubject<Sala[]>([]);
@@ -42,6 +41,10 @@ export class SalasService {
 
   getAll(): Observable<Sala[]> {
     return this.salas$.asObservable();
+  }
+
+  getSalasSync(): Sala[] {
+    return this.salas$.getValue();
   }
 
   getById(id: string): Sala | undefined {

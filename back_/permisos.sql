@@ -13,7 +13,7 @@ CREATE TABLE usuarios (
 
 -- 3. Insertar el usuario pedro
 INSERT INTO usuarios (nombre, correo, contrasena, tiene_permisos)
-VALUES ('pedro', 'pedro', 'pedro', true);
+VALUES ('Jaime', 'nachomatamala@gmail.com', 'nacho', true);
 
 -- 4. Insertar el usuario db_jaime en la tabla de privilegios globales
 INSERT INTO mysql.global_priv (Host, User, Priv)

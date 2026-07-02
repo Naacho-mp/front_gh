@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { SeccionesService } from './seccion.service';
 
 export interface Ramo {
   id: string;
@@ -18,7 +19,10 @@ export class RamosService {
   private storageKey = 'info_ramos'; 
   private ramos$ = new BehaviorSubject<Ramo[]>([]);
 
-  constructor(private http: HttpClient) {
+  constructor(
+    private http: HttpClient,
+    private seccionesService: SeccionesService
+  ) {
     this.inicializarDatos();
   }
 
@@ -82,6 +86,10 @@ export class RamosService {
 
     this.ramos$.next(nuevoListado);
     this.guardarEnLocalStorage(nuevoListado);
+
+    // Cascada: al eliminar el ramo, se eliminan también todas las secciones
+    // que le pertenecían (identificadas por codigo_ramo === id del ramo).
+    this.seccionesService.eliminarPorRamo(id);
   }
 
   editar(id: string, datos: Partial<Ramo>): void {

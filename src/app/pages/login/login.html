@@ -15,7 +15,7 @@
           SISTEMA OFICIAL UNIVERSITARIO
         </div>
         <p class="left-footer">
-          Acceso restringido a personal docente y administrativo<br>
+          Acceso restringido a personal directivo y administrativo<br>
           autorizado. 
         </p>
       </div>
@@ -24,11 +24,6 @@
     <div class="right">
       <h2>Bienvenido(a)</h2>
       <p class="subtitle">Ingrese sus credenciales para acceder a la plataforma.</p>
-
-      <!-- Mensaje de Error -->
-      <div *ngIf="mensajeError" class="alert alert-danger" style="color: red; margin-bottom: 15px; font-weight: bold;">
-        <i class="pi pi-exclamation-triangle"></i> {{ mensajeError }}
-      </div>
 
       <div class="field">
         <label>USUARIO</label>
@@ -55,16 +50,12 @@
         </div>
       </div>
 
-      <!-- Eliminado routerLink="/horario" para que TypeScript maneje la redirección -->
+      <!--typescript maneja la redirección -->
       <button class="btn-login" (click)="iniciarSesion()" [disabled]="cargando">
-        {{ cargando ? 'Verificando...' : 'Iniciar Sesión' }} <i class="pi pi-sign-in" *ngIf="!cargando"></i>
+        Iniciar Sesión <i class="pi pi-sign-in"></i>
       </button>
 
       <div class="right-footer">
-        <div class="help">
-          <i class="pi pi-question-circle"></i>
-          ¿Necesitas ayuda? <a href="#">Contactar Soporte</a>
-        </div>
         <span class="version">V1.0.0 © 2026 SGH</span>
       </div>
     </div>

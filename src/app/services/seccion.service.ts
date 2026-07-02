@@ -51,14 +51,22 @@ export class SeccionesService {
     return this.secciones$.getValue().find(s => s.id === id);
   }
 
-  agregar(seccion: Omit<Seccion, 'id'>): void {
-    const id = `S-${seccion.numero_seccion}`;
-    const nueva: Seccion = { id, ...seccion };
+  agregar(seccion: Omit<Seccion, 'id'>): boolean {
+  
+    const id = `${seccion.codigo_ramo}-S${seccion.numero_seccion}`;
     const actual = this.secciones$.getValue();
+
+    const yaExiste = actual.some(s => s.id === id);
+    if (yaExiste) {
+      return false; 
+    }
+
+    const nueva: Seccion = { id, ...seccion };
     const nuevoListado = [nueva, ...actual];
-    
+
     this.secciones$.next(nuevoListado);
     this.guardarEnLocalStorage(nuevoListado);
+    return true;
   }
 
   eliminar(id: string): void {
@@ -69,21 +77,41 @@ export class SeccionesService {
     this.guardarEnLocalStorage(nuevoListado);
   }
 
-  editar(id: string, datos: Partial<Omit<Seccion, 'id'>>): void {
+  // Elimina todas las secciones asociadas a un ramo (usado en cascada desde RamosService
+  // cuando se elimina un ramo completo).
+  eliminarPorRamo(codigoRamo: string): void {
+    const actual = this.secciones$.getValue();
+    const nuevoListado = actual.filter(s => s.codigo_ramo !== codigoRamo);
+
+    this.secciones$.next(nuevoListado);
+    this.guardarEnLocalStorage(nuevoListado);
+  }
+
+  editar(id: string, datos: Partial<Omit<Seccion, 'id'>>): boolean {
     const actual = this.secciones$.getValue();
     const idx = actual.findIndex(s => s.id === id);
-    if (idx === -1) return;
+    if (idx === -1) return false;
 
     const nuevaLista = [...actual];
     const seccionActualizada = { ...nuevaLista[idx], ...datos };
 
-    if (datos.numero_seccion !== undefined) {
-      seccionActualizada.id = `S-${datos.numero_seccion}`;
+    // Si cambia el número de sección o el ramo, se regenera el id con el mismo
+    // esquema único (codigo_ramo + numero_seccion) usado en agregar().
+    if (datos.numero_seccion !== undefined || datos.codigo_ramo !== undefined) {
+      const nuevoId = `${seccionActualizada.codigo_ramo}-S${seccionActualizada.numero_seccion}`;
+
+      const colisionaConOtra = actual.some((s, i) => i !== idx && s.id === nuevoId);
+      if (colisionaConOtra) {
+        return false;
+      }
+
+      seccionActualizada.id = nuevoId;
     }
 
     nuevaLista[idx] = seccionActualizada;
 
     this.secciones$.next(nuevaLista);
     this.guardarEnLocalStorage(nuevaLista);
+    return true;
   }
 }

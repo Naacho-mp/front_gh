@@ -202,6 +202,7 @@ export class HorarioService {
     // Validación de capacidad de aforo físico vs alumnos matriculados
     const seccionData = secciones.find(s => s.id === bloque.seccionId);
     const salaData = salas.find(s => s.nombre === bloque.sala);
+
     if (seccionData && salaData) {
       if (seccionData.estudiantes_inscritos > salaData.capacidad) {
         conflictos.push(`Sobrecarga de aforo: La sala posee capacidad para ${salaData.capacidad} estudiantes, pero la sección tiene ${seccionData.estudiantes_inscritos} inscritos.`);
@@ -220,8 +221,27 @@ export class HorarioService {
       conflictos.push(`Conflicto de Nivel: Los alumnos de ${bloque.nivel} ya presentan otra actividad curricular concurrente en este mismo bloque.`);
     }
 
+    //Validacion de superar horas catedra / laboratorio
+    const ramoData = ramos.find(r=> r.id === bloque.ramoId);
+    
+    if (ramoData) {
+      const bloquesDeEsteTipoEnLaSeccion = todosBloques.filter(b =>
+        b.seccionId === bloque.seccionId && b.tipo === bloque.tipo
+      ).length;
+
+        if (bloque.tipo === 'C' && bloquesDeEsteTipoEnLaSeccion > ramoData.horas_catedra) {
+    conflictos.push(`Exceso de horas de cátedra: la sección ya tiene ${bloquesDeEsteTipoEnLaSeccion} bloques de cátedra asignados, pero el ramo solo requiere ${ramoData.horas_catedra}.`);
+  }
+
+        if (bloque.tipo === 'L' && bloquesDeEsteTipoEnLaSeccion > ramoData.horas_laboratorio) {
+          conflictos.push(`Exceso de horas de laboratorio: la sección ya tiene ${bloquesDeEsteTipoEnLaSeccion} bloques de laboratorio asignados, pero el ramo solo requiere ${ramoData.horas_laboratorio}.`);
+        }
+      }
+
+
     return conflictos;
   }
+
 
   // Exportador de bloques a formato Excel (.xlsx) mediante XLSX
   exportarBloquesAExcel(): void {

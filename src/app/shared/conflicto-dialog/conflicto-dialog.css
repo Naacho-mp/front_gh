@@ -1,0 +1,125 @@
+.dialog-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  animation: overlay-entrada 0.15s ease-out;
+}
+
+.dialog-caja {
+  position: relative;
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 28px 24px 20px;
+  width: 340px;
+  max-width: 90vw;
+  text-align: center;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
+  font-family: 'Segoe UI', sans-serif;
+  animation: dialog-entrada 0.2s ease-out;
+}
+
+.dialog-cerrar-x {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  cursor: pointer;
+  font-size: 18px;
+  color: #94a3b8;
+}
+
+.dialog-cerrar-x:hover {
+  color: #475569;
+}
+
+.dialog-icono-container {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #fee2e2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 14px;
+}
+
+.dialog-icono {
+  font-size: 26px;
+  color: #dc2626;
+}
+
+.dialog-titulo {
+  margin: 0 0 8px;
+  font-size: 16px;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.dialog-mensaje {
+  margin: 0 0 16px;
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.5;
+}
+
+.dialog-lista {
+  text-align: left;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  padding: 10px 14px;
+  margin: 0 0 16px;
+  max-height: 160px;
+  overflow-y: auto;
+  list-style: none;
+}
+
+.dialog-lista li {
+  font-size: 12.5px;
+  color: #b91c1c;
+  line-height: 1.5;
+  margin-bottom: 6px;
+  padding-left: 14px;
+  position: relative;
+}
+
+.dialog-lista li::before {
+  content: '•';
+  position: absolute;
+  left: 0;
+  color: #dc2626;
+}
+
+.dialog-lista li:last-child {
+  margin-bottom: 0;
+}
+
+.btn-cerrar {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: background 0.15s;
+  background: #2563eb;
+  color: #ffffff;
+}
+
+.btn-cerrar:hover {
+  background: #1d4ed8;
+}
+
+@keyframes overlay-entrada {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes dialog-entrada {
+  from { opacity: 0; transform: translateY(-10px) scale(0.97); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}

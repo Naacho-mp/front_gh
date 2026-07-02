@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { HorarioService, BloqueHorarioAsignado } from '../../services/horario.service';
 import { Subscription } from 'rxjs';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { ConflictoDialog } from '../../shared/conflicto-dialog/conflicto-dialog';
 
 interface SeccionPanel {
   id: string;
@@ -30,7 +31,7 @@ interface RamoPanel {
 @Component({
   selector: 'app-horario',
   standalone: true,
-  imports: [CommonModule, FormsModule,MatSnackBarModule],
+  imports: [CommonModule, FormsModule, MatSnackBarModule, ConflictoDialog],
   templateUrl: './horario.html',
   styleUrl: './horario.css'
 })
@@ -48,6 +49,11 @@ export class Horario implements OnInit, OnDestroy {
 
   private subscriptions: Subscription = new Subscription();
   private panelSubscription: Subscription | null = null;
+
+  // Estado del modal de alerta de conflictos (además del tooltip que ya existe en la grilla)
+  modalConflictoVisible: boolean = false;
+  modalConflictoDetalles: string[] = [];
+  private dropPendiente: { seccionId: string; dia: string; modulo: number } | null = null;
 
   // Estructura de la grilla de Ingeniería Civil en Informática UCM
   dias: string[] = ['LUNES', 'MARTES', 'MIÉRCOLES', 'JUEVES', 'VIERNES'];
@@ -95,6 +101,7 @@ export class Horario implements OnInit, OnDestroy {
       this.horarioService.getGrillaHorariaConConflictos().subscribe({
         next: (bloquesValidados) => {
           this.bloquesGlobales = bloquesValidados;
+          this.revisarConflictoPendiente();
           this.cdr.detectChanges();
         },
         error: (err) => console.error('Error cargando grilla con conflictos:', err)
@@ -213,7 +220,15 @@ export class Horario implements OnInit, OnDestroy {
         const seccionContexto = this.secciones.find(s => s.id === payload.seccionId);
 
         if (seccionContexto) {
-          
+          // Se guarda referencia del bloque recién soltado para poder revisar,
+          // apenas la grilla se actualice, si quedó marcado en conflicto y así
+          // abrir el modal de alerta (además del hover/tooltip ya existente).
+          this.dropPendiente = {
+            seccionId: seccionContexto.id,
+            dia: dia,
+            modulo: moduloId
+          };
+
           this.horarioService.asignarBloque({
             seccionId: seccionContexto.id,
             ramoId: seccionContexto.ramoId,
@@ -273,5 +288,32 @@ export class Horario implements OnInit, OnDestroy {
     }
  
     this.horarioService.exportarBloquesAExcel();
+  }
+
+  // Revisa si el último bloque soltado (drag & drop) quedó marcado en conflicto
+  // dentro de la nueva grilla recibida, y en ese caso abre el modal de alerta.
+  private revisarConflictoPendiente(): void {
+    if (!this.dropPendiente) {
+      return;
+    }
+
+    const { seccionId, dia, modulo } = this.dropPendiente;
+    this.dropPendiente = null;
+
+    const bloqueRelacionado = this.bloquesGlobales.find(
+      b => b.seccionId === seccionId && b.dia === dia && b.modulo === modulo
+    );
+
+    if (bloqueRelacionado?.enConflicto) {
+      // Se pasa el detalle real del conflicto tal cual lo calcula el servicio
+      // (el mismo texto que aparece en el tooltip al pasar el mouse sobre el bloque).
+      this.modalConflictoDetalles = bloqueRelacionado.conflictos ?? [];
+      this.modalConflictoVisible = true;
+    }
+  }
+
+  cerrarModalConflicto(): void {
+    this.modalConflictoVisible = false;
+    this.modalConflictoDetalles = [];
   }
 }

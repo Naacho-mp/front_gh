@@ -209,8 +209,8 @@
 
 .right-footer {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  justify-content: center;
+  width: 100%;
   margin-top: 2rem;
 }
 

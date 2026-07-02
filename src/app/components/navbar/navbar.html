@@ -1,16 +1,27 @@
 <header class="navbar">
   <div class="navbar-user">
+    
+    <!-- Botón principal del Perfil -->
     <button class="user-btn" (click)="toggleMenu()">
       <div class="avatar">
-        <span style="color:white; font-size:14px; font-weight:500">U</span>
+        <!-- Renderiza la inicial calculada dinámicamente -->
+        <span style="color:white; font-size:14px; font-weight:500">{{ inicialUsuario }}</span>
       </div>
-      <span class="user-name">Director(a)</span>
+      <!-- Renderiza el nombre real del usuario que viene del backend -->
+      <span class="user-name">{{ nombreUsuario }}</span>
       <span class="chevron" [class.open]="menuOpen">&#8964;</span>
     </button>
 
+    <!-- Menú Desplegable (Dropdown) -->
     <div class="dropdown" *ngIf="menuOpen">
+      
       <hr class="divider" />
-      <button class="dropdown-item danger" (click)="onCerrarSesion()"><i class="pi pi-sign-out menu-icon"></i>Cerrar Sesión</button>
+      
+      <!-- Opción de Cerrar Sesión -->
+      <button class="dropdown-item danger" (click)="onCerrarSesion()">
+        <i class="pi pi-sign-out menu-icon"></i>Cerrar Sesión
+      </button>
     </div>
+
   </div>
 </header>

@@ -51,14 +51,24 @@ export class SalasService {
     return this.salas$.getValue().find(s => s.id === id);
   }
 
-  agregar(sala: Omit<Sala, 'id'>): void {
+  agregar(sala: Omit<Sala, 'id'>): boolean {
+    const actual = this.salas$.getValue();
+
+    // para evitar duplicados tipo "Laboratorio 3" vs "laboratorio 3 "
+    const nombreNormalizado = sala.nombre.trim().toLowerCase();
+    const yaExiste = actual.some(s => s.nombre.trim().toLowerCase() === nombreNormalizado);
+
+    if (yaExiste) {
+      return false;
+    }
+
     const id = `SALA-${Math.floor(Math.random() * 9000 + 1000)}`;
     const nueva: Sala = { id, ...sala };
-    const actual = this.salas$.getValue();
     const nuevoListado = [nueva, ...actual];
-    
+
     this.salas$.next(nuevoListado);
     this.guardarEnLocalStorage(nuevoListado);
+    return true;
   }
 
   eliminar(id: string): void {
@@ -69,15 +79,26 @@ export class SalasService {
     this.guardarEnLocalStorage(nuevoListado);
   }
 
-  editar(id: string, datos: Partial<Omit<Sala, 'id'>>): void {
+  editar(id: string, datos: Partial<Omit<Sala, 'id'>>): boolean {
     const actual = this.salas$.getValue();
     const idx = actual.findIndex(s => s.id === id);
-    if (idx === -1) return;
+    if (idx === -1) return false;
+
+    if (datos.nombre !== undefined) {
+      const nombreNormalizado = datos.nombre.trim().toLowerCase();
+      const colisionaConOtra = actual.some((s, i) =>
+        i !== idx && s.nombre.trim().toLowerCase() === nombreNormalizado
+      );
+      if (colisionaConOtra) {
+        return false;
+      }
+    }
 
     const nuevaLista = [...actual];
     nuevaLista[idx] = { ...nuevaLista[idx], ...datos };
     
     this.salas$.next(nuevaLista);
     this.guardarEnLocalStorage(nuevaLista);
+    return true;
   }
 }

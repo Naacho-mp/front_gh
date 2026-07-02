@@ -36,8 +36,8 @@ export class RamoFormComponent implements OnInit {
       nivel: ['', [Validators.required]],
       cantidad_secciones:    ['', [Validators.required, Validators.min(1)]],
       cupos_por_seccion:    ['', [Validators.required, Validators.min(1)]],
-      horas_catedra:    ['', [Validators.required, Validators.min(1)]],
-      horas_laboratorio:    ['', [Validators.required, Validators.min(1)]],
+      horas_catedra:    ['', [Validators.required, Validators.min(0)]],
+      horas_laboratorio:    ['', [Validators.required, Validators.min(0)]],
     });
 
     if (this.data) {

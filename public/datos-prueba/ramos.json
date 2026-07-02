@@ -1,19 +1,74 @@
 [
   {
-    "id": "INF-201", "nombre": "Introducción a la Programación","nivel": "I","cantidad_secciones": 2, "cupos_por_seccion": 40, "horas_catedra": 4, "horas_laboratorio": 2
+    "id": "INF-201",
+    "nombre": "Introducción a la Programación",
+    "nivel": "I",
+    "cantidad_secciones": 2,
+    "cupos_por_seccion": 40,
+    "horas_catedra": 4,
+    "horas_laboratorio": 2
   },
-  {"id": "INE-202","nombre": "Taller de Desarrollo Web","nivel": "II","cantidad_secciones": 2,"cupos_por_seccion": 35,"horas_catedra": 2, "horas_laboratorio": 4
+  {
+    "id": "INE-202",
+    "nombre": "Taller de Desarrollo Web",
+    "nivel": "II",
+    "cantidad_secciones": 2,
+    "cupos_por_seccion": 35,
+    "horas_catedra": 2,
+    "horas_laboratorio": 4
   },
-  {"id": "ICI-211","nombre": "Estructuras de Datos y Algoritmos", "nivel": "III","cantidad_secciones": 1,"cupos_por_seccion": 45, "horas_catedra": 4, "horas_laboratorio": 2
+  {
+    "id": "ICI-211",
+    "nombre": "Estructuras de Datos y Algoritmos",
+    "nivel": "III",
+    "cantidad_secciones": 1,
+    "cupos_por_seccion": 45,
+    "horas_catedra": 4,
+    "horas_laboratorio": 2
   },
-  { "id": "ECI-435","nombre": "Programación Orientada a Objetos","nivel": "IV","cantidad_secciones": 2,"cupos_por_seccion": 35, "horas_catedra": 4, "horas_laboratorio": 2
+  {
+    "id": "ECI-435",
+    "nombre": "Programación Orientada a Objetos",
+    "nivel": "IV",
+    "cantidad_secciones": 2,
+    "cupos_por_seccion": 35,
+    "horas_catedra": 4,
+    "horas_laboratorio": 2
   },
-  { "id": "ECI-536", "nombre": "Sistemas de Bases de Datos","nivel": "V", "cantidad_secciones": 2,"cupos_por_seccion": 30,"horas_catedra": 3,"horas_laboratorio": 3
+  {
+    "id": "ECI-536",
+    "nombre": "Sistemas de Bases de Datos",
+    "nivel": "V",
+    "cantidad_secciones": 2,
+    "cupos_por_seccion": 30,
+    "horas_catedra": 3,
+    "horas_laboratorio": 3
   },
-  {"id": "ECI-536","nombre": "Ingeniería de Software","nivel": "V","cantidad_secciones": 1,"cupos_por_seccion": 40,"horas_catedra": 4, "horas_laboratorio": 0
+  {
+    "id": "ECI-539",
+    "nombre": "Ingeniería de Software",
+    "nivel": "V",
+    "cantidad_secciones": 1,
+    "cupos_por_seccion": 40,
+    "horas_catedra": 4,
+    "horas_laboratorio": 0
   },
-  {"id": "ECI-537","nombre": "Redes y Conectividad","nivel": "V", "cantidad_secciones": 2,"cupos_por_seccion": 30,"horas_catedra": 3,"horas_laboratorio": 2
+  {
+    "id": "ECI-537",
+    "nombre": "Redes y Conectividad",
+    "nivel": "V",
+    "cantidad_secciones": 2,
+    "cupos_por_seccion": 30,
+    "horas_catedra": 3,
+    "horas_laboratorio": 2
   },
-  {"id": "ECI-436","nombre": "Arquitectura Cloud y DevOps","nivel": "IV","cantidad_secciones": 1,"cupos_por_seccion": 25,"horas_catedra": 3,"horas_laboratorio": 3
+  {
+    "id": "ECI-436",
+    "nombre": "Arquitectura Cloud y DevOps",
+    "nivel": "IV",
+    "cantidad_secciones": 1,
+    "cupos_por_seccion": 25,
+    "horas_catedra": 3,
+    "horas_laboratorio": 3
   }
 ]

@@ -48,7 +48,7 @@ export class Secciones implements OnInit, OnDestroy {
     }
   }
 
-  abrirFormulario(seccion?: Seccion): void {
+ abrirFormulario(seccion?: Seccion): void {
   this.dialog.open(SeccionFormComponent, {
     width: '560px',
     disableClose: true,
@@ -57,7 +57,18 @@ export class Secciones implements OnInit, OnDestroy {
     if (!result) return;
 
     if (seccion) {
-      this.seccionesService.editar(seccion.id, result);
+      const exito = this.seccionesService.editar(seccion.id, result);
+
+      if (!exito) {
+        this.snackBar.open(`Error, Ya existe una sección "${result.numero_seccion}" para el ramo "${result.codigo_ramo}".`, 'Cerrar', {
+          duration: 4000,
+          horizontalPosition: 'center',
+          verticalPosition: 'top',
+          panelClass: ['snack-eliminar']
+        });
+        return;
+      }
+
       this.snackBar.open(`La Sección "${result.numero_seccion}" del ramo "${result.codigo_ramo}" ha sido actualizada correctamente`, 'Cerrar', {
         duration: 3000,
         horizontalPosition: 'center',
@@ -65,7 +76,18 @@ export class Secciones implements OnInit, OnDestroy {
         panelClass: ['snack-success']
       });
     } else {
-      this.seccionesService.agregar(result);
+      const exito = this.seccionesService.agregar(result);
+
+      if (!exito) {
+        this.snackBar.open(`Error, Ya existe una sección "${result.numero_seccion}" para el ramo "${result.codigo_ramo}".`, 'Cerrar', {
+          duration: 4000,
+          horizontalPosition: 'center',
+          verticalPosition: 'top',
+          panelClass: ['snack-eliminar']
+        });
+        return;
+      }
+
       this.snackBar.open(`La Sección "${result.numero_seccion}" del ramo "${result.codigo_ramo}" ha sido registrada correctamente`, 'Cerrar', {
         duration: 3000,
         horizontalPosition: 'center',

@@ -1,0 +1,21 @@
+<div class="dialog-overlay" *ngIf="visible">
+  <div class="dialog-caja">
+    <span class="dialog-cerrar-x" (click)="cerrarModal()">×</span>
+ 
+    <div class="dialog-icono-container">
+      <i class="pi pi-exclamation-triangle dialog-icono"></i>
+    </div>
+ 
+    <h3 class="dialog-titulo">{{ titulo }}</h3>
+ 
+    <!-- Un solo conflicto: se muestra directamente como mensaje -->
+    <p class="dialog-mensaje" *ngIf="detalles.length === 1">{{ detalles[0] }}</p>
+ 
+    <!-- Varios conflictos: se muestran todos de inmediato -->
+    <ul class="dialog-lista" *ngIf="detalles.length > 1">
+      <li *ngFor="let d of detalles">{{ d }}</li>
+    </ul>
+ 
+    <button class="btn-cerrar" (click)="cerrarModal()">Cerrar</button>
+  </div>
+</div>

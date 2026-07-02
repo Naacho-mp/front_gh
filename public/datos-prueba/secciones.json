@@ -1,9 +1,10 @@
 [
-  { "id": "S-1", "codigo_ramo": "INF-201", "numero_seccion": "1", "estudiantes_inscritos": 15 },
-  { "id": "S-2", "codigo_ramo": "ECI-302", "numero_seccion": "2", "estudiantes_inscritos": 20 },
-  { "id": "S-3", "codigo_ramo": "ECI-102", "numero_seccion": "3", "estudiantes_inscritos": 15 }, 
-  { "id": "S-4", "codigo_ramo": "ECI-537", "numero_seccion": "4", "estudiantes_inscritos": 30 },
-  { "id": "S-5", "codigo_ramo": "ECI-435", "numero_seccion": "5", "estudiantes_inscritos": 25 },
-  { "id": "S-1", "codigo_ramo": "ECI-536", "numero_seccion": "1", "estudiantes_inscritos": 40 },
-  { "id": "S-2", "codigo_ramo": "ECI-536", "numero_seccion": "2", "estudiantes_inscritos": 40 }
+  { "id": "INF-201-S1", "codigo_ramo": "INF-201", "numero_seccion": "1", "estudiantes_inscritos": 15 },
+  { "id": "INE-202-S1", "codigo_ramo": "INE-202", "numero_seccion": "1", "estudiantes_inscritos": 20 },
+  { "id": "ICI-211-S1", "codigo_ramo": "ICI-211", "numero_seccion": "1", "estudiantes_inscritos": 15 },
+  { "id": "ECI-537-S1", "codigo_ramo": "ECI-537", "numero_seccion": "1", "estudiantes_inscritos": 30 },
+  { "id": "ECI-435-S1", "codigo_ramo": "ECI-435", "numero_seccion": "1", "estudiantes_inscritos": 25 },
+  { "id": "ECI-536-S1", "codigo_ramo": "ECI-536", "numero_seccion": "1", "estudiantes_inscritos": 28 },
+  { "id": "ECI-539-S2", "codigo_ramo": "ECI-539", "numero_seccion": "2", "estudiantes_inscritos": 35 },
+  { "id": "ECI-436-S1", "codigo_ramo": "ECI-436", "numero_seccion": "1", "estudiantes_inscritos": 22 }
 ]

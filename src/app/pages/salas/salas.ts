@@ -58,11 +58,22 @@ export class Salas implements OnInit, OnDestroy {
 
       if (sala) {
         // edición
-        this.salasService.editar(sala.id, {
+        const exito = this.salasService.editar(sala.id, {
           nombre:    result.nombre,
           tipo:      result.tipo,
           capacidad: Number(result.capacidad)
         });
+
+        if (!exito) {
+          this.snackBar.open(`Ya existe una sala registrada con el nombre "${result.nombre}".`, 'Cerrar', {
+            duration: 4000,
+            horizontalPosition: 'center',
+            verticalPosition: 'top',
+            panelClass: ['snack-eliminar']
+          });
+          return;
+        }
+
         this.snackBar.open(`La Sala "${result.nombre}" ha sido actualizada correctamente`, 'Cerrar', {
           duration: 3000,
           horizontalPosition: 'center',
@@ -71,11 +82,22 @@ export class Salas implements OnInit, OnDestroy {
         });
       } else {
         // registro nuevo
-        this.salasService.agregar({
+        const exito = this.salasService.agregar({
           nombre:    result.nombre,
           tipo:      result.tipo,
           capacidad: Number(result.capacidad)
         });
+
+        if (!exito) {
+          this.snackBar.open(`Ya existe una sala registrada con el nombre "${result.nombre}".`, 'Cerrar', {
+            duration: 4000,
+            horizontalPosition: 'center',
+            verticalPosition: 'top',
+            panelClass: ['snack-eliminar']
+          });
+          return;
+        }
+
         this.snackBar.open(`La Sala "${result.nombre}" ha sido registrada correctamente`, 'Cerrar', {
           duration: 3000,
           horizontalPosition: 'center',

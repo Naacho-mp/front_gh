@@ -188,7 +188,8 @@
 
 
 .btn-login {
-  
+  width: 100%;
+  box-sizing: border-box;   
   padding: 13px 40px;
   background: #003366;
   color: white;
@@ -209,9 +210,16 @@
 
 .right-footer {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  justify-content: center;
+  width: 100%;
   margin-top: 2rem;
+}
+
+
+.version {
+  font-size: 12px;
+  color: #64748b;
+  font-family: 'Segoe UI', sans-serif;  
 }
 
 .help {
@@ -229,11 +237,7 @@
   font-family: 'Segoe UI', sans-serif;
 }
 
-.version {
-  font-size: 12px;
-  color: #9ca3af;
-  font-family: 'Segoe UI', sans-serif;  
-}
+
 
 .texto-retorno {
   margin-top: 8px;

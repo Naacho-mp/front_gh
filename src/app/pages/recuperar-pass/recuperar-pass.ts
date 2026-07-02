@@ -1,108 +1,118 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink, Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
-import { timeout, catchError } from 'rxjs/operators';
-import { throwError } from 'rxjs';
-
-
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar'; 
 @Component({
   selector: 'app-recuperar-pass',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule, RouterLink, MatSnackBarModule], 
   templateUrl: './recuperar-pass.html',
   styleUrl: './recuperar-pass.css',
 })
 export class RecuperarPass {
-  // Control de flujo de las pantallas
   paso = 1; 
   cargando = false;
-  mensajeExito = '';
-  mensajeError = '';
-
-  // Variables Paso 1 (Correo)
   correo = '';
-
-  // Variables Paso 2 (Código y nueva contraseña)
   tokenrecuperar = '';
   nuevaContrasena = '';
   mostrarPassword = false;
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(
+    private authService: AuthService, 
+    private router: Router,
+    private snackBar: MatSnackBar,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   togglePassword() {
     this.mostrarPassword = !this.mostrarPassword;
   }
 
-  // PASO 1: Enviar correo institucional
+  // ================= PASO 1: SOLICITAR CÓDIGO =================
   recuperarContrasena() {
-    this.mensajeExito = '';
-    this.mensajeError = '';
-
-    if (!this.correo.trim()) {
-      this.mensajeError = 'Por favor ingrese su correo electrónico.';
-      return;
+    if (!this.correo || !this.correo.trim()) {
+      this.snackBar.open('Por favor, ingrese su correo electrónico.', 'Cerrar', {
+        duration: 3000,
+        horizontalPosition: 'center',
+        verticalPosition: 'top',
+        panelClass: ['snack-eliminar']
+      });
+      return; 
     }
 
-    // Cambiamos de pantalla de inmediato, sin esperar la respuesta del servidor.
-    // El envío del correo se sigue procesando en segundo plano.
-    this.paso = 2;
+    // Si pasó los dos pasos se inicia la peticiion
+    this.cargando = true;
 
-    this.authService.recuperarContrasena(this.correo).pipe(
-      timeout(15000), // Si el backend no responde en 15s, se avisa igual (en segundo plano)
-      catchError(err => {
-        if (err.name === 'TimeoutError') {
-          this.mensajeError = 'El servidor está tardando demasiado en responder. Es posible que el correo no haya sido enviado; puedes intentar solicitarlo nuevamente.';
-        } else {
-          this.mensajeError = err.error?.error || 'No se encontró una cuenta con ese correo o hubo un problema al enviar el código.';
-        }
-        return throwError(() => err);
-      })
-    ).subscribe({
+    this.authService.recuperarContrasena(this.correo).subscribe({
       next: (respuesta) => {
-        this.mensajeExito = '¡Correo enviado con éxito! Revisa tu bandeja de entrada.';
+        this.cargando = false;
+        this.paso = 2;
+        this.cdr.detectChanges();
+        
+        this.snackBar.open('¡Código enviado! Revisa tu correo.', 'Aceptar', {
+          duration: 4000,
+          horizontalPosition: 'center',
+          verticalPosition: 'top',
+          panelClass: ['snack-success']
+        });
+
+         
       },
-      error: () => {
-        // El mensaje de error ya se seteó en catchError; aquí solo evitamos
-        // que la excepción quede sin manejar en la consola.
+      error: (err) => {
+        this.cargando = false;
+        this.cdr.detectChanges();
+        const mensaje = err.error?.error || 'No se encontró una cuenta asociada a este correo.';
+        
+        this.snackBar.open(mensaje, 'Cerrar', {
+          duration: 3000,
+          horizontalPosition: 'center',
+          verticalPosition: 'top',
+          panelClass: ['snack-eliminar']
+        });
+        
       }
     });
   }
 
-  // PASO 2: Validar token y actualizar clave
+  // ================= PASO 2: RESTABLECER CLAVE =================
   actualizarContrasena() {
-    this.mensajeExito = '';
-    this.mensajeError = '';
-
     if (!this.tokenrecuperar.trim() || !this.nuevaContrasena.trim()) {
-      this.mensajeError = 'El código y la nueva contraseña son requeridos.';
+      this.snackBar.open('El código y la nueva contraseña son requeridos.', 'Cerrar', {
+        duration: 3000,
+        horizontalPosition: 'center',
+        verticalPosition: 'top',
+        panelClass: ['snack-eliminar']
+      });
       return;
     }
 
     this.cargando = true;
 
-    this.authService.restablecerContrasena(this.tokenrecuperar, this.nuevaContrasena).pipe(
-      timeout(15000),
-      catchError(err => {
-        this.cargando = false;
-        if (err.name === 'TimeoutError') {
-          this.mensajeError = 'El servidor está tardando demasiado en responder. Intenta nuevamente.';
-        } else {
-          this.mensajeError = err.error?.error || 'El código es inválido o ya expiró.';
-        }
-        return throwError(() => err);
-      })
-    ).subscribe({
+    this.authService.restablecerContrasena(this.tokenrecuperar, this.nuevaContrasena).subscribe({
       next: (respuesta) => {
         this.cargando = false;
-        this.mensajeExito = 'Contraseña actualizada exitosamente. Redirigiendo...';
+        this.snackBar.open('Contraseña actualizada con éxito. Redirigiendo...', 'Cerrar', {
+          duration: 2000,
+          horizontalPosition: 'center',
+          verticalPosition: 'top',
+          panelClass: ['snack-success']
+        });
         
         setTimeout(() => {
           this.router.navigate(['/login']);
         }, 2000);
       },
-      error: () => {
+      error: (err) => {
+        this.cargando = false;
+        const mensaje = err.error?.error || 'El código es inválido o ya expiró.';
+        this.snackBar.open(mensaje, 'Cerrar', {
+          duration: 3000,
+          horizontalPosition: 'center',
+          verticalPosition: 'top',
+          panelClass: ['snack-eliminar']
+        });
       }
     });
   }

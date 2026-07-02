@@ -13,7 +13,7 @@
           SISTEMA OFICIAL UNIVERSITARIO
         </div>
         <p class="left-footer">
-          Acceso restringido a personal docente y administrativo<br>
+          Acceso restringido a personal directivo y administrativo<br>
           autorizado.
         </p>
       </div>
@@ -22,14 +22,6 @@
 
     <div class="right">
       
-      <!-- Mensajes de Feedback Globales -->
-      <div *ngIf="mensajeError" class="alert alert-danger" style="color: red; margin-bottom: 15px; font-weight: bold;">
-        <i class="pi pi-times-circle"></i> {{ mensajeError }}
-      </div>
-      <div *ngIf="mensajeExito" class="alert alert-success" style="color: green; margin-bottom: 15px; font-weight: bold;">
-        <i class="pi pi-check-circle"></i> {{ mensajeExito }}
-      </div>
-
       <!-- ================= PASO 1: SOLICITAR TOKEN ================= -->
       <div *ngIf="paso === 1">
         <h2>Recuperar Contraseña</h2>
@@ -44,7 +36,7 @@
         </div>                              
         
         <button class="btn-login" (click)="recuperarContrasena()" [disabled]="cargando">
-          {{ cargando ? 'Procesando...' : 'Solicitar código' }} <i class="pi pi-send" *ngIf="!cargando"></i>
+          Solicitar código <i class="pi pi-send"></i>
         </button>
       </div>
 
@@ -89,10 +81,6 @@
       </p> 
    
       <div class="right-footer">
-        <div class="help">
-          <i class="pi pi-question-circle"></i>
-          ¿Necesitas ayuda? <a href="#">Contactar Soporte</a>
-        </div>
         <span class="version">V1.0.0 © 2026 SGH</span>
       </div>
 
